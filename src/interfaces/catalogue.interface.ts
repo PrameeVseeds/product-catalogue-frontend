@@ -13,6 +13,9 @@ export interface BrandSummary {
   slug: string
   countryName?: string | null
   logoUrl?: string | null
+  flagImageUrl?: string | null
+  description?: string | null
+  websiteUrl?: string | null
   displayOrder: number
 }
 

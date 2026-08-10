@@ -1,6 +1,7 @@
 import type {
   Product,
   ProductListResponse,
+  ProductFilters,
 } from "../interfaces/product.interface";
 import { apiClient } from "./apiClient";
 import {
@@ -22,6 +23,8 @@ const normalizeProduct = (value: unknown): Product => {
     mainImageUrl: getText(item, "mainImageUrl", "main_image_url"),
     modelNumber: getText(item, "modelNumber", "model_number"),
     shortDescription: getText(item, "shortDescription", "short_description"),
+    subcategoryId:
+      getNumber(item, 0, "subcategoryId", "subcategory_id") || null,
     description: getText(item, "description"),
     displayOrder: getNumber(item, 0, "displayOrder", "display_order"),
     category: asRelation(item.category),
@@ -100,9 +103,7 @@ const asRelation = (value: unknown): { name: string; slug: string } | null => {
 };
 
 export const productApi = {
-  async getProducts(params?: {
-    featured?: boolean;
-  }): Promise<ProductListResponse> {
+  async getProducts(params?: ProductFilters): Promise<ProductListResponse> {
     const { data } = await apiClient.get<unknown>("/products", { params });
     const products = asArray(data)
       .map(normalizeProduct)

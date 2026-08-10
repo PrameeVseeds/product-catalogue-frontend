@@ -70,10 +70,16 @@ export interface HomeSection {
 
 export interface ContactSettings {
   callEnabled: boolean
+  callButtonText?: string | null
   callPhone?: string | null
   whatsappEnabled: boolean
+  whatsappButtonText?: string | null
   whatsappPhone?: string | null
   whatsappDefaultMessage?: string | null
+  emailEnabled: boolean
+  emailButtonText?: string | null
+  enquiryEmail?: string | null
+  defaultEmailSubject?: string | null
 }
 
 export interface SocialLink {

@@ -5,6 +5,7 @@ export interface ProductSummary {
   mainImageUrl?: string | null;
   modelNumber?: string | null;
   shortDescription?: string | null;
+  subcategoryId?: number | null;
   brand?: { name: string; slug?: string } | null;
   displayOrder: number;
 }
@@ -39,4 +40,12 @@ export interface Product extends ProductSummary {
 export interface ProductListResponse {
   products: ProductSummary[];
   total?: number;
+}
+
+export interface ProductFilters {
+  search?: string;
+  category?: string;
+  brand?: string;
+  subcategory?: string;
+  featured?: boolean;
 }
