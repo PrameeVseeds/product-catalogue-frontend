@@ -1345,3 +1345,169 @@ img {
   margin-top: 0.25rem;
   color: var(--muted-text-color);
 }
+
+.enquiryFilters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+.enquiryFilters label {
+  min-width: 180px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-weight: 650;
+}
+.enquiryFilters select,
+.statusEditor select {
+  min-height: 42px;
+  padding: 0.6rem;
+  border: 1px solid color-mix(in srgb, var(--text-color) 20%, transparent);
+  border-radius: 0.4rem;
+  color: var(--text-color);
+  background: var(--surface-color);
+}
+.enquiryTable {
+  min-width: 1150px;
+}
+.enquiryTable td strong,
+.enquiryTable td small {
+  display: block;
+}
+.enquiryTable td small {
+  margin-top: 0.2rem;
+  color: var(--muted-text-color);
+}
+.enquiryStatus {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.enquiryStatus::before {
+  font-size: 1rem;
+}
+.enquiryStatusNEW {
+  color: var(--primary-color);
+}
+.enquiryStatusNEW::before {
+  content: "●";
+}
+.enquiryStatusIN_PROGRESS {
+  color: #9a6700;
+}
+.enquiryStatusIN_PROGRESS::before {
+  content: "◐";
+}
+.enquiryStatusCONTACTED {
+  color: #176536;
+}
+.enquiryStatusCONTACTED::before {
+  content: "✓";
+}
+.enquiryStatusCLOSED {
+  color: var(--muted-text-color);
+}
+.enquiryStatusCLOSED::before {
+  content: "■";
+}
+.tableViewAction {
+  display: inline-grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border: 1px solid var(--primary-color);
+  border-radius: 0.4rem;
+  color: var(--primary-color);
+  font-size: 0;
+  text-decoration: none;
+}
+.tableViewAction::before {
+  content: "›";
+  font-size: 1.5rem;
+  line-height: 1;
+}
+.tableViewAction:hover,
+.tableViewAction:focus-visible {
+  background: color-mix(in srgb, var(--primary-color) 10%, transparent);
+}
+.paginationControls {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+.emptyState,
+.enquiryLoading {
+  margin-top: 1rem;
+}
+.enquiryDetailsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+.detailSection {
+  margin-bottom: 1rem;
+}
+.detailSection h2 {
+  margin-top: 0;
+}
+.detailList {
+  margin: 0;
+}
+.detailList > div {
+  display: grid;
+  grid-template-columns: minmax(100px, 0.35fr) 1fr;
+  gap: 1rem;
+  padding: 0.55rem 0;
+  border-bottom: 1px solid
+    color-mix(in srgb, var(--text-color) 10%, transparent);
+}
+.detailList dt {
+  color: var(--muted-text-color);
+  font-weight: 650;
+}
+.detailList dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.customerActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin-top: 1rem;
+}
+.enquiryMessage {
+  margin-bottom: 0;
+  line-height: 1.75;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.statusEditor {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 0.75rem;
+}
+.statusEditor h2 {
+  width: 100%;
+}
+.statusEditor label {
+  align-self: center;
+  font-weight: 650;
+}
+@media (max-width: 760px) {
+  .enquiryDetailsGrid {
+    grid-template-columns: 1fr;
+  }
+  .paginationControls {
+    justify-content: space-between;
+  }
+  .detailList > div {
+    grid-template-columns: 1fr;
+    gap: 0.2rem;
+  }
+}

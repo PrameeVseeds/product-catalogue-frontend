@@ -30,10 +30,8 @@ import { CategoryBrandsPage } from "../pages/admin/categoryBrandsPage";
 import { ProductManagementPage } from "../pages/admin/productManagementPage";
 import { ProductsAdminPage } from "../pages/admin/productsPage";
 import { SubcategoriesPage } from "../pages/admin/subcategoriesPage";
-
-const adminPlaceholders = [
-  ["enquiries", "Enquiries"],
-] as const;
+import { EnquiriesPage } from "../pages/admin/enquiriesPage";
+import { EnquiryDetailsPage } from "../pages/admin/enquiryDetailsPage";
 
 export const appRouter = createBrowserRouter([
   {
@@ -78,10 +76,8 @@ export const appRouter = createBrowserRouter([
           { path: "subcategories", element: <SubcategoriesPage /> },
           { path: "products", element: <ProductsAdminPage /> },
           { path: "products/:id/manage", element: <ProductManagementPage /> },
-          ...adminPlaceholders.map(([path, title]) => ({
-            path,
-            element: <AdminPlaceholderPage title={title} />,
-          })),
+          { path: "enquiries", element: <EnquiriesPage /> },
+          { path: "enquiries/:id", element: <EnquiryDetailsPage /> },
           {
             path: "*",
             element: <AdminPlaceholderPage title="Admin Page Not Found" />,
