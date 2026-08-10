@@ -5,7 +5,10 @@ import { FormFeedback } from "../../components/admin/formFeedback";
 import { FormField } from "../../components/admin/formField";
 import { StatusToggle } from "../../components/admin/statusToggle";
 import { LoadingSpinner } from "../../components/common/loadingSpinner";
-import type {AdminSocialMedia,SocialMediaForm,} from "../../interfaces/adminCms.interface";
+import type {
+  AdminSocialMedia,
+  SocialMediaForm,
+} from "../../interfaces/adminCms.interface";
 import { getAdminApiError } from "../../services/admin/adminApiError";
 import { socialMediaApi } from "../../services/admin/socialMediaApi";
 import { isHttpUrl, optionalText } from "../../utils/formValidation";
@@ -213,43 +216,69 @@ export const SocialMediaPage = () => {
           </div>
         </form>
       )}
-      <div className="adminList">
-        {links.map((link) => (
-          <article className="adminListCard" key={link.id}>
-            <div>
-              <h2>{link.displayName || link.platform}</h2>
-              <a
-                href={link.profileUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {link.profileUrl}
-              </a>
-              <p>
-                Order {link.displayOrder} ·{" "}
-                {link.isActive ? "Active" : "Inactive"}
-              </p>
-            </div>
-            <div className="listActions">
-              <button
-                className="adminButton secondary"
-                type="button"
-                onClick={() =>
-                  setEdit({ id: link.id, value: formValues(link) })
-                }
-              >
-                Edit
-              </button>
-              <button
-                className="adminButton danger"
-                type="button"
-                onClick={() => setDeleteId(link.id)}
-              >
-                Delete
-              </button>
-            </div>
-          </article>
-        ))}
+      <div className="adminTableWrapper">
+        <table className="adminTable">
+          <thead>
+            <tr>
+              <th>Platform</th>
+              <th>Display Name</th>
+              <th>Profile</th>
+              <th>Icon</th>
+              <th>Order</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {links.map((link) => (
+              <tr key={link.id}>
+                <td>
+                  <strong>{link.platform}</strong>
+                </td>
+                <td>{link.displayName || "—"}</td>
+                <td>
+                  <a
+                    className="tableLink"
+                    href={link.profileUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Open profile
+                  </a>
+                </td>
+                <td>{link.iconName || "—"}</td>
+                <td>{link.displayOrder}</td>
+                <td>
+                  <span
+                    className={`statusPill ${link.isActive ? "active" : "inactive"}`}
+                  >
+                    {link.isActive ? "Active" : "Inactive"}
+                  </span>
+                </td>
+                <td>
+                  <div className="tableActions">
+                    <button
+                      className="adminButton secondary"
+                      type="button"
+                      onClick={() =>
+                        setEdit({ id: link.id, value: formValues(link) })
+                      }
+                    >
+                      Edit
+                    </button>
+                    <button
+                      className="adminButton danger"
+                      type="button"
+                      onClick={() => setDeleteId(link.id)}
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
       <ConfirmDialog
         open={deleteId !== null}

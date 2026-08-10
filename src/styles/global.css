@@ -1050,3 +1050,298 @@ img {
     flex: 1;
   }
 }
+
+.catalogueListCard > img {
+  width: 76px;
+  height: 76px;
+  flex: 0 0 auto;
+  border-radius: 0.45rem;
+  object-fit: contain;
+  background: var(--background-color);
+}
+.listCardContent {
+  min-width: 0;
+  flex: 1;
+}
+.toggleRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+.productFilters {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+.productFilters input,
+.productFilters select {
+  min-height: 42px;
+  padding: 0.6rem;
+  border: 1px solid color-mix(in srgb, var(--text-color) 20%, transparent);
+  border-radius: 0.4rem;
+  color: var(--text-color);
+  background: var(--surface-color);
+}
+.managementNav {
+  position: sticky;
+  top: 64px;
+  z-index: 4;
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  padding: 0.65rem;
+  overflow-x: auto;
+  border: 1px solid color-mix(in srgb, var(--text-color) 12%, transparent);
+  border-radius: 0.5rem;
+  background: var(--surface-color);
+}
+.managementNav a {
+  padding: 0.5rem 0.75rem;
+  color: var(--primary-color);
+  font-weight: 650;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.managementSection {
+  margin-bottom: 1.5rem;
+  padding: 1.25rem;
+  border: 1px solid color-mix(in srgb, var(--text-color) 12%, transparent);
+  border-radius: 0.65rem;
+  background: var(--surface-color);
+  scroll-margin-top: 140px;
+}
+.assetGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 1rem;
+}
+.assetCard {
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--text-color) 12%, transparent);
+  border-radius: 0.5rem;
+}
+.assetCard > img {
+  width: 100%;
+  height: 170px;
+  object-fit: contain;
+  background: var(--background-color);
+}
+.assetCard > div {
+  padding: 0.75rem;
+}
+.assetCard p {
+  margin: 0.35rem 0;
+  color: var(--muted-text-color);
+}
+@media (max-width: 760px) {
+  .catalogueListCard > img {
+    width: 100%;
+    height: 160px;
+  }
+}
+
+.productDetails {
+  padding-block: clamp(2.5rem, 6vw, 5rem);
+}
+.productDetails > section {
+  margin-top: 3rem;
+}
+.productDetails > section > p,
+.productOverview > div > p {
+  color: var(--muted-text-color);
+  line-height: 1.7;
+}
+.productOverview {
+  display: grid;
+  grid-template-columns: minmax(260px, 0.85fr) minmax(0, 1.15fr);
+  align-items: center;
+  gap: clamp(2rem, 6vw, 5rem);
+}
+.productOverview > img {
+  width: 100%;
+  max-height: 520px;
+  object-fit: contain;
+}
+.productOverview h1 {
+  margin: 0.5rem 0 1rem;
+  font-size: clamp(2.2rem, 5vw, 4rem);
+}
+.productOverview .button {
+  margin-top: 1rem;
+}
+.productGallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+}
+.productGallery img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: 0.5rem;
+  object-fit: contain;
+  background: var(--surface-color);
+}
+.specificationList {
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--text-color) 12%, transparent);
+  border-radius: 0.5rem;
+}
+.specificationList > div {
+  display: grid;
+  grid-template-columns: minmax(140px, 0.4fr) 1fr;
+  padding: 0.8rem 1rem;
+  border-bottom: 1px solid
+    color-mix(in srgb, var(--text-color) 10%, transparent);
+}
+.specificationList > div:last-child {
+  border-bottom: 0;
+}
+.specificationList dt {
+  font-weight: 700;
+}
+.specificationList dd {
+  margin: 0;
+}
+@media (max-width: 760px) {
+  .productOverview {
+    grid-template-columns: 1fr;
+  }
+  .specificationList > div {
+    grid-template-columns: 1fr;
+    gap: 0.35rem;
+  }
+}
+
+.legacyCatalogueList {
+  display: none;
+}
+.adminTableWrapper {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid color-mix(in srgb, var(--text-color) 12%, transparent);
+  border-radius: 0.65rem;
+  background: var(--surface-color);
+}
+.adminTable {
+  width: 100%;
+  min-width: 760px;
+  border-collapse: collapse;
+  text-align: left;
+}
+.adminTable th {
+  padding: 0.8rem 1rem;
+  color: var(--muted-text-color);
+  background: color-mix(
+    in srgb,
+    var(--background-color) 75%,
+    var(--surface-color)
+  );
+  font-size: 0.78rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.adminTable td {
+  padding: 0.85rem 1rem;
+  border-top: 1px solid color-mix(in srgb, var(--text-color) 10%, transparent);
+  vertical-align: middle;
+}
+.adminTable tbody tr:hover {
+  background: color-mix(in srgb, var(--primary-color) 4%, var(--surface-color));
+}
+.tableImage {
+  width: 56px;
+  height: 56px;
+  border-radius: 0.4rem;
+  object-fit: contain;
+  background: var(--background-color);
+}
+.emptyCell {
+  color: var(--muted-text-color);
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+.statusPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0;
+  font-size: 0.82rem;
+  font-weight: 700;
+  white-space: nowrap;
+  background: transparent;
+}
+.statusPill::before {
+  font-size: 1rem;
+  line-height: 1;
+}
+.statusPill.active {
+  color: #176536;
+}
+.statusPill.active::before {
+  content: "✓";
+}
+.statusPill.inactive {
+  color: #8a1c1c;
+}
+.statusPill.inactive::before {
+  content: "✕";
+}
+.tableActions {
+  display: flex;
+  gap: 0.45rem;
+  white-space: nowrap;
+}
+.tableActions .adminButton {
+  width: 34px;
+  min-height: 34px;
+  padding: 0;
+  border-color: currentColor;
+  font-size: 0;
+  background: transparent;
+}
+.tableActions .adminButton::before {
+  font-size: 1.15rem;
+  line-height: 1;
+}
+.tableActions button.secondary {
+  color: var(--primary-color);
+}
+.tableActions button.secondary::before {
+  content: "✎";
+}
+.tableActions a.secondary {
+  color: var(--secondary-color);
+}
+.tableActions a.secondary::before {
+  content: "⚙";
+}
+.tableActions .adminButton.danger {
+  color: #b42318;
+  background: transparent;
+}
+.tableActions .adminButton.danger::before {
+  content: "✕";
+}
+.tableActions .adminButton:hover,
+.tableActions .adminButton:focus-visible {
+  background: color-mix(in srgb, currentColor 10%, transparent);
+}
+.tableLink {
+  color: var(--primary-color);
+  font-weight: 650;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.productTable {
+  min-width: 1050px;
+}
+.productTable td strong,
+.productTable td small {
+  display: block;
+}
+.productTable td small {
+  margin-top: 0.25rem;
+  color: var(--muted-text-color);
+}

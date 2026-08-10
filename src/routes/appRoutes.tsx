@@ -24,13 +24,14 @@ import { HomeSectionsPage } from "../pages/admin/homeSectionsPage";
 import { SiteSettingsPage } from "../pages/admin/siteSettingsPage";
 import { SocialMediaPage } from "../pages/admin/socialMediaPage";
 import { ThemeSettingsPage } from "../pages/admin/themeSettingsPage";
+import { BrandsPage } from "../pages/admin/brandsPage";
+import { CategoriesPage } from "../pages/admin/categoriesPage";
+import { CategoryBrandsPage } from "../pages/admin/categoryBrandsPage";
+import { ProductManagementPage } from "../pages/admin/productManagementPage";
+import { ProductsAdminPage } from "../pages/admin/productsPage";
+import { SubcategoriesPage } from "../pages/admin/subcategoriesPage";
 
 const adminPlaceholders = [
-  ["categories", "Categories"],
-  ["brands", "Brands"],
-  ["category-brands", "Category Brands"],
-  ["subcategories", "Subcategories"],
-  ["products", "Products"],
   ["enquiries", "Enquiries"],
 ] as const;
 
@@ -71,6 +72,12 @@ export const appRouter = createBrowserRouter([
           { path: "contact", element: <ContactSettingsPage /> },
           { path: "enquiry-settings", element: <EnquirySettingsPage /> },
           { path: "social-media", element: <SocialMediaPage /> },
+          { path: "categories", element: <CategoriesPage /> },
+          { path: "brands", element: <BrandsPage /> },
+          { path: "category-brands", element: <CategoryBrandsPage /> },
+          { path: "subcategories", element: <SubcategoriesPage /> },
+          { path: "products", element: <ProductsAdminPage /> },
+          { path: "products/:id/manage", element: <ProductManagementPage /> },
           ...adminPlaceholders.map(([path, title]) => ({
             path,
             element: <AdminPlaceholderPage title={title} />,
