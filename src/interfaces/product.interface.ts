@@ -2,8 +2,11 @@ export interface ProductSummary {
   id: string | number
   name: string
   slug: string
-  image?: string | null
+  mainImageUrl?: string | null
+  modelNumber?: string | null
   shortDescription?: string | null
+  brand?: { name: string; slug?: string } | null
+  displayOrder: number
 }
 
 export interface Product extends ProductSummary {
@@ -14,6 +17,6 @@ export interface Product extends ProductSummary {
 }
 
 export interface ProductListResponse {
-  data: ProductSummary[]
+  products: ProductSummary[]
   total?: number
 }

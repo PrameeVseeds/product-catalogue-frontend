@@ -1,66 +1,84 @@
-import type { ContactSettings, HeroContent, SiteContent, SiteSettings, SocialLink, ThemeSettings } from '../interfaces/site.interface'
+import type { HeroContent, HomeSection, HomeSectionItem, HomeSectionType, SiteContent, SocialLink } from '../interfaces/site.interface'
 import { apiClient } from './apiClient'
+import { asRecord, getBoolean, getId, getNumber, getText, unwrapData } from './responseNormalizers'
 
-type JsonRecord = Record<string, unknown>
-const record = (value: unknown): JsonRecord => value && typeof value === 'object' && !Array.isArray(value) ? value as JsonRecord : {}
-const text = (source: JsonRecord, ...keys: string[]): string | null => {
-  const value = keys.map((key) => source[key]).find((item) => typeof item === 'string')
-  return typeof value === 'string' ? value : null
+const sectionTypes: HomeSectionType[] = ['CONTENT', 'CARDS', 'CATEGORIES', 'FEATURED_PRODUCTS', 'BRANDS', 'CTA']
+
+const normalizeItem = (value: unknown): HomeSectionItem => {
+  const item = asRecord(value)
+  return {
+    id: getId(item), title: getText(item, 'title') ?? '', subtitle: getText(item, 'subtitle'), description: getText(item, 'description'),
+    imageUrl: getText(item, 'imageUrl', 'image_url'), iconName: getText(item, 'iconName', 'icon_name'),
+    buttonText: getText(item, 'buttonText', 'button_text'), buttonLink: getText(item, 'buttonLink', 'button_link'),
+    displayOrder: getNumber(item, 0, 'displayOrder', 'display_order'), isVisible: getBoolean(item, true, 'isVisible', 'is_visible'),
+  }
 }
-const bool = (source: JsonRecord, fallback: boolean, ...keys: string[]): boolean => {
-  const value = keys.map((key) => source[key]).find((item) => typeof item === 'boolean' || item === 0 || item === 1)
-  return value === undefined ? fallback : Boolean(value)
+
+const normalizeSection = (value: unknown): HomeSection | null => {
+  const section = asRecord(value)
+  const type = getText(section, 'sectionType', 'section_type') as HomeSectionType | null
+  if (!type || !sectionTypes.includes(type)) return null
+  const itemsSource = section.items
+  return {
+    id: getId(section), sectionKey: getText(section, 'sectionKey', 'section_key') ?? String(getId(section)),
+    title: getText(section, 'title'), subtitle: getText(section, 'subtitle'), description: getText(section, 'description'),
+    imageUrl: getText(section, 'imageUrl', 'image_url'), backgroundImageUrl: getText(section, 'backgroundImageUrl', 'background_image_url'),
+    buttonText: getText(section, 'buttonText', 'button_text'), buttonLink: getText(section, 'buttonLink', 'button_link'), sectionType: type,
+    displayOrder: getNumber(section, 0, 'displayOrder', 'display_order'), isVisible: getBoolean(section, true, 'isVisible', 'is_visible'),
+    items: Array.isArray(itemsSource) ? itemsSource.map(normalizeItem).filter((item) => item.isVisible).sort((a, b) => a.displayOrder - b.displayOrder) : [],
+  }
 }
 
 const normalizeSiteContent = (response: unknown): SiteContent => {
-  const envelope = record(response)
-  const root = record(envelope.data ?? response)
-  const settings = record(root.siteSettings ?? root.site_settings ?? root.settings)
-  const theme = record(root.themeSettings ?? root.theme_settings ?? root.theme)
-  const heroSource = record(root.hero)
-  const contact = record(root.contactSettings ?? root.contact_settings ?? root.contact)
-  const enquiry = record(root.enquirySettings ?? root.enquiry_settings ?? root.enquiry)
-  const socialSource = root.socialMedia ?? root.social_media ?? root.socialLinks ?? []
+  const root = asRecord(unwrapData(response))
+  const settings = asRecord(root.siteSettings ?? root.site_settings)
+  const theme = asRecord(root.themeSettings ?? root.theme_settings)
+  const heroSource = asRecord(root.hero)
+  const contact = asRecord(root.contactSettings ?? root.contact_settings)
+  const enquiry = asRecord(root.enquirySettings ?? root.enquiry_settings)
+  const socialSource = root.socialMedia ?? root.social_media
+  const sectionsSource = root.homeSections ?? root.home_sections
 
-  const siteSettings: SiteSettings = {
-    companyName: text(settings, 'companyName', 'company_name', 'siteName', 'site_name'),
-    logo: text(settings, 'logo', 'logoUrl', 'logo_url'),
-    footerDescription: text(settings, 'footerDescription', 'footer_description'),
-    address: text(settings, 'address'), phone: text(settings, 'phone'), email: text(settings, 'email'),
-    copyright: text(settings, 'copyright', 'copyrightText', 'copyright_text'),
-  }
-  const themeSettings: ThemeSettings = {
-    primaryColor: text(theme, 'primaryColor', 'primary_color'), secondaryColor: text(theme, 'secondaryColor', 'secondary_color'),
-    backgroundColor: text(theme, 'backgroundColor', 'background_color'), surfaceColor: text(theme, 'surfaceColor', 'surface_color'),
-    textColor: text(theme, 'textColor', 'text_color'), mutedTextColor: text(theme, 'mutedTextColor', 'muted_text_color'),
-    buttonBackgroundColor: text(theme, 'buttonBackgroundColor', 'button_background_color'), buttonTextColor: text(theme, 'buttonTextColor', 'button_text_color'),
-    headerBackgroundColor: text(theme, 'headerBackgroundColor', 'header_background_color'), footerBackgroundColor: text(theme, 'footerBackgroundColor', 'footer_background_color'),
-    footerTextColor: text(theme, 'footerTextColor', 'footer_text_color'),
-  }
-  const contactSettings: ContactSettings = {
-    callEnabled: bool(contact, false, 'callEnabled', 'call_enabled'), callPhone: text(contact, 'callPhone', 'call_phone', 'phone'),
-    whatsappEnabled: bool(enquiry, bool(contact, false, 'whatsappEnabled', 'whatsapp_enabled'), 'whatsappEnabled', 'whatsapp_enabled'),
-    whatsappPhone: text(enquiry, 'whatsappPhone', 'whatsapp_phone', 'phone') ?? text(contact, 'whatsappPhone', 'whatsapp_phone'),
-    whatsappDefaultMessage: text(enquiry, 'whatsappDefaultMessage', 'whatsapp_default_message', 'defaultMessage', 'default_message') ?? text(contact, 'whatsappDefaultMessage', 'whatsapp_default_message'),
-  }
+  const alignment = getText(heroSource, 'textAlignment', 'text_alignment')
   const hero: HeroContent | null = Object.keys(heroSource).length ? {
-    title: text(heroSource, 'title'), subtitle: text(heroSource, 'subtitle'), description: text(heroSource, 'description'),
-    backgroundImage: text(heroSource, 'backgroundImage', 'background_image'), foregroundImage: text(heroSource, 'foregroundImage', 'foreground_image', 'image'),
-    primaryButtonText: text(heroSource, 'primaryButtonText', 'primary_button_text'), primaryButtonUrl: text(heroSource, 'primaryButtonUrl', 'primary_button_url'),
-    secondaryButtonText: text(heroSource, 'secondaryButtonText', 'secondary_button_text'), secondaryButtonUrl: text(heroSource, 'secondaryButtonUrl', 'secondary_button_url'),
-    isVisible: bool(heroSource, true, 'isVisible', 'is_visible'),
+    title: getText(heroSource, 'title'), subtitle: getText(heroSource, 'subtitle'), description: getText(heroSource, 'description'),
+    backgroundImage: getText(heroSource, 'backgroundImageUrl', 'background_image_url', 'backgroundImage', 'background_image'),
+    foregroundImage: getText(heroSource, 'foregroundImageUrl', 'foreground_image_url', 'foregroundImage', 'foreground_image'),
+    primaryButtonText: getText(heroSource, 'primaryButtonText', 'primary_button_text'), primaryButtonUrl: getText(heroSource, 'primaryButtonLink', 'primary_button_link', 'primaryButtonUrl'),
+    secondaryButtonText: getText(heroSource, 'secondaryButtonText', 'secondary_button_text'), secondaryButtonUrl: getText(heroSource, 'secondaryButtonLink', 'secondary_button_link', 'secondaryButtonUrl'),
+    textAlignment: alignment === 'CENTER' || alignment === 'RIGHT' ? alignment : 'LEFT',
+    overlayOpacity: Math.min(1, Math.max(0, getNumber(heroSource, 0.45, 'overlayOpacity', 'overlay_opacity'))),
+    isVisible: getBoolean(heroSource, true, 'isVisible', 'is_visible'),
   } : null
-  const socialMedia: SocialLink[] = Array.isArray(socialSource) ? socialSource.map(record).map((item) => ({
-    id: typeof item.id === 'string' || typeof item.id === 'number' ? item.id : undefined,
-    platform: text(item, 'platform', 'name') ?? '', url: text(item, 'url', 'link') ?? '', isActive: bool(item, true, 'isActive', 'is_active'),
+
+  const socialMedia: SocialLink[] = Array.isArray(socialSource) ? socialSource.map(asRecord).map((item) => ({
+    id: getId(item), platform: getText(item, 'displayName', 'display_name', 'platform') ?? '',
+    url: getText(item, 'profileUrl', 'profile_url', 'url') ?? '', isActive: getBoolean(item, true, 'isActive', 'is_active'),
   })).filter((item) => item.platform && item.url) : []
+  const homeSections = (Array.isArray(sectionsSource) ? sectionsSource.map(normalizeSection) : []).filter((section): section is HomeSection => Boolean(section?.isVisible)).sort((a, b) => a.displayOrder - b.displayOrder)
 
-  return { siteSettings, themeSettings, hero, contactSettings, socialMedia }
+  return {
+    siteSettings: {
+      companyName: getText(settings, 'companyName', 'company_name'), logo: getText(settings, 'logoUrl', 'logo_url', 'logo'),
+      footerDescription: getText(settings, 'footerDescription', 'footer_description'), address: getText(contact, 'address'),
+      phone: getText(contact, 'phonePrimary', 'phone_primary'), email: getText(contact, 'generalEmail', 'general_email'),
+      copyright: getText(settings, 'copyrightText', 'copyright_text', 'copyright'),
+    },
+    themeSettings: {
+      primaryColor: getText(theme, 'primaryColor', 'primary_color'), secondaryColor: getText(theme, 'secondaryColor', 'secondary_color'),
+      backgroundColor: getText(theme, 'backgroundColor', 'background_color'), surfaceColor: getText(theme, 'surfaceColor', 'surface_color'), textColor: getText(theme, 'textColor', 'text_color'),
+      mutedTextColor: getText(theme, 'mutedTextColor', 'muted_text_color'), buttonBackgroundColor: getText(theme, 'buttonBackgroundColor', 'button_background_color'),
+      buttonTextColor: getText(theme, 'buttonTextColor', 'button_text_color'), headerBackgroundColor: getText(theme, 'headerBackgroundColor', 'header_background_color'),
+      footerBackgroundColor: getText(theme, 'footerBackgroundColor', 'footer_background_color'), footerTextColor: getText(theme, 'footerTextColor', 'footer_text_color'),
+    },
+    hero,
+    contactSettings: {
+      callEnabled: getBoolean(enquiry, false, 'callEnabled', 'call_enabled'), callPhone: getText(enquiry, 'callPhone', 'call_phone'),
+      whatsappEnabled: getBoolean(enquiry, false, 'whatsappEnabled', 'whatsapp_enabled'), whatsappPhone: getText(enquiry, 'whatsappNumber', 'whatsapp_number'),
+      whatsappDefaultMessage: getText(enquiry, 'whatsappDefaultMessage', 'whatsapp_default_message'),
+    },
+    socialMedia, homeSections,
+  }
 }
 
-export const siteApi = {
-  async getSiteContent(): Promise<SiteContent> {
-    const response = await apiClient.get<unknown>('/site-content')
-    return normalizeSiteContent(response.data)
-  },
-}
+export const siteApi = { async getSiteContent(): Promise<SiteContent> { const { data } = await apiClient.get<unknown>('/site-content'); return normalizeSiteContent(data) } }
