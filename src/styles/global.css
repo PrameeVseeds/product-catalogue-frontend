@@ -1233,13 +1233,10 @@ img {
   margin-bottom: 0.5rem;
 }
 .productActions {
-  width: fit-content;
-  display: grid;
-  justify-items: center;
-  gap: 1rem;
+  width: 100%;
   margin-top: 1.5rem;
 }
-.productContactActions {
+.productPrimaryActions {
   display: flex;
   flex-wrap: wrap;
   gap: 0.65rem;
@@ -1271,6 +1268,109 @@ img {
 .productActions .datasheetButton:focus-visible {
   filter: brightness(0.92);
   transform: translateY(-1px);
+}
+.inquireButton .lucide-chevron-down {
+  transition: transform 160ms ease;
+}
+.inquireButton .lucide-chevron-down.isExpanded {
+  transform: rotate(180deg);
+}
+.enquiryOptionsPanel {
+  margin-top: 1rem;
+  padding: 1rem;
+  border: 1px solid color-mix(in srgb, var(--primary-color) 22%, transparent);
+  border-radius: 0.7rem;
+  background: color-mix(in srgb, var(--primary-color) 5%, var(--surface-color));
+}
+.enquiryOptionsHeading h2 {
+  margin: 0;
+  font-size: 1.08rem;
+}
+.enquiryOptionsHeading p {
+  margin: 0.3rem 0 0;
+  color: var(--muted-text-color);
+}
+.enquiryOptionGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.7rem;
+  margin-top: 0.9rem;
+}
+.enquiryOptionCard {
+  min-width: 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.7rem;
+  padding: 0.85rem;
+  border: 1px solid color-mix(in srgb, var(--text-color) 13%, transparent);
+  border-radius: 0.55rem;
+  color: var(--text-color);
+  background: var(--background-color);
+  font: inherit;
+  text-align: left;
+}
+.enquiryOptionCard > svg {
+  width: 21px;
+  height: 21px;
+  flex: 0 0 auto;
+  color: var(--primary-color);
+}
+.enquiryOptionCard > div,
+.enquiryOptionCard > span {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.25rem;
+}
+.enquiryOptionCard strong,
+.enquiryOptionCard small,
+.enquiryOptionCard .contactValue {
+  display: block;
+}
+.enquiryOptionCard small {
+  color: var(--muted-text-color);
+}
+.enquiryOptionLink {
+  cursor: pointer;
+  text-decoration: none;
+}
+.enquiryOptionLink:hover,
+.enquiryOptionLink:focus-visible {
+  border-color: var(--primary-color);
+  box-shadow: 0 5px 14px color-mix(in srgb, var(--text-color) 8%, transparent);
+}
+.contactValue {
+  color: var(--primary-color);
+  overflow-wrap: anywhere;
+  text-decoration: none;
+}
+.copyPhoneControl {
+  margin-top: 0.2rem;
+}
+.copyPhoneButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0;
+  border: 0;
+  color: var(--primary-color);
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+.copyPhoneButton svg {
+  width: 15px;
+  height: 15px;
+}
+.copyPhoneFeedback {
+  min-height: 1.1em;
+  display: block;
+  margin-top: 0.2rem;
+  color: var(--muted-text-color);
+  font-size: 0.72rem;
 }
 .productSection {
   margin-top: 3rem;
@@ -1359,6 +1459,12 @@ img {
   .productActions .button {
     flex: 1 1 145px;
     text-align: center;
+  }
+  .enquiryOptionGrid {
+    grid-template-columns: 1fr;
+  }
+  .productPrimaryActions {
+    width: 100%;
   }
 }
 

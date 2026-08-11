@@ -6,12 +6,14 @@ import { enquiryApi } from "../../services/enquiryApi";
 interface Props {
   product: Product;
   defaultSubject?: string | null;
+  defaultMessage?: string | null;
   onClose: () => void;
 }
 
 export const ProductEnquiryForm = ({
   product,
   defaultSubject,
+  defaultMessage,
   onClose,
 }: Props) => {
   const [form, setForm] = useState({
@@ -19,7 +21,7 @@ export const ProductEnquiryForm = ({
     email: "",
     phone: "",
     subject: defaultSubject ?? "",
-    message: "",
+    message: defaultMessage ?? "",
   });
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -54,7 +56,7 @@ export const ProductEnquiryForm = ({
         email: "",
         phone: "",
         subject: defaultSubject ?? "",
-        message: "",
+        message: defaultMessage ?? "",
       });
       setSuccess("Your enquiry has been sent successfully.");
     } catch (reason) {
@@ -69,7 +71,7 @@ export const ProductEnquiryForm = ({
       aria-labelledby="product-enquiry-heading"
     >
       <div className="panelHeading">
-        <h2 id="product-enquiry-heading">Product enquiry</h2>
+        <h2 id="product-enquiry-heading">Request a quote</h2>
         <button type="button" className="textButton" onClick={onClose}>
           Close
         </button>
