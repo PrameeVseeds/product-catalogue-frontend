@@ -48,6 +48,12 @@ export const HomeSectionForm = ({value,saving,onChange,onSubmit,onCancel,}: Prop
               <option key={type}>{type}</option>
             ))}
           </select>
+          {value.sectionType === "FEATURED_PRODUCTS" && (
+            <small className="fieldHint">
+              Shows products marked Featured in an auto-scrolling row. Turn
+              Visible off to hide the entire row from the homepage.
+            </small>
+          )}
         </FormField>
         <FormField label="Title">
           <input

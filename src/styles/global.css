@@ -152,7 +152,7 @@ img {
 
 .heroSection {
   position: relative;
-  min-height: min(680px, calc(100svh - 72px));
+  min-height: min(600px, calc(100svh - 72px));
   display: grid;
   align-items: center;
   background-image: var(--hero-background);
@@ -175,7 +175,7 @@ img {
   grid-template-columns: minmax(0, 2fr) minmax(240px, 0.8fr);
   align-items: center;
   gap: clamp(2rem, 4vw, 4rem);
-  padding-block: clamp(4rem, 8vw, 6.5rem);
+  padding-block: clamp(3.25rem, 6vw, 5rem);
 }
 
 .heroTextOnly .heroContent {
@@ -324,6 +324,123 @@ img {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
   gap: 1.25rem;
+}
+.autoScrollingProductRow {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 1.25rem;
+  padding: 0.35rem 0.2rem 1rem;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  scroll-snap-type: inline proximity;
+  scrollbar-width: thin;
+  scrollbar-color: var(--primary-color)
+    color-mix(in srgb, var(--text-color) 8%, transparent);
+}
+.autoScrollingProductRow:focus-visible {
+  outline: 3px solid var(--primary-color);
+  outline-offset: 4px;
+}
+.autoScrollingProductRow .productCard {
+  width: clamp(190px, 18vw, 230px);
+  flex: 0 0 clamp(190px, 18vw, 230px);
+  scroll-snap-align: start;
+}
+.autoScrollingProductRow .productCard > a > img {
+  aspect-ratio: 4 / 3;
+  object-fit: contain;
+  background: var(--background-color);
+}
+.featuredProductsSection {
+  border-block: 1px solid
+    color-mix(in srgb, var(--primary-color) 14%, transparent);
+  background: color-mix(
+    in srgb,
+    var(--primary-color) 4%,
+    var(--background-color)
+  );
+}
+.featuredProductsSection .sectionHeading {
+  margin-bottom: clamp(1.5rem, 3vw, 2.25rem);
+}
+.featuredProductCard {
+  position: relative;
+  box-shadow: 0 8px 22px color-mix(in srgb, var(--text-color) 8%, transparent);
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease,
+    border-color 180ms ease;
+}
+.featuredProductCard > a > img {
+  transition: transform 220ms ease;
+}
+.featuredProductCard:hover,
+.featuredProductCard:focus-within {
+  border-color: color-mix(in srgb, var(--primary-color) 48%, transparent);
+  box-shadow: 0 13px 28px color-mix(in srgb, var(--text-color) 14%, transparent);
+  transform: translateY(-4px);
+}
+.featuredProductCard:hover > a > img,
+.featuredProductCard:focus-within > a > img {
+  transform: scale(1.035);
+}
+.featuredProductCard:active {
+  box-shadow: 0 6px 14px color-mix(in srgb, var(--text-color) 12%, transparent);
+  transform: translateY(-1px) scale(0.985);
+}
+.featuredProductCard .cardBody {
+  min-height: 92px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.9rem 1rem;
+}
+.featuredProductCard .cardBody h3 {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.35;
+}
+.featuredProductArrow {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: var(--button-text-color);
+  background: var(--button-background-color);
+  transition:
+    transform 160ms ease,
+    filter 160ms ease;
+}
+.featuredProductArrow svg {
+  width: 18px;
+  height: 18px;
+}
+.featuredProductArrow:hover,
+.featuredProductArrow:focus-visible {
+  filter: brightness(1.12);
+  transform: translateX(3px) scale(1.06);
+}
+.featuredProductArrow:active {
+  transform: translateX(1px) scale(0.92);
+}
+@media (prefers-reduced-motion: reduce) {
+  .featuredProductCard,
+  .featuredProductCard > a > img,
+  .featuredProductArrow {
+    transition: none;
+  }
+  .featuredProductCard:hover,
+  .featuredProductCard:focus-within,
+  .featuredProductCard:active,
+  .featuredProductCard:hover > a > img,
+  .featuredProductCard:focus-within > a > img,
+  .featuredProductArrow:hover,
+  .featuredProductArrow:focus-visible,
+  .featuredProductArrow:active {
+    transform: none;
+  }
 }
 .catalogueCard {
   overflow: hidden;
@@ -625,10 +742,9 @@ img {
 
 .footerGrid {
   display: grid;
-  grid-template-columns: minmax(240px, 1.8fr) minmax(130px, 0.75fr) minmax(
-      220px,
-      1.2fr
-    ) minmax(170px, 0.8fr);
+  grid-template-columns:
+    minmax(240px, 1.8fr) minmax(130px, 0.75fr) minmax(220px, 1.2fr)
+    minmax(170px, 0.8fr);
   align-items: start;
   gap: clamp(1.75rem, 4vw, 3.5rem);
 }
