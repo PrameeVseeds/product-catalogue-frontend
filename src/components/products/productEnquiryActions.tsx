@@ -1,73 +1,87 @@
+import { ChevronDown, FileDown, FileText, MessageCircle, Phone } from "lucide-react";
 import { useState } from "react";
-import { FileDown, Mail, Phone } from "lucide-react";
 import { FaWhatsapp } from "react-icons/fa6";
 import type { Product } from "../../interfaces/product.interface";
 import type { ContactSettings } from "../../interfaces/site.interface";
 import { productApi } from "../../services/productApi";
 import { getWhatsAppUrl } from "../../utils/getWhatsAppUrl";
+import { CopyPhoneButton } from "./copyPhoneButton";
 import { ProductEnquiryForm } from "./productEnquiryForm";
 
-export const ProductEnquiryActions = ({
-  product,
-  settings,
-}: {
-  product: Product;
-  settings: ContactSettings;
-}) => {
+export const ProductEnquiryActions = ({ product, settings }: { product: Product; settings: ContactSettings }) => {
+  const [showOptions, setShowOptions] = useState(false);
   const [showForm, setShowForm] = useState(false);
-  const productLabel = `${product.name}${product.modelNumber ? ` (${product.modelNumber})` : ""}`;
-  const whatsappMessage = [settings.whatsappDefaultMessage, productLabel]
-    .filter(Boolean)
-    .join(" - ");
+  const callPhone = settings.callPhone?.trim();
+  const whatsappMessage = [
+    settings.whatsappDefaultMessage,
+    `Product: ${product.name}`,
+    product.modelNumber ? `Model: ${product.modelNumber}` : null,
+  ].filter(Boolean).join("\n");
   const whatsappUrl = getWhatsAppUrl(settings.whatsappPhone, whatsappMessage);
+  const hasOptions = Boolean(
+    (settings.callEnabled && callPhone) ||
+    (settings.whatsappEnabled && whatsappUrl) ||
+    settings.emailEnabled,
+  );
+  const defaultSubject = `${settings.defaultEmailSubject?.trim() || "Quote Request"} - ${product.name}`;
+  const defaultMessage = [
+    "I would like to request a quotation for this product.",
+    "",
+    `Product: ${product.name}`,
+    product.modelNumber ? `Model: ${product.modelNumber}` : null,
+  ].filter((line) => line !== null).join("\n");
+
   return (
     <>
       <div className="productActions">
-        <div className="productContactActions">
-          {settings.callEnabled && settings.callPhone && (
-            <a className="button" href={`tel:${settings.callPhone}`}>
-              <Phone aria-hidden="true" />
-              {settings.callButtonText || "Call"}
-            </a>
-          )}
-          {settings.whatsappEnabled && whatsappUrl && (
-            <a
-              className="button buttonSecondary"
-              href={whatsappUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <FaWhatsapp aria-hidden="true" />
-              {settings.whatsappButtonText || "WhatsApp"}
-            </a>
-          )}
-          {settings.emailEnabled && (
-            <button
-              className="button buttonSecondary"
-              type="button"
-              onClick={() => setShowForm(true)}
-            >
-              <Mail aria-hidden="true" />
-              {settings.emailButtonText || "Enquire"}
+        <div className="productPrimaryActions">
+          {hasOptions && (
+            <button className="button inquireButton" type="button" aria-expanded={showOptions} aria-controls="product-enquiry-options" onClick={() => setShowOptions((current) => !current)}>
+              <MessageCircle aria-hidden="true" />
+              Inquire Now
+              <ChevronDown className={showOptions ? "isExpanded" : undefined} aria-hidden="true" />
             </button>
           )}
+          <a className="button datasheetButton" href={productApi.getDatasheetUrl(product.slug)} target="_blank" rel="noopener noreferrer">
+            <FileDown aria-hidden="true" />
+            Open Datasheet
+          </a>
         </div>
-        <a
-          className="button datasheetButton"
-          href={productApi.getDatasheetUrl(product.slug)}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <FileDown aria-hidden="true" />
-          Open Datasheet
-        </a>
+        {showOptions && hasOptions && (
+          <section className="enquiryOptionsPanel" id="product-enquiry-options" aria-labelledby="enquiry-options-heading">
+            <div className="enquiryOptionsHeading">
+              <h2 id="enquiry-options-heading">Interested in this product?</h2>
+              <p>Choose how you would like to contact us.</p>
+            </div>
+            <div className="enquiryOptionGrid">
+              {settings.callEnabled && callPhone && (
+                <div className="enquiryOptionCard">
+                  <Phone aria-hidden="true" />
+                  <div>
+                    <strong>{settings.callButtonText || "Call Now"}</strong>
+                    <a className="contactValue" href={`tel:${callPhone.replace(/[^+\d]/g, "")}`}>{callPhone}</a>
+                    <CopyPhoneButton phone={callPhone} />
+                  </div>
+                </div>
+              )}
+              {settings.whatsappEnabled && whatsappUrl && (
+                <a className="enquiryOptionCard enquiryOptionLink" href={whatsappUrl} target="_blank" rel="noopener noreferrer">
+                  <FaWhatsapp aria-hidden="true" />
+                  <span><strong>{settings.whatsappButtonText || "WhatsApp"}</strong><small>Continue in WhatsApp</small></span>
+                </a>
+              )}
+              {settings.emailEnabled && (
+                <button className="enquiryOptionCard enquiryOptionLink" type="button" onClick={() => setShowForm(true)}>
+                  <FileText aria-hidden="true" />
+                  <span><strong>Request Quote</strong><small>Send us your requirements</small></span>
+                </button>
+              )}
+            </div>
+          </section>
+        )}
       </div>
       {showForm && (
-        <ProductEnquiryForm
-          product={product}
-          defaultSubject={settings.defaultEmailSubject}
-          onClose={() => setShowForm(false)}
-        />
+        <ProductEnquiryForm product={product} defaultSubject={defaultSubject} defaultMessage={defaultMessage} onClose={() => setShowForm(false)} />
       )}
     </>
   );

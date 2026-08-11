@@ -18,14 +18,17 @@ export const ContactActions = ({ settings }: { settings: ContactSettings }) => {
   return (
     <div className="contactActions" aria-label="Contact options">
       {settings.callEnabled && callPhone && (
-        <a className="button" href={`tel:${callPhone.replace(/[^+\d]/g, "")}`}>
+        <a
+          className="button contactCallAction"
+          href={`tel:${callPhone.replace(/[^+\d]/g, "")}`}
+        >
           <Phone aria-hidden="true" />
           {settings.callButtonText || "Call"}
         </a>
       )}
       {settings.whatsappEnabled && whatsappUrl && (
         <a
-          className="button buttonSecondary"
+          className="button contactWhatsAppAction"
           href={whatsappUrl}
           target="_blank"
           rel="noopener noreferrer"
@@ -35,9 +38,9 @@ export const ContactActions = ({ settings }: { settings: ContactSettings }) => {
         </a>
       )}
       {settings.emailEnabled && (
-        <a className="button buttonSecondary" href="#contact-form">
+        <a className="button contactQuoteAction" href="#contact-form">
           <Mail aria-hidden="true" />
-          {settings.emailButtonText || "Email enquiry"}
+          Request Quote
         </a>
       )}
     </div>

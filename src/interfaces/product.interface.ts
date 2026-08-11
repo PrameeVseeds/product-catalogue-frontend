@@ -17,6 +17,7 @@ export interface Product extends ProductSummary {
   subcategory?: { name: string; slug: string } | null;
   datasheetTitle?: string | null;
   datasheetDescription?: string | null;
+  datasheetFileUrl?: string | null;
   galleryImages: {
     id: string | number;
     imageUrl: string;

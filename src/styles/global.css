@@ -57,7 +57,8 @@ img {
   position: relative;
   z-index: 10;
   background: var(--header-background-color);
-  border-bottom: 1px solid rgb(0 0 0 / 8%);
+  border-bottom: 1px solid color-mix(in srgb, var(--primary-color) 18%, transparent);
+  color: #ffffff;
 }
 
 .navbar {
@@ -74,6 +75,7 @@ img {
   gap: 0.75rem;
   font-weight: 700;
   text-decoration: none;
+  color: #ffffff;
 }
 
 .brand img {
@@ -89,20 +91,56 @@ img {
 }
 
 .navLinks > a {
+  position: relative;
+  padding-block: 0.45rem;
+  color: #ffffff;
   text-decoration: none;
+  transition: color 160ms ease;
 }
 
 .navLinks > a.active:not(.button) {
+  color: #ffffff;
+}
+.navLinks > a:not(.button)::after {
+  position: absolute;
+  right: 50%;
+  bottom: 0;
+  left: 50%;
+  height: 2px;
+  border-radius: 3px;
+  background: var(--primary-color);
+  content: "";
+  transition: right 180ms ease, left 180ms ease;
+}
+.navLinks > a:not(.button):hover {
   color: var(--primary-color);
+}
+.navLinks > a:not(.button):hover::after {
+  right: 25%;
+  left: 25%;
+}
+.navLinks > a.active:not(.button)::after {
+  right: 0;
+  left: 0;
+  height: 3px;
 }
 
 .menuButton {
   display: none;
-  padding: 0.55rem 0.75rem;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  place-items: center;
   border: 1px solid currentColor;
   border-radius: 0.4rem;
-  color: var(--text-color);
+  color: #ffffff;
   background: transparent;
+  cursor: pointer;
+}
+
+.menuButton svg {
+  width: 24px;
+  height: 24px;
 }
 
 .button {
@@ -115,6 +153,12 @@ img {
   color: var(--button-text-color);
   background: var(--button-background-color);
   text-decoration: none;
+  font-weight: 600;
+  transition: background-color 160ms ease, color 160ms ease, border-color 160ms ease, transform 160ms ease;
+}
+.button:hover,
+.button:focus-visible {
+  background: color-mix(in srgb, var(--button-background-color) 90%, #000000);
 }
 
 .buttonSmall {
@@ -143,7 +187,7 @@ img {
 
 .heroSection {
   position: relative;
-  min-height: min(680px, calc(100svh - 72px));
+  min-height: min(600px, calc(100svh - 72px));
   display: grid;
   align-items: center;
   background-image: var(--hero-background);
@@ -154,8 +198,13 @@ img {
 .heroSection::before {
   position: absolute;
   inset: 0;
-  background: var(--text-color);
-  opacity: var(--hero-overlay-opacity, 0);
+  background: linear-gradient(
+    90deg,
+    var(--secondary-color) 0%,
+    color-mix(in srgb, var(--secondary-color) 88%, transparent) 42%,
+    color-mix(in srgb, var(--secondary-color) 28%, transparent) 100%
+  );
+  opacity: max(0.38, var(--hero-overlay-opacity, 0.38));
   content: "";
   pointer-events: none;
 }
@@ -166,7 +215,7 @@ img {
   grid-template-columns: minmax(0, 2fr) minmax(240px, 0.8fr);
   align-items: center;
   gap: clamp(2rem, 4vw, 4rem);
-  padding-block: clamp(4rem, 8vw, 6.5rem);
+  padding-block: clamp(3.25rem, 6vw, 5rem);
 }
 
 .heroTextOnly .heroContent {
@@ -195,11 +244,26 @@ img {
 }
 
 .heroSection[style] .heroCopy {
-  color: var(--surface-color);
+  color: #ffffff;
+  text-shadow: 0 2px 14px rgb(0 0 0 / 28%);
 }
 
 .heroSection[style] .heroCopy > p:not(.eyebrow) {
-  color: inherit;
+  color: #e8eef7;
+}
+.heroSection[style] .heroCopy .eyebrow {
+  color: var(--primary-color);
+  text-shadow: 0 1px 8px rgb(0 0 0 / 38%);
+}
+.heroSection[style] .heroActions .buttonSecondary {
+  border-color: #ffffff;
+  color: #ffffff;
+  background: transparent;
+}
+.heroSection[style] .heroActions .buttonSecondary:hover,
+.heroSection[style] .heroActions .buttonSecondary:focus-visible {
+  color: var(--secondary-color);
+  background: #ffffff;
 }
 
 .heroAlignCENTER .heroContent {
@@ -277,6 +341,7 @@ img {
 .homeSection {
   padding-block: clamp(3rem, 7vw, 6rem);
   padding-top: clamp(2rem, 4vw, 3.5rem);
+  color: var(--heading-text-color);
 }
 .surfaceSection {
   background: var(--surface-color);
@@ -294,6 +359,8 @@ img {
   margin: 0.35rem 0 0.8rem;
   font-size: clamp(1.8rem, 4vw, 3rem);
   line-height: 1.15;
+  color: var(--heading-text-color);
+  font-weight: 750;
 }
 .sectionHeading > p:not(.eyebrow),
 .ctaContent > div > p:not(.eyebrow) {
@@ -302,6 +369,7 @@ img {
 }
 .sectionHeading .eyebrow {
   margin: 0.45rem auto 0;
+  color: var(--heading-text-color);
 }
 .sectionHeading h2 {
   width: 100%;
@@ -316,9 +384,121 @@ img {
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
   gap: 1.25rem;
 }
+.autoScrollingProductRow {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 1.25rem;
+  padding: 0.35rem 0.2rem 1rem;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  scroll-snap-type: inline proximity;
+  scrollbar-width: thin;
+  scrollbar-color: var(--primary-color)
+    color-mix(in srgb, var(--text-color) 8%, transparent);
+}
+.autoScrollingProductRow:focus-visible {
+  outline: 3px solid var(--primary-color);
+  outline-offset: 4px;
+}
+.autoScrollingProductRow .productCard {
+  width: clamp(190px, 18vw, 230px);
+  flex: 0 0 clamp(190px, 18vw, 230px);
+  scroll-snap-align: start;
+}
+.autoScrollingProductRow .productCard > a > img {
+  aspect-ratio: 4 / 3;
+  object-fit: contain;
+  background: var(--background-color);
+}
+.featuredProductsSection {
+  border-block: 1px solid var(--content-border-color);
+  background: var(--background-color);
+}
+.featuredProductsSection .sectionHeading {
+  margin-bottom: clamp(1.5rem, 3vw, 2.25rem);
+}
+.featuredProductCard {
+  position: relative;
+  box-shadow: 0 8px 22px color-mix(in srgb, var(--text-color) 8%, transparent);
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease,
+    border-color 180ms ease;
+}
+.featuredProductCard > a > img {
+  transition: transform 220ms ease;
+}
+.featuredProductCard:hover,
+.featuredProductCard:focus-within {
+  border-color: color-mix(in srgb, var(--primary-color) 48%, transparent);
+  box-shadow: 0 13px 28px color-mix(in srgb, var(--text-color) 14%, transparent);
+  transform: translateY(-4px);
+}
+.featuredProductCard:hover > a > img,
+.featuredProductCard:focus-within > a > img {
+  transform: scale(1.035);
+}
+.featuredProductCard:active {
+  box-shadow: 0 6px 14px color-mix(in srgb, var(--text-color) 12%, transparent);
+  transform: translateY(-1px) scale(0.985);
+}
+.featuredProductCard .cardBody {
+  min-height: 92px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.9rem 1rem;
+}
+.featuredProductCard .cardBody h3 {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.35;
+}
+.featuredProductArrow {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: var(--button-text-color);
+  background: var(--button-background-color);
+  transition:
+    transform 160ms ease,
+    filter 160ms ease;
+}
+.featuredProductArrow svg {
+  width: 18px;
+  height: 18px;
+}
+.featuredProductArrow:hover,
+.featuredProductArrow:focus-visible {
+  filter: brightness(1.12);
+  transform: translateX(3px) scale(1.06);
+}
+.featuredProductArrow:active {
+  transform: translateX(1px) scale(0.92);
+}
+@media (prefers-reduced-motion: reduce) {
+  .featuredProductCard,
+  .featuredProductCard > a > img,
+  .featuredProductArrow {
+    transition: none;
+  }
+  .featuredProductCard:hover,
+  .featuredProductCard:focus-within,
+  .featuredProductCard:active,
+  .featuredProductCard:hover > a > img,
+  .featuredProductCard:focus-within > a > img,
+  .featuredProductArrow:hover,
+  .featuredProductArrow:focus-visible,
+  .featuredProductArrow:active {
+    transform: none;
+  }
+}
 .catalogueCard {
   overflow: hidden;
-  border: 1px solid color-mix(in srgb, var(--text-color) 12%, transparent);
+  border: 1px solid var(--content-border-color);
   border-radius: 0.75rem;
   color: var(--text-color);
   background: var(--surface-color);
@@ -336,25 +516,26 @@ img {
 .cardBody h3 {
   margin: 0 0 0.7rem;
   font-size: 1.2rem;
+  color: var(--heading-text-color);
 }
 .cardBody h3 a {
   text-decoration: none;
 }
 .cardBody > p:not(.cardMeta, .modelNumber) {
   margin: 0 0 1rem;
-  color: var(--muted-text-color);
+  color: var(--body-text-color);
   line-height: 1.6;
 }
 .cardMeta,
 .modelNumber {
   margin: 0 0 0.45rem;
-  color: var(--secondary-color);
+  color: var(--heading-text-color);
   font-size: 0.85rem;
 }
 .textLink {
   display: inline-flex;
   margin-top: 0.25rem;
-  color: var(--primary-color);
+  color: var(--heading-text-color);
   font-weight: 700;
   text-decoration: none;
 }
@@ -408,9 +589,9 @@ img {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  border: 1px solid color-mix(in srgb, var(--text-color) 12%, transparent);
-  border-radius: 0.85rem;
-  background: var(--background-color);
+  border: 1px solid var(--content-border-color);
+  border-radius: 0.75rem;
+  background: var(--surface-color);
   box-shadow: 0 8px 24px color-mix(in srgb, var(--text-color) 7%, transparent);
   transition:
     transform 180ms ease,
@@ -418,7 +599,7 @@ img {
     border-color 180ms ease;
 }
 .serviceCard:hover {
-  border-color: color-mix(in srgb, var(--primary-color) 35%, transparent);
+  border-color: color-mix(in srgb, var(--primary-color) 55%, transparent);
   box-shadow: 0 14px 34px color-mix(in srgb, var(--text-color) 12%, transparent);
   transform: translateY(-4px);
 }
@@ -435,12 +616,9 @@ img {
   place-items: center;
   margin: 0;
   border-radius: 0.75rem;
-  color: var(--primary-color);
-  background: color-mix(
-    in srgb,
-    var(--primary-color) 12%,
-    var(--surface-color)
-  );
+  color: var(--secondary-color);
+  color: var(--heading-text-color);
+  background: var(--icon-background-color);
 }
 .serviceCardIcon svg {
   width: 28px;
@@ -471,10 +649,11 @@ img {
   margin: 0;
   font-size: 1.35rem;
   line-height: 1.25;
+  color: var(--heading-text-color);
 }
 .serviceCardBody > p:not(.cardMeta) {
   margin: 0 0 1.25rem;
-  color: var(--muted-text-color);
+  color: var(--body-text-color);
   line-height: 1.65;
 }
 .serviceCardLink {
@@ -483,7 +662,7 @@ img {
   gap: 0.4rem;
   align-self: flex-start;
   margin-top: auto;
-  color: var(--primary-color);
+  color: var(--secondary-color);
   font-weight: 750;
   text-decoration: none;
 }
@@ -556,7 +735,7 @@ img {
 .ctaSection {
   position: relative;
   overflow: hidden;
-  color: var(--text-color);
+  color: var(--footer-text-color);
   background-color: var(--secondary-color);
   background-image: var(--section-background);
   background-position: center;
@@ -616,10 +795,9 @@ img {
 
 .footerGrid {
   display: grid;
-  grid-template-columns: minmax(240px, 1.8fr) minmax(130px, 0.75fr) minmax(
-      220px,
-      1.2fr
-    ) minmax(170px, 0.8fr);
+  grid-template-columns:
+    minmax(240px, 1.8fr) minmax(130px, 0.75fr) minmax(220px, 1.2fr)
+    minmax(170px, 0.8fr);
   align-items: start;
   gap: clamp(1.75rem, 4vw, 3.5rem);
 }
@@ -633,9 +811,11 @@ img {
 }
 
 .footerGrid p {
-  color: inherit;
-  opacity: 0.8;
+  color: #cbd5e1;
   line-height: 1.7;
+}
+.footerContact address {
+  color: #cbd5e1;
 }
 
 .footerGrid address,
@@ -672,6 +852,7 @@ img {
 .footerLinks a:focus-visible,
 .footerContact a:hover,
 .footerContact a:focus-visible {
+  color: var(--primary-color);
   text-decoration: underline;
   text-underline-offset: 0.25em;
 }
@@ -851,7 +1032,7 @@ img {
   }
 
   .menuButton {
-    display: block;
+    display: grid;
   }
 
   .navLinks {
@@ -867,6 +1048,20 @@ img {
 
   .navLinks.open {
     display: flex;
+  }
+
+  .navLinks > a:not(.button) {
+    padding: 0.65rem 0.75rem;
+    border-left: 3px solid transparent;
+  }
+
+  .navLinks > a:not(.button)::after {
+    display: none;
+  }
+
+  .navLinks > a.active:not(.button) {
+    border-left-color: var(--primary-color);
+    background: color-mix(in srgb, var(--primary-color) 8%, transparent);
   }
 
   .heroContent {
@@ -922,16 +1117,33 @@ img {
   width: min(1240px, calc(100% - 2rem));
   padding-block: 2.5rem 4rem;
 }
+.productsLandingPage {
+  color: #475569;
+}
+.productsLandingPage::before {
+  position: fixed;
+  z-index: -1;
+  inset: 0;
+  background: #f8fafc;
+  content: "";
+}
 .publicCataloguePage section {
   margin-top: 2.5rem;
 }
 .pageIntro {
   margin-bottom: 2rem;
 }
+.productsLandingPage .pageIntro h1,
+.productsLandingPage section > h2 {
+  color: #0b1f3a;
+}
 .pageIntro p {
   max-width: 680px;
   color: var(--muted-text-color);
   line-height: 1.65;
+}
+.productsLandingPage .pageIntro p {
+  color: #64748b;
 }
 .publicProductToolbar {
   display: grid;
@@ -940,14 +1152,16 @@ img {
   gap: 1rem;
   margin-bottom: 2rem;
   padding: 1rem;
-  border: 1px solid color-mix(in srgb, var(--text-color) 12%, transparent);
-  border-radius: 0.7rem;
-  background: var(--surface-color);
+  border: 1px solid #e2e8f0;
+  border-radius: 0.75rem;
+  background: #ffffff;
+  box-shadow: 0 5px 18px rgb(15 23 42 / 4%);
 }
 .publicProductToolbar label {
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
+  color: #0b1f3a;
   font-weight: 650;
 }
 .publicProductToolbar input,
@@ -955,11 +1169,30 @@ img {
   width: 100%;
   min-height: 46px;
   padding: 0.7rem 0.8rem;
-  border: 1px solid color-mix(in srgb, var(--text-color) 22%, transparent);
+  border: 1px solid #cbd5e1;
   border-radius: 0.45rem;
-  color: var(--text-color);
-  background: var(--background-color);
+  color: #0b1f3a;
+  background: #ffffff;
   font: inherit;
+}
+.publicProductToolbar input::placeholder {
+  color: #94a3b8;
+}
+.publicProductToolbar input:focus,
+.publicProductToolbar select:focus {
+  border-color: #082b5c;
+  outline: none;
+  box-shadow: 0 0 0 3px rgb(8 43 92 / 12%);
+}
+.productsLandingPage .publicProductToolbar .buttonSecondary {
+  border-color: #0b1f3a;
+  color: #0b1f3a;
+  background: transparent;
+}
+.productsLandingPage .publicProductToolbar .buttonSecondary:hover,
+.productsLandingPage .publicProductToolbar .buttonSecondary:focus-visible {
+  color: #ffffff;
+  background: #0b1f3a;
 }
 .catalogueGrid {
   display: grid;
@@ -970,7 +1203,10 @@ img {
   min-height: 100%;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 7px 20px color-mix(in srgb, var(--text-color) 6%, transparent);
+  border-color: #e2e8f0;
+  border-radius: 0.75rem;
+  background: #ffffff;
+  box-shadow: 0 6px 18px rgb(15 23 42 / 5%);
   transition:
     transform 180ms ease,
     box-shadow 180ms ease,
@@ -978,13 +1214,21 @@ img {
 }
 .categoryCard:hover,
 .categoryCard:focus-visible {
-  border-color: color-mix(in srgb, var(--primary-color) 38%, transparent);
-  box-shadow: 0 13px 30px color-mix(in srgb, var(--text-color) 11%, transparent);
+  border-color: rgb(255 193 7 / 55%);
+  box-shadow: 0 12px 28px rgb(15 23 42 / 10%);
   transform: translateY(-3px);
 }
-.categoryCard > img {
+.categoryCard > img,
+.categoryImagePlaceholder {
+  width: 100%;
   aspect-ratio: 16 / 9;
   max-height: 180px;
+}
+.categoryCard > img {
+  object-fit: cover;
+}
+.categoryImagePlaceholder {
+  background: #f1f5f9;
 }
 .categoryCard .cardBody {
   flex: 1;
@@ -993,6 +1237,8 @@ img {
 }
 .categoryCard .cardBody h3 {
   font-size: 1.15rem;
+  font-weight: 700;
+  color: #0b1f3a;
   line-height: 1.3;
 }
 .categoryCard .cardBody p {
@@ -1000,9 +1246,34 @@ img {
   overflow: hidden;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
+  color: #475569;
 }
 .productGrid .productCard {
   min-width: 0;
+}
+.productsLandingPage .productGrid .productCard {
+  border-color: #e2e8f0;
+  background: #ffffff;
+}
+.productsLandingPage .productGrid .cardBody h3,
+.productsLandingPage .productGrid .cardBody h3 a {
+  color: #0b1f3a;
+}
+.productsLandingPage .productGrid .modelNumber {
+  color: #64748b;
+}
+.productsLandingPage .productGrid .cardBody > p:not(.modelNumber) {
+  color: #475569;
+}
+.productsLandingPage .productGrid .textLink {
+  color: #0b1f3a;
+}
+.productsLandingPage .productGrid .textLink:hover,
+.productsLandingPage .productGrid .textLink:focus-visible {
+  color: #082b5c;
+  text-decoration-color: #ffc107;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.25em;
 }
 .catalogueHero {
   display: grid;
@@ -1044,6 +1315,20 @@ img {
 }
 .productDetails {
   padding-block: 1.5rem 4rem;
+}
+.publicCataloguePage h1,
+.publicCataloguePage h2,
+.publicCataloguePage h3,
+.productDetails h1,
+.productDetails h2,
+.contactLayout h2 {
+  color: var(--heading-text-color);
+}
+.publicCataloguePage .catalogueHero p:not(.eyebrow),
+.productDetails .productInfo > p,
+.productDetails .productSection > p,
+.contactInfo dd {
+  color: var(--body-text-color);
 }
 .breadcrumbs ol {
   display: flex;
@@ -1108,13 +1393,10 @@ img {
   margin-bottom: 0.5rem;
 }
 .productActions {
-  width: fit-content;
-  display: grid;
-  justify-items: center;
-  gap: 1rem;
+  width: 100%;
   margin-top: 1.5rem;
 }
-.productContactActions {
+.productPrimaryActions {
   display: flex;
   flex-wrap: wrap;
   gap: 0.65rem;
@@ -1132,7 +1414,7 @@ img {
 .productActions .datasheetButton {
   gap: 0.5rem;
   border-color: var(--secondary-color);
-  color: var(--button-text-color);
+  color: var(--footer-text-color);
   background: var(--secondary-color);
   box-shadow: 0 5px 14px
     color-mix(in srgb, var(--secondary-color) 28%, transparent);
@@ -1144,8 +1426,113 @@ img {
 }
 .productActions .datasheetButton:hover,
 .productActions .datasheetButton:focus-visible {
+  color: #ffffff;
+  background: color-mix(in srgb, var(--secondary-color) 88%, #ffffff);
   filter: brightness(0.92);
   transform: translateY(-1px);
+}
+.inquireButton .lucide-chevron-down {
+  transition: transform 160ms ease;
+}
+.inquireButton .lucide-chevron-down.isExpanded {
+  transform: rotate(180deg);
+}
+.enquiryOptionsPanel {
+  margin-top: 1rem;
+  padding: 1rem;
+  border: 1px solid color-mix(in srgb, var(--primary-color) 22%, transparent);
+  border-radius: 0.7rem;
+  background: color-mix(in srgb, var(--primary-color) 5%, var(--surface-color));
+}
+.enquiryOptionsHeading h2 {
+  margin: 0;
+  font-size: 1.08rem;
+}
+.enquiryOptionsHeading p {
+  margin: 0.3rem 0 0;
+  color: var(--muted-text-color);
+}
+.enquiryOptionGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.7rem;
+  margin-top: 0.9rem;
+}
+.enquiryOptionCard {
+  min-width: 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.7rem;
+  padding: 0.85rem;
+  border: 1px solid color-mix(in srgb, var(--text-color) 13%, transparent);
+  border-radius: 0.55rem;
+  color: var(--text-color);
+  background: var(--background-color);
+  font: inherit;
+  text-align: left;
+}
+.enquiryOptionCard > svg {
+  width: 21px;
+  height: 21px;
+  flex: 0 0 auto;
+  color: var(--primary-color);
+}
+.enquiryOptionCard > div,
+.enquiryOptionCard > span {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.25rem;
+}
+.enquiryOptionCard strong,
+.enquiryOptionCard small,
+.enquiryOptionCard .contactValue {
+  display: block;
+}
+.enquiryOptionCard small {
+  color: var(--muted-text-color);
+}
+.enquiryOptionLink {
+  cursor: pointer;
+  text-decoration: none;
+}
+.enquiryOptionLink:hover,
+.enquiryOptionLink:focus-visible {
+  border-color: var(--primary-color);
+  box-shadow: 0 5px 14px color-mix(in srgb, var(--text-color) 8%, transparent);
+}
+.contactValue {
+  color: var(--primary-color);
+  overflow-wrap: anywhere;
+  text-decoration: none;
+}
+.copyPhoneControl {
+  margin-top: 0.2rem;
+}
+.copyPhoneButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0;
+  border: 0;
+  color: var(--primary-color);
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+.copyPhoneButton svg {
+  width: 15px;
+  height: 15px;
+}
+.copyPhoneFeedback {
+  min-height: 1.1em;
+  display: block;
+  margin-top: 0.2rem;
+  color: var(--muted-text-color);
+  font-size: 0.72rem;
 }
 .productSection {
   margin-top: 3rem;
@@ -1234,6 +1621,12 @@ img {
   .productActions .button {
     flex: 1 1 145px;
     text-align: center;
+  }
+  .enquiryOptionGrid {
+    grid-template-columns: 1fr;
+  }
+  .productPrimaryActions {
+    width: 100%;
   }
 }
 
@@ -1666,6 +2059,53 @@ img {
 .uploadSuccess {
   color: #176536;
   font-size: 0.875rem;
+}
+.datasheetUploader {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  padding: 1rem;
+  border: 1px solid color-mix(in srgb, var(--text-color) 12%, transparent);
+  border-radius: 0.55rem;
+  background: var(--surface-color);
+}
+.currentDatasheet {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  overflow-wrap: anywhere;
+}
+.currentDatasheet > svg {
+  width: 24px;
+  height: 24px;
+  flex: 0 0 auto;
+  color: var(--primary-color);
+}
+.currentDatasheet > span {
+  min-width: 0;
+  flex: 1;
+}
+.datasheetUploader .imageActions .adminButton {
+  gap: 0.45rem;
+}
+.datasheetUploader .imageActions svg {
+  width: 17px;
+  height: 17px;
+}
+.datasheetFallbackHint {
+  margin: 0;
+}
+@media (max-width: 600px) {
+  .currentDatasheet {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+  .currentDatasheet .adminButton {
+    width: 100%;
+  }
 }
 .colorControl {
   display: grid;
@@ -2564,7 +3004,8 @@ img {
   display: grid;
   min-height: 250px;
   align-items: center;
-  background: var(--surface-color);
+  color: #0b1f3a;
+  background: #f7f9fc;
 }
 .contactHero.hasImage {
   min-height: clamp(300px, 42vw, 480px);
@@ -2575,6 +3016,10 @@ img {
   background-position: center;
   background-size: cover;
 }
+.contactPage {
+  color: #475569;
+  background: #f7f9fc;
+}
 .contactHeroContent {
   position: relative;
   padding-block: 3.5rem;
@@ -2582,13 +3027,20 @@ img {
 .contactHero h1 {
   max-width: 800px;
   margin: 0;
+  color: #0b1f3a;
   font-size: clamp(2.25rem, 6vw, 4rem);
+}
+.contactHero.hasImage h1 {
+  color: #ffffff;
 }
 .contactHero p {
   max-width: 680px;
   margin: 1rem 0 0;
   font-size: 1.08rem;
   line-height: 1.7;
+}
+.contactHero:not(.hasImage) p {
+  color: #475569;
 }
 .contactLayout {
   display: grid;
@@ -2600,18 +3052,18 @@ img {
 .contactFormPanel h2,
 .mapSection h2 {
   margin-top: 0;
+  color: #0b1f3a;
 }
 .contactInfo dl {
   margin: 0;
 }
 .contactInfo dl > div {
   padding: 0.8rem 0;
-  border-bottom: 1px solid
-    color-mix(in srgb, var(--text-color) 12%, transparent);
+  border-bottom: 1px solid #e2e8f0;
 }
 .contactInfo dt {
   margin-bottom: 0.25rem;
-  color: var(--muted-text-color);
+  color: #64748b;
   font-size: 0.88rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -2619,14 +3071,59 @@ img {
 }
 .contactInfo dd {
   margin: 0;
+  color: #475569;
   line-height: 1.55;
   overflow-wrap: anywhere;
 }
+.contactInfo a {
+  color: #0b1f3a;
+}
+.contactInfo a:hover,
+.contactInfo a:focus-visible {
+  color: #082b5c;
+}
 .contactActions {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 0.65rem;
   margin-block: 1.5rem;
+}
+.contactActions .button {
+  min-width: 0;
+  padding-inline: 0.85rem;
+  white-space: nowrap;
+}
+.contactActions .contactCallAction {
+  border-color: #ffc107;
+  color: #0b1f3a;
+  background: #ffc107;
+}
+.contactActions .contactCallAction:hover,
+.contactActions .contactCallAction:focus-visible {
+  border-color: #e5ad06;
+  color: #0b1f3a;
+  background: #e5ad06;
+}
+.contactActions .contactWhatsAppAction {
+  border-color: #25d366;
+  color: #ffffff;
+  background: #25d366;
+}
+.contactActions .contactWhatsAppAction:hover,
+.contactActions .contactWhatsAppAction:focus-visible {
+  border-color: #1eae54;
+  color: #ffffff;
+  background: #1eae54;
+}
+.contactActions .contactQuoteAction {
+  border-color: #0b1f3a;
+  color: #0b1f3a;
+  background: #ffffff;
+}
+.contactActions .contactQuoteAction:hover,
+.contactActions .contactQuoteAction:focus-visible {
+  color: #ffffff;
+  background: #0b1f3a;
 }
 .contactDetailsColumn > .socialLinks {
   flex-direction: row;
@@ -2634,9 +3131,10 @@ img {
 }
 .contactFormPanel {
   padding: clamp(1.25rem, 4vw, 2rem);
-  border: 1px solid color-mix(in srgb, var(--text-color) 12%, transparent);
+  border: 1px solid #e2e8f0;
   border-radius: 0.75rem;
-  background: var(--surface-color);
+  background: #ffffff;
+  box-shadow: 0 8px 24px rgb(15 23 42 / 5%);
 }
 .contactForm {
   display: grid;
@@ -2647,21 +3145,42 @@ img {
   flex-direction: column;
   gap: 0.4rem;
   font-weight: 650;
+  color: #0b1f3a;
 }
 .contactForm input,
 .contactForm textarea {
   width: 100%;
   padding: 0.75rem 0.8rem;
-  border: 1px solid color-mix(in srgb, var(--text-color) 22%, transparent);
+  border: 1px solid #cbd5e1;
   border-radius: 0.45rem;
-  color: var(--text-color);
-  background: var(--background-color);
+  color: #0b1f3a;
+  background: #ffffff;
+}
+.contactForm input::placeholder,
+.contactForm textarea::placeholder {
+  color: #94a3b8;
+}
+.contactForm input:focus,
+.contactForm textarea:focus {
+  border-color: #082b5c;
+  outline: 3px solid rgb(8 43 92 / 15%);
+  outline-offset: 1px;
 }
 .contactForm textarea {
   resize: vertical;
 }
 .contactForm .button {
   justify-self: start;
+  border-color: #ffc107;
+  color: #0b1f3a;
+  background: #ffc107;
+  font-weight: 600;
+}
+.contactForm .button:hover:not(:disabled),
+.contactForm .button:focus-visible:not(:disabled) {
+  border-color: #e5ad06;
+  color: #0b1f3a;
+  background: #e5ad06;
 }
 .successMessage {
   padding: 0.8rem;
@@ -2685,6 +3204,9 @@ img {
   }
   .contactActions .button {
     flex: 1 1 140px;
+  }
+  .contactActions {
+    flex-wrap: wrap;
   }
   .mapSection iframe {
     min-height: 300px;
