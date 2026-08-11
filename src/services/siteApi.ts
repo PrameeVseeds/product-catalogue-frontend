@@ -235,6 +235,27 @@ const normalizeSiteContent = (response: unknown): SiteContent => {
         "default_email_subject",
       ),
     },
+    contactDetails: {
+      heading: getText(contact, "contactHeading", "contact_heading"),
+      description: getText(
+        contact,
+        "contactDescription",
+        "contact_description",
+      ),
+      companyName: getText(contact, "companyName", "company_name"),
+      address: getText(contact, "address"),
+      phonePrimary: getText(contact, "phonePrimary", "phone_primary"),
+      phoneSecondary: getText(contact, "phoneSecondary", "phone_secondary"),
+      fax: getText(contact, "fax"),
+      generalEmail: getText(contact, "generalEmail", "general_email"),
+      workingHours: getText(contact, "workingHours", "working_hours"),
+      mapEmbedUrl: getText(contact, "mapEmbedUrl", "map_embed_url"),
+      backgroundImageUrl: getText(
+        contact,
+        "contactBackgroundImageUrl",
+        "contact_background_image_url",
+      ),
+    },
     socialMedia,
     homeSections,
   };

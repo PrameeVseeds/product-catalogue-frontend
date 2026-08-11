@@ -82,6 +82,20 @@ export interface ContactSettings {
   defaultEmailSubject?: string | null
 }
 
+export interface ContactDetails {
+  heading?: string | null
+  description?: string | null
+  companyName?: string | null
+  address?: string | null
+  phonePrimary?: string | null
+  phoneSecondary?: string | null
+  fax?: string | null
+  generalEmail?: string | null
+  workingHours?: string | null
+  mapEmbedUrl?: string | null
+  backgroundImageUrl?: string | null
+}
+
 export interface SocialLink {
   id?: string | number
   platform: string
@@ -94,6 +108,7 @@ export interface SiteContent {
   themeSettings: ThemeSettings
   hero: HeroContent | null
   contactSettings: ContactSettings
+  contactDetails: ContactDetails
   socialMedia: SocialLink[]
   homeSections: HomeSection[]
 }

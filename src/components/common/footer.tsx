@@ -1,23 +1,54 @@
-import { useSiteContent } from '../../hooks/useSiteContent'
-
-const safeExternalUrl = (value: string): string => {
-  try { const url = new URL(value); return ['http:', 'https:'].includes(url.protocol) ? url.href : '' } catch { return '' }
-}
+import { Link } from "react-router-dom";
+import { useSiteContent } from "../../hooks/useSiteContent";
+import { getImageUrl } from "../../utils/getImageUrl";
+import { SocialLinks } from "./socialLinks";
 
 export const Footer = () => {
-  const { data } = useSiteContent()
-  const site = data?.siteSettings
-  const links = data?.socialMedia.filter((link) => link.isActive && safeExternalUrl(link.url)) ?? []
-  const hasDetails = site?.address || site?.phone || site?.email
-  if (!site?.companyName && !site?.footerDescription && !hasDetails && !links.length && !site?.copyright) return null
-
-  return <footer className="siteFooter"><div className="container footerGrid">
-    <div>{site?.companyName && <h2>{site.companyName}</h2>}{site?.footerDescription && <p>{site.footerDescription}</p>}</div>
-    {hasDetails && <address>
-      {site?.address && <span>{site.address}</span>}
-      {site?.phone && <a href={`tel:${site.phone.replace(/[^+\d]/g, '')}`}>{site.phone}</a>}
-      {site?.email && <a href={`mailto:${site.email}`}>{site.email}</a>}
-    </address>}
-    {links.length > 0 && <div className="socialLinks" aria-label="Social media">{links.map((link) => <a key={link.id ?? `${link.platform}-${link.url}`} href={safeExternalUrl(link.url)} target="_blank" rel="noopener noreferrer">{link.platform}</a>)}</div>}
-  </div>{site?.copyright && <div className="container copyright">{site.copyright}</div>}</footer>
-}
+  const { data } = useSiteContent();
+  const site = data?.siteSettings;
+  const logo = getImageUrl(site?.logo);
+  const activeSocialLinks =
+    data?.socialMedia.filter((link) => link.isActive) ?? [];
+  if (!site && !activeSocialLinks.length) return null;
+  return (
+    <footer className="siteFooter">
+      <div className="container footerGrid">
+        <div className="footerBrand">
+          {logo && (
+            <img
+              src={logo}
+              alt={
+                site?.companyName ? `${site.companyName} logo` : "Company logo"
+              }
+              loading="lazy"
+            />
+          )}
+          {site?.companyName && <h2>{site.companyName}</h2>}
+          {site?.footerDescription && <p>{site.footerDescription}</p>}
+        </div>
+        <nav className="footerLinks" aria-label="Footer navigation">
+          <h2>Quick links</h2>
+          <Link to="/">Home</Link>
+          <Link to="/products">Products</Link>
+          <Link to="/contact">Contact Us</Link>
+        </nav>
+        <div className="footerContact">
+          <h2>Contact</h2>
+          <address>
+            {site?.address && <span>{site.address}</span>}
+            {site?.phone && (
+              <a href={`tel:${site.phone.replace(/[^+\d]/g, "")}`}>
+                {site.phone}
+              </a>
+            )}
+            {site?.email && <a href={`mailto:${site.email}`}>{site.email}</a>}
+          </address>
+          <SocialLinks links={activeSocialLinks} />
+        </div>
+      </div>
+      {site?.copyright && (
+        <div className="container copyright">{site.copyright}</div>
+      )}
+    </footer>
+  );
+};

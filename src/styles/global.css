@@ -451,11 +451,29 @@ img {
 }
 
 .footerGrid address,
-.socialLinks {
+.socialLinks,
+.footerLinks {
   display: flex;
   flex-direction: column;
   gap: 0.65rem;
   font-style: normal;
+}
+
+.footerGrid h2 {
+  font-size: 1.15rem;
+}
+.footerBrand img {
+  width: auto;
+  height: 52px;
+  margin-bottom: 1rem;
+  object-fit: contain;
+}
+.footerLinks a,
+.footerContact a {
+  text-underline-offset: 0.2em;
+}
+.footerContact .socialLinks {
+  margin-top: 1rem;
 }
 
 .copyright {
@@ -1717,5 +1735,137 @@ img {
   .detailList > div {
     grid-template-columns: 1fr;
     gap: 0.2rem;
+  }
+}
+
+.contactHero {
+  position: relative;
+  display: grid;
+  min-height: 250px;
+  align-items: center;
+  background: var(--surface-color);
+}
+.contactHero.hasImage {
+  min-height: clamp(300px, 42vw, 480px);
+  color: var(--surface-color);
+  background-image:
+    linear-gradient(rgb(0 0 0 / 55%), rgb(0 0 0 / 55%)),
+    var(--contact-background);
+  background-position: center;
+  background-size: cover;
+}
+.contactHeroContent {
+  position: relative;
+  padding-block: 3.5rem;
+}
+.contactHero h1 {
+  max-width: 800px;
+  margin: 0;
+  font-size: clamp(2.25rem, 6vw, 4rem);
+}
+.contactHero p {
+  max-width: 680px;
+  margin: 1rem 0 0;
+  font-size: 1.08rem;
+  line-height: 1.7;
+}
+.contactLayout {
+  display: grid;
+  grid-template-columns: minmax(250px, 0.8fr) minmax(0, 1.2fr);
+  gap: clamp(2rem, 6vw, 5rem);
+  padding-block: clamp(3rem, 7vw, 5rem);
+}
+.contactInfo h2,
+.contactFormPanel h2,
+.mapSection h2 {
+  margin-top: 0;
+}
+.contactInfo dl {
+  margin: 0;
+}
+.contactInfo dl > div {
+  padding: 0.8rem 0;
+  border-bottom: 1px solid
+    color-mix(in srgb, var(--text-color) 12%, transparent);
+}
+.contactInfo dt {
+  margin-bottom: 0.25rem;
+  color: var(--muted-text-color);
+  font-size: 0.88rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.contactInfo dd {
+  margin: 0;
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+.contactActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin-block: 1.5rem;
+}
+.contactDetailsColumn > .socialLinks {
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.contactFormPanel {
+  padding: clamp(1.25rem, 4vw, 2rem);
+  border: 1px solid color-mix(in srgb, var(--text-color) 12%, transparent);
+  border-radius: 0.75rem;
+  background: var(--surface-color);
+}
+.contactForm {
+  display: grid;
+  gap: 1rem;
+}
+.contactForm label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-weight: 650;
+}
+.contactForm input,
+.contactForm textarea {
+  width: 100%;
+  padding: 0.75rem 0.8rem;
+  border: 1px solid color-mix(in srgb, var(--text-color) 22%, transparent);
+  border-radius: 0.45rem;
+  color: var(--text-color);
+  background: var(--background-color);
+}
+.contactForm textarea {
+  resize: vertical;
+}
+.contactForm .button {
+  justify-self: start;
+}
+.successMessage {
+  padding: 0.8rem;
+  border-left: 4px solid var(--primary-color);
+  background: color-mix(in srgb, var(--primary-color) 8%, var(--surface-color));
+}
+.mapSection {
+  padding-bottom: clamp(3rem, 7vw, 5rem);
+}
+.mapSection iframe {
+  display: block;
+  width: 100%;
+  min-height: 380px;
+  border: 0;
+  border-radius: 0.75rem;
+}
+
+@media (max-width: 760px) {
+  .contactLayout {
+    grid-template-columns: 1fr;
+  }
+  .contactActions .button {
+    flex: 1 1 140px;
+  }
+  .mapSection iframe {
+    min-height: 300px;
   }
 }

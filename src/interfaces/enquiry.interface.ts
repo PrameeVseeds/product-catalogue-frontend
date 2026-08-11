@@ -1,5 +1,5 @@
 export interface ProductEnquiryRequest {
-  productId: string | number;
+  productId?: string | number;
   name: string;
   email: string;
   phone?: string | null;
