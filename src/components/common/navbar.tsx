@@ -1,34 +1,53 @@
-import { useState } from 'react'
-import { NavLink } from 'react-router-dom'
-import { useSiteContent } from '../../hooks/useSiteContent'
-import { getImageUrl } from '../../utils/getImageUrl'
-
-const phoneHref = (phone: string) => phone.replace(/[^+\d]/g, '')
+import { useState } from "react";
+import { NavLink } from "react-router-dom";
+import { useSiteContent } from "../../hooks/useSiteContent";
+import { getImageUrl } from "../../utils/getImageUrl";
 
 export const Navbar = () => {
-  const [open, setOpen] = useState(false)
-  const { data } = useSiteContent()
-  const site = data?.siteSettings
-  const contact = data?.contactSettings
-  const logoUrl = getImageUrl(site?.logo)
-  const callPhone = contact?.callPhone?.trim()
-  const whatsappPhone = contact?.whatsappPhone?.replace(/\D/g, '')
-  const whatsappUrl = whatsappPhone ? `https://wa.me/${whatsappPhone}${contact?.whatsappDefaultMessage ? `?text=${encodeURIComponent(contact.whatsappDefaultMessage)}` : ''}` : ''
+  const [open, setOpen] = useState(false);
+  const { data } = useSiteContent();
+  const site = data?.siteSettings;
+  const logoUrl = getImageUrl(site?.logo);
 
-  return <header className="siteHeader">
-    <div className="container navbar">
-      <NavLink to="/" className="brand" onClick={() => setOpen(false)}>
-        {logoUrl && <img src={logoUrl} alt={site?.companyName ? `${site.companyName} logo` : 'Company logo'} />}
-        {site?.companyName && <span>{site.companyName}</span>}
-      </NavLink>
-      <button className="menuButton" type="button" aria-expanded={open} aria-controls="public-navigation" onClick={() => setOpen((value) => !value)}>Menu</button>
-      <nav id="public-navigation" className={open ? 'navLinks open' : 'navLinks'} aria-label="Main navigation">
-        <NavLink to="/" end onClick={() => setOpen(false)}>Home</NavLink>
-        <NavLink to="/products" onClick={() => setOpen(false)}>Products</NavLink>
-        <NavLink to="/contact" onClick={() => setOpen(false)}>Contact Us</NavLink>
-        {contact?.callEnabled && callPhone && <a className="button buttonSmall" href={`tel:${phoneHref(callPhone)}`}>Call Now</a>}
-        {contact?.whatsappEnabled && whatsappUrl && <a className="button buttonSmall" href={whatsappUrl} target="_blank" rel="noopener noreferrer">WhatsApp</a>}
-      </nav>
-    </div>
-  </header>
-}
+  return (
+    <header className="siteHeader">
+      <div className="container navbar">
+        <NavLink to="/" className="brand" onClick={() => setOpen(false)}>
+          {logoUrl && (
+            <img
+              src={logoUrl}
+              alt={
+                site?.companyName ? `${site.companyName} logo` : "Company logo"
+              }
+            />
+          )}
+          {site?.companyName && <span>{site.companyName}</span>}
+        </NavLink>
+        <button
+          className="menuButton"
+          type="button"
+          aria-expanded={open}
+          aria-controls="public-navigation"
+          onClick={() => setOpen((value) => !value)}
+        >
+          Menu
+        </button>
+        <nav
+          id="public-navigation"
+          className={open ? "navLinks open" : "navLinks"}
+          aria-label="Main navigation"
+        >
+          <NavLink to="/" end onClick={() => setOpen(false)}>
+            Home
+          </NavLink>
+          <NavLink to="/products" onClick={() => setOpen(false)}>
+            Products
+          </NavLink>
+          <NavLink to="/contact" onClick={() => setOpen(false)}>
+            Contact Us
+          </NavLink>
+        </nav>
+      </div>
+    </header>
+  );
+};

@@ -9,7 +9,14 @@ html {
 body {
   margin: 0;
   min-width: 320px;
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
   color: var(--text-color);
   background: var(--background-color);
 }
@@ -64,7 +71,7 @@ img {
 .brand {
   display: inline-flex;
   align-items: center;
-  gap: .75rem;
+  gap: 0.75rem;
   font-weight: 700;
   text-decoration: none;
 }
@@ -81,19 +88,19 @@ img {
   gap: 1.25rem;
 }
 
-.navLinks>a {
+.navLinks > a {
   text-decoration: none;
 }
 
-.navLinks>a.active:not(.button) {
+.navLinks > a.active:not(.button) {
   color: var(--primary-color);
 }
 
 .menuButton {
   display: none;
-  padding: .55rem .75rem;
+  padding: 0.55rem 0.75rem;
   border: 1px solid currentColor;
-  border-radius: .4rem;
+  border-radius: 0.4rem;
   color: var(--text-color);
   background: transparent;
 }
@@ -102,16 +109,16 @@ img {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: .75rem 1.15rem;
+  padding: 0.75rem 1.15rem;
   border: 1px solid transparent;
-  border-radius: .45rem;
+  border-radius: 0.45rem;
   color: var(--button-text-color);
   background: var(--button-background-color);
   text-decoration: none;
 }
 
 .buttonSmall {
-  padding: .55rem .8rem;
+  padding: 0.55rem 0.8rem;
 }
 
 .buttonSecondary {
@@ -135,59 +142,118 @@ img {
 }
 
 .heroSection {
-  min-height: min(680px, calc(100vh - 72px));
+  position: relative;
+  min-height: min(680px, calc(100svh - 72px));
   display: grid;
   align-items: center;
+  background-image: var(--hero-background);
   background-position: center;
   background-size: cover;
 }
 
+.heroSection::before {
+  position: absolute;
+  inset: 0;
+  background: var(--text-color);
+  opacity: var(--hero-overlay-opacity, 0);
+  content: "";
+  pointer-events: none;
+}
+
 .heroContent {
+  position: relative;
   display: grid;
-  grid-template-columns: minmax(0, 1.15fr) minmax(260px, .85fr);
+  grid-template-columns: minmax(0, 2fr) minmax(240px, 0.8fr);
   align-items: center;
-  gap: clamp(2rem, 6vw, 5rem);
-  padding-block: 4rem;
+  gap: clamp(2rem, 4vw, 4rem);
+  padding-block: clamp(4rem, 8vw, 6.5rem);
+}
+
+.heroTextOnly .heroContent {
+  grid-template-columns: minmax(0, 1fr);
 }
 
 .heroCopy {
-  max-width: 680px;
+  width: 100%;
+  max-width: 760px;
 }
 
 .heroCopy h1 {
-  margin: .4rem 0 1rem;
-  font-size: clamp(2.5rem, 7vw, 5rem);
-  line-height: 1.04;
+  margin: 0.75rem 0 1.25rem;
+  font-size: clamp(2.75rem, 4.5vw, 4rem);
+  font-weight: 750;
+  line-height: 1.08;
+  letter-spacing: -0.025em;
 }
 
-.heroCopy>p:not(.eyebrow) {
-  max-width: 60ch;
+.heroCopy > p:not(.eyebrow) {
+  max-width: 680px;
+  margin-block: 0;
   color: var(--muted-text-color);
-  font-size: 1.1rem;
-  line-height: 1.7;
+  font-size: clamp(1rem, 1.4vw, 1.125rem);
+  line-height: 1.65;
 }
 
 .heroSection[style] .heroCopy {
-  color: #fff;
+  color: var(--surface-color);
 }
 
-.heroSection[style] .heroCopy>p:not(.eyebrow) {
-  color: #fff;
+.heroSection[style] .heroCopy > p:not(.eyebrow) {
+  color: inherit;
+}
+
+.heroAlignCENTER .heroContent {
+  grid-template-columns: minmax(0, 1fr);
+  justify-items: center;
+  text-align: center;
+}
+.heroAlignCENTER .heroCopy {
+  max-width: 800px;
+  margin-inline: auto;
+}
+.heroAlignCENTER .heroCopy > p:not(.eyebrow),
+.heroAlignCENTER .eyebrow {
+  margin-inline: auto;
+}
+.heroAlignCENTER .heroActions {
+  justify-content: center;
+}
+.heroAlignCENTER .heroImage {
+  max-width: 640px;
+}
+.heroAlignRIGHT .heroContent {
+  direction: rtl;
+}
+.heroAlignRIGHT .heroContent > * {
+  direction: ltr;
+}
+.heroAlignRIGHT .heroCopy {
+  margin-left: auto;
+  text-align: right;
+}
+.heroAlignRIGHT .heroCopy > p:not(.eyebrow),
+.heroAlignRIGHT .eyebrow {
+  margin-left: auto;
+}
+.heroAlignRIGHT .heroActions {
+  justify-content: flex-end;
 }
 
 .eyebrow {
   margin: 0;
+  max-width: 700px;
   color: var(--secondary-color);
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: .1em;
+  letter-spacing: 0.075em;
+  line-height: 1.5;
 }
 
 .heroActions {
   display: flex;
   flex-wrap: wrap;
-  gap: .75rem;
-  margin-top: 1.75rem;
+  gap: 0.75rem;
+  margin-top: 2rem;
 }
 
 .heroImage {
@@ -196,10 +262,327 @@ img {
   object-fit: contain;
 }
 
+@media (max-width: 960px) {
+  .heroHasForeground .heroContent {
+    grid-template-columns: minmax(0, 1.5fr) minmax(210px, 0.65fr);
+  }
+  .heroCopy h1 {
+    font-size: clamp(2.5rem, 5.8vw, 3.5rem);
+  }
+}
+
+.catalogueLoading {
+  padding-block: 1.5rem;
+}
+.homeSection {
+  padding-block: clamp(3rem, 7vw, 6rem);
+  padding-top: clamp(2rem, 4vw, 3.5rem);
+}
+.surfaceSection {
+  background: var(--surface-color);
+}
+.sectionHeading {
+  max-width: 720px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 auto 2rem;
+  text-align: center;
+}
+.sectionHeading h2,
+.ctaContent h2 {
+  margin: 0.35rem 0 0.8rem;
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  line-height: 1.15;
+}
+.sectionHeading > p:not(.eyebrow),
+.ctaContent > div > p:not(.eyebrow) {
+  color: var(--muted-text-color);
+  line-height: 1.7;
+}
+.sectionHeading .eyebrow {
+  margin: 0.45rem auto 0;
+}
+.sectionHeading h2 {
+  width: 100%;
+  margin: 0;
+}
+.sectionHeading > p:not(.eyebrow) {
+  max-width: 680px;
+  margin: 0.75rem auto 0;
+}
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+  gap: 1.25rem;
+}
+.catalogueCard {
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--text-color) 12%, transparent);
+  border-radius: 0.75rem;
+  color: var(--text-color);
+  background: var(--surface-color);
+  text-decoration: none;
+}
+.catalogueCard > img,
+.catalogueCard > a > img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+.cardBody {
+  padding: 1.25rem;
+}
+.cardBody h3 {
+  margin: 0 0 0.7rem;
+  font-size: 1.2rem;
+}
+.cardBody h3 a {
+  text-decoration: none;
+}
+.cardBody > p:not(.cardMeta, .modelNumber) {
+  margin: 0 0 1rem;
+  color: var(--muted-text-color);
+  line-height: 1.6;
+}
+.cardMeta,
+.modelNumber {
+  margin: 0 0 0.45rem;
+  color: var(--secondary-color);
+  font-size: 0.85rem;
+}
+.textLink {
+  display: inline-flex;
+  margin-top: 0.25rem;
+  color: var(--primary-color);
+  font-weight: 700;
+  text-decoration: none;
+}
+.textLink:hover,
+.textLink:focus-visible {
+  text-decoration: underline;
+}
+.itemIcon {
+  display: block;
+  margin-bottom: 0.75rem;
+  color: var(--primary-color);
+  font-weight: 700;
+}
+.serviceCardsSection .sectionHeading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  max-width: 780px;
+  margin: 0 auto clamp(2rem, 5vw, 3.25rem);
+  gap: 0;
+  text-align: center;
+}
+.serviceCardsSection {
+  padding-top: clamp(2rem, 4vw, 3.5rem);
+}
+.serviceCardsSection .sectionHeading .eyebrow {
+  order: 2;
+  margin-top: 0.4rem;
+  margin-inline: auto;
+  letter-spacing: 0.075em;
+}
+.serviceCardsSection .sectionHeading h2 {
+  order: 1;
+  width: 100%;
+  margin: 0;
+  font-size: clamp(2.1rem, 4.2vw, 3.4rem);
+}
+.serviceCardsSection .sectionHeading > p:not(.eyebrow) {
+  order: 3;
+  max-width: 680px;
+  margin: 0.65rem auto 0;
+  font-size: 1.05rem;
+}
+.serviceCardGrid {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  gap: clamp(1rem, 2.5vw, 1.5rem);
+}
+.serviceCard {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--text-color) 12%, transparent);
+  border-radius: 0.85rem;
+  background: var(--background-color);
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--text-color) 7%, transparent);
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease,
+    border-color 180ms ease;
+}
+.serviceCard:hover {
+  border-color: color-mix(in srgb, var(--primary-color) 35%, transparent);
+  box-shadow: 0 14px 34px color-mix(in srgb, var(--text-color) 12%, transparent);
+  transform: translateY(-4px);
+}
+.serviceCardImage {
+  width: 100%;
+  aspect-ratio: 16 / 8;
+  object-fit: cover;
+}
+.serviceCardIcon {
+  flex: 0 0 58px;
+  width: 58px;
+  height: 58px;
+  display: grid;
+  place-items: center;
+  margin: 0;
+  border-radius: 0.75rem;
+  color: var(--primary-color);
+  background: color-mix(
+    in srgb,
+    var(--primary-color) 12%,
+    var(--surface-color)
+  );
+}
+.serviceCardIcon svg {
+  width: 28px;
+  height: 28px;
+}
+.serviceCardBody {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+}
+.serviceCardHeading {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+.serviceCardHeading > div {
+  min-width: 0;
+}
+.serviceCardBody .cardMeta {
+  margin: 0.35rem 0 0;
+  font-weight: 750;
+  text-transform: uppercase;
+  letter-spacing: 0.055em;
+}
+.serviceCardBody h3 {
+  margin: 0;
+  font-size: 1.35rem;
+  line-height: 1.25;
+}
+.serviceCardBody > p:not(.cardMeta) {
+  margin: 0 0 1.25rem;
+  color: var(--muted-text-color);
+  line-height: 1.65;
+}
+.serviceCardLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  align-self: flex-start;
+  margin-top: auto;
+  color: var(--primary-color);
+  font-weight: 750;
+  text-decoration: none;
+}
+.serviceCardLink::after {
+  content: "→";
+  transition: transform 160ms ease;
+}
+.serviceCardLink:hover::after,
+.serviceCardLink:focus-visible::after {
+  transform: translateX(3px);
+}
+@media (prefers-reduced-motion: reduce) {
+  .serviceCard,
+  .serviceCardLink::after {
+    transition: none;
+  }
+  .serviceCard:hover {
+    transform: none;
+  }
+}
+.brandGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 160px), 1fr));
+  gap: 1rem;
+}
+.brandCard {
+  min-height: 160px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  padding: 1.25rem;
+  border: 1px solid color-mix(in srgb, var(--text-color) 12%, transparent);
+  border-radius: 0.75rem;
+  background: var(--surface-color);
+  text-align: center;
+  text-decoration: none;
+}
+.brandCard img {
+  width: 100%;
+  height: 72px;
+  object-fit: contain;
+}
+.brandCard span {
+  color: var(--muted-text-color);
+  font-size: 0.85rem;
+}
+.contentSection,
+.ctaContent {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: center;
+  gap: clamp(2rem, 6vw, 5rem);
+}
+.contentSection.contentReversed > div {
+  order: 2;
+}
+.contentSection > img,
+.ctaContent > img {
+  width: 100%;
+  max-height: 440px;
+  object-fit: cover;
+  border-radius: 0.75rem;
+}
+.contentSection .button,
+.ctaContent .button {
+  margin-top: 1.25rem;
+}
+.ctaSection {
+  position: relative;
+  overflow: hidden;
+  color: var(--text-color);
+  background-color: var(--secondary-color);
+  background-image: var(--section-background);
+  background-position: center;
+  background-size: cover;
+}
+.ctaSection.hasBackground::before {
+  position: absolute;
+  inset: 0;
+  background: var(--text-color);
+  opacity: 0.6;
+  content: "";
+}
+.ctaContent {
+  position: relative;
+}
+.ctaSection.hasBackground .ctaContent {
+  color: var(--surface-color);
+}
+.ctaSection.hasBackground .ctaContent > div > p:not(.eyebrow) {
+  color: inherit;
+}
+
 .loading {
   display: flex;
   align-items: center;
-  gap: .75rem;
+  gap: 0.75rem;
   color: var(--muted-text-color);
 }
 
@@ -209,7 +592,7 @@ img {
   border: 3px solid rgb(0 0 0 / 15%);
   border-top-color: var(--primary-color);
   border-radius: 50%;
-  animation: spin .8s linear infinite;
+  animation: spin 0.8s linear infinite;
 }
 
 @keyframes spin {
@@ -220,47 +603,246 @@ img {
 
 .errorMessage {
   padding: 1rem;
-  border-radius: .4rem;
+  border-radius: 0.4rem;
   color: #8a1c1c;
   background: #feecec;
 }
 
 .siteFooter {
-  padding-top: 3rem;
+  padding-top: clamp(2.5rem, 5vw, 4rem);
   color: var(--footer-text-color);
   background: var(--footer-background-color);
 }
 
 .footerGrid {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr;
-  gap: 2rem;
+  grid-template-columns: minmax(240px, 1.8fr) minmax(130px, 0.75fr) minmax(
+      220px,
+      1.2fr
+    ) minmax(170px, 0.8fr);
+  align-items: start;
+  gap: clamp(1.75rem, 4vw, 3.5rem);
 }
 
 .footerGrid h2 {
-  margin-top: 0;
+  margin: 0 0 1rem;
+  color: inherit;
+  font-size: 0.86rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
 .footerGrid p {
   color: inherit;
-  opacity: .8;
+  opacity: 0.8;
   line-height: 1.7;
 }
 
 .footerGrid address,
-.socialLinks {
+.footerLinks {
   display: flex;
   flex-direction: column;
-  gap: .65rem;
+  gap: 0.75rem;
   font-style: normal;
 }
 
+.footerBrand img {
+  width: auto;
+  max-width: min(220px, 100%);
+  height: 54px;
+  margin-bottom: 0.85rem;
+  object-fit: contain;
+}
+.footerBrand h2 {
+  margin-bottom: 0.65rem;
+  font-size: 1.15rem;
+  letter-spacing: 0.02em;
+  text-transform: none;
+}
+.footerBrand p {
+  max-width: 390px;
+  margin: 0;
+}
+.footerLinks a,
+.footerContact a {
+  color: inherit;
+  text-decoration: none;
+}
+.footerLinks a:hover,
+.footerLinks a:focus-visible,
+.footerContact a:hover,
+.footerContact a:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+}
+.footerContact address > a,
+.footerContact address > span {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+.footerContact address svg {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
+  margin-top: 0.16rem;
+  opacity: 0.85;
+}
+.socialLinks {
+  display: flex;
+  flex-flow: row wrap;
+  gap: 0.65rem;
+}
+.socialIcon,
+.socialPlatformIcon {
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 auto;
+  border-radius: 0.6rem;
+}
+.socialIcon {
+  width: 40px;
+  height: 40px;
+  box-shadow: 0 5px 14px rgb(0 0 0 / 16%);
+  transition:
+    transform 150ms ease,
+    box-shadow 150ms ease;
+}
+.socialIcon svg {
+  width: 20px;
+  height: 20px;
+}
+.socialIcon-instagram {
+  background: linear-gradient(135deg, #405de6, #c13584 55%, #f77737) !important;
+}
+.socialIcon-tiktok {
+  box-shadow:
+    -2px 0 #25f4ee,
+    2px 0 #fe2c55,
+    0 5px 14px rgb(0 0 0 / 16%);
+}
+.socialIcon:hover,
+.socialIcon:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgb(0 0 0 / 24%);
+}
+.socialIcon:focus-visible {
+  outline: 3px solid var(--footer-text-color);
+  outline-offset: 3px;
+}
+.socialPlatformTrigger:focus-visible,
+.socialPlatformOptions button:focus-visible {
+  outline: 3px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
 .copyright {
-  margin-top: 2.5rem;
-  padding-block: 1rem;
-  border-top: 1px solid rgb(255 255 255 / 15%);
-  font-size: .9rem;
-  opacity: .75;
+  margin-top: clamp(2rem, 4vw, 3rem);
+  padding-block: 1.1rem;
+  border-top: 1px solid
+    color-mix(in srgb, var(--footer-text-color) 18%, transparent);
+  font-size: 0.85rem;
+  opacity: 0.8;
+  text-align: center;
+}
+
+.socialPlatformPicker {
+  position: relative;
+}
+.socialPlatformTrigger {
+  width: 100%;
+  min-height: 52px;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid color-mix(in srgb, var(--text-color) 20%, transparent);
+  border-radius: 0.45rem;
+  color: var(--text-color);
+  background: var(--surface-color);
+  cursor: pointer;
+  text-align: left;
+}
+.socialPlatformTrigger > span:nth-child(2) {
+  flex: 1;
+  font-weight: 650;
+}
+.socialPlatformIcon {
+  width: 36px;
+  height: 36px;
+}
+.socialPlatformIcon svg {
+  width: 18px;
+  height: 18px;
+}
+.socialPlatformOptions {
+  position: absolute;
+  z-index: 15;
+  top: calc(100% + 0.4rem);
+  left: 0;
+  width: min(100%, 420px);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.4rem;
+  padding: 0.55rem;
+  border: 1px solid color-mix(in srgb, var(--text-color) 15%, transparent);
+  border-radius: 0.55rem;
+  background: var(--surface-color);
+  box-shadow: 0 14px 30px color-mix(in srgb, var(--text-color) 16%, transparent);
+}
+.socialPlatformOptions button {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.5rem;
+  border: 1px solid transparent;
+  border-radius: 0.45rem;
+  color: var(--text-color);
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+}
+.socialPlatformOptions button:hover,
+.socialPlatformOptions button.isSelected {
+  border-color: var(--primary-color);
+  background: color-mix(in srgb, var(--primary-color) 8%, var(--surface-color));
+}
+.socialPlatformPreview,
+.adminSocialPlatform {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+.socialPlatformPreview {
+  margin-top: 0.65rem;
+  color: var(--muted-text-color);
+  font-size: 0.86rem;
+}
+.socialPlatformPreview strong {
+  color: var(--text-color);
+}
+.socialMediaTable {
+  min-width: 760px;
+}
+.socialProfileUrl {
+  display: block;
+  max-width: 360px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 1050px) and (min-width: 761px) {
+  .footerGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .socialIcon {
+    transition: none;
+  }
 }
 
 @media (max-width: 760px) {
@@ -291,11 +873,1820 @@ img {
     grid-template-columns: 1fr;
   }
 
+  .heroContent {
+    gap: 2rem;
+    padding-block: 3.5rem;
+  }
+
+  .heroCopy h1 {
+    font-size: clamp(2.2rem, 9vw, 3rem);
+    line-height: 1.1;
+  }
+
   .heroImage {
     max-height: 320px;
   }
 
   .footerGrid {
     grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .footerBrand p {
+    max-width: 100%;
+  }
+
+  .socialPlatformOptions {
+    grid-template-columns: 1fr;
+  }
+
+  .contentSection,
+  .ctaContent {
+    grid-template-columns: 1fr;
+  }
+  .contentSection.contentReversed > div {
+    order: initial;
+  }
+}
+
+@media (max-width: 520px) {
+  .heroActions {
+    gap: 0.65rem;
+  }
+  .heroActions .button {
+    width: 100%;
+  }
+}
+
+.publicCataloguePage {
+  width: min(1240px, calc(100% - 2rem));
+  padding-block: 2.5rem 4rem;
+}
+.publicCataloguePage section {
+  margin-top: 2.5rem;
+}
+.pageIntro {
+  margin-bottom: 2rem;
+}
+.pageIntro p {
+  max-width: 680px;
+  color: var(--muted-text-color);
+  line-height: 1.65;
+}
+.publicProductToolbar {
+  display: grid;
+  grid-template-columns: minmax(280px, 1.8fr) minmax(220px, 1fr) auto;
+  align-items: end;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  border: 1px solid color-mix(in srgb, var(--text-color) 12%, transparent);
+  border-radius: 0.7rem;
+  background: var(--surface-color);
+}
+.publicProductToolbar label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-weight: 650;
+}
+.publicProductToolbar input,
+.publicProductToolbar select {
+  width: 100%;
+  min-height: 46px;
+  padding: 0.7rem 0.8rem;
+  border: 1px solid color-mix(in srgb, var(--text-color) 22%, transparent);
+  border-radius: 0.45rem;
+  color: var(--text-color);
+  background: var(--background-color);
+  font: inherit;
+}
+.catalogueGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1.25rem;
+}
+.categoryCard {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 7px 20px color-mix(in srgb, var(--text-color) 6%, transparent);
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease,
+    border-color 180ms ease;
+}
+.categoryCard:hover,
+.categoryCard:focus-visible {
+  border-color: color-mix(in srgb, var(--primary-color) 38%, transparent);
+  box-shadow: 0 13px 30px color-mix(in srgb, var(--text-color) 11%, transparent);
+  transform: translateY(-3px);
+}
+.categoryCard > img {
+  aspect-ratio: 16 / 9;
+  max-height: 180px;
+}
+.categoryCard .cardBody {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.categoryCard .cardBody h3 {
+  font-size: 1.15rem;
+  line-height: 1.3;
+}
+.categoryCard .cardBody p {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+.productGrid .productCard {
+  min-width: 0;
+}
+.catalogueHero {
+  display: grid;
+  grid-template-columns: minmax(180px, 320px) 1fr;
+  align-items: center;
+  gap: clamp(1.5rem, 4vw, 3.5rem);
+}
+.catalogueHero > img {
+  width: 100%;
+  max-height: 260px;
+  object-fit: contain;
+  border-radius: 0.75rem;
+}
+.productFilters {
+  display: grid;
+  grid-template-columns: minmax(220px, 2fr) repeat(2, minmax(170px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+.productFilters label,
+.publicEnquiryForm label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-weight: 650;
+}
+.productFilters input,
+.productFilters select,
+.publicEnquiryForm input,
+.publicEnquiryForm textarea {
+  width: 100%;
+  min-height: 44px;
+  padding: 0.7rem 0.8rem;
+  border: 1px solid color-mix(in srgb, var(--text-color) 22%, transparent);
+  border-radius: 0.45rem;
+  color: var(--text-color);
+  background: var(--surface-color);
+  font: inherit;
+}
+.productDetails {
+  padding-block: 1.5rem 4rem;
+}
+.breadcrumbs ol {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  padding: 0;
+  margin: 0 0 1.5rem;
+  list-style: none;
+  color: var(--muted-text-color);
+  font-size: 0.92rem;
+}
+.breadcrumbs li:not(:last-child)::after {
+  content: "/";
+  margin-left: 0.45rem;
+}
+.breadcrumbs a {
+  color: inherit;
+}
+.productOverview {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(280px, 0.95fr);
+  align-items: start;
+  gap: clamp(1.5rem, 5vw, 4rem);
+}
+.productGalleryViewer {
+  min-width: 0;
+}
+.productMainImage,
+.productImagePlaceholder {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: contain;
+  border-radius: 0.75rem;
+  background: var(--surface-color);
+}
+.productThumbnails {
+  display: flex;
+  gap: 0.65rem;
+  margin-top: 0.75rem;
+  overflow-x: auto;
+  padding-bottom: 0.25rem;
+}
+.productThumbnails button {
+  flex: 0 0 76px;
+  width: 76px;
+  height: 64px;
+  padding: 0.2rem;
+  border: 2px solid transparent;
+  border-radius: 0.45rem;
+  background: var(--surface-color);
+  cursor: pointer;
+}
+.productThumbnails button.isSelected {
+  border-color: var(--primary-color);
+}
+.productThumbnails img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.productInfo h1 {
+  margin-bottom: 0.5rem;
+}
+.productActions {
+  width: fit-content;
+  display: grid;
+  justify-items: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+.productContactActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+}
+.productActions .button,
+.contactActions .button {
+  gap: 0.5rem;
+}
+.productActions .button svg,
+.contactActions .button svg {
+  width: 1.1rem;
+  height: 1.1rem;
+  flex: 0 0 auto;
+}
+.productActions .datasheetButton {
+  gap: 0.5rem;
+  border-color: var(--secondary-color);
+  color: var(--button-text-color);
+  background: var(--secondary-color);
+  box-shadow: 0 5px 14px
+    color-mix(in srgb, var(--secondary-color) 28%, transparent);
+  font-weight: 700;
+}
+.productActions .datasheetButton svg {
+  width: 1.15rem;
+  height: 1.15rem;
+}
+.productActions .datasheetButton:hover,
+.productActions .datasheetButton:focus-visible {
+  filter: brightness(0.92);
+  transform: translateY(-1px);
+}
+.productSection {
+  margin-top: 3rem;
+}
+.featureList {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem 2rem;
+  padding-left: 1.25rem;
+}
+.publicSpecifications {
+  width: 100%;
+  border-collapse: collapse;
+}
+.publicSpecifications th,
+.publicSpecifications td {
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid
+    color-mix(in srgb, var(--text-color) 12%, transparent);
+  text-align: left;
+}
+.publicSpecifications th {
+  width: 35%;
+  background: color-mix(
+    in srgb,
+    var(--surface-color) 85%,
+    var(--primary-color) 4%
+  );
+}
+.productEnquiryPanel {
+  margin-top: 1.5rem;
+  padding: 1.25rem;
+  border: 1px solid color-mix(in srgb, var(--text-color) 12%, transparent);
+  border-radius: 0.75rem;
+  background: var(--surface-color);
+}
+.panelHeading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.panelHeading h2 {
+  margin: 0;
+}
+.textButton {
+  border: 0;
+  color: var(--primary-color);
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+  font-weight: 700;
+}
+.publicEnquiryForm {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+.publicEnquiryForm .fullWidth {
+  grid-column: 1 / -1;
+}
+.formError {
+  color: #a31220;
+  margin: 0;
+}
+.preserveText {
+  white-space: pre-line;
+}
+@media (max-width: 760px) {
+  .catalogueHero,
+  .productOverview,
+  .productFilters,
+  .publicEnquiryForm {
+    grid-template-columns: 1fr;
+  }
+  .catalogueHero > img {
+    max-height: 210px;
+  }
+  .featureList {
+    grid-template-columns: 1fr;
+  }
+  .publicEnquiryForm .fullWidth {
+    grid-column: auto;
+  }
+  .productActions .button {
+    flex: 1 1 145px;
+    text-align: center;
+  }
+}
+
+@media (max-width: 900px) {
+  .catalogueGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .publicProductToolbar {
+    grid-template-columns: 1fr 1fr;
+  }
+  .publicProductToolbar .button {
+    grid-column: 1 / -1;
+    justify-self: start;
+  }
+}
+
+@media (max-width: 600px) {
+  .catalogueGrid,
+  .publicProductToolbar {
+    grid-template-columns: 1fr;
+  }
+  .publicProductToolbar .button {
+    grid-column: auto;
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .categoryCard {
+    transition: none;
+  }
+  .categoryCard:hover {
+    transform: none;
+  }
+}
+
+.adminLoginPage {
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  color: var(--text-color);
+  background: var(--background-color);
+}
+.adminLoginCard {
+  width: min(100%, 430px);
+  padding: clamp(1.5rem, 5vw, 2.5rem);
+  border: 1px solid color-mix(in srgb, var(--text-color) 12%, transparent);
+  border-radius: 0.8rem;
+  background: var(--surface-color);
+  box-shadow: 0 18px 45px color-mix(in srgb, var(--text-color) 10%, transparent);
+}
+.adminLoginCard header p,
+.adminPageHeader > p {
+  margin: 0 0 0.35rem;
+  color: var(--primary-color);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.adminLoginCard h1 {
+  margin: 0 0 1.5rem;
+  font-size: 2rem;
+}
+.adminLoginCard form {
+  display: flex;
+  flex-direction: column;
+}
+.adminLoginCard label {
+  margin: 1rem 0 0.4rem;
+  font-weight: 650;
+}
+.adminLoginCard input {
+  width: 100%;
+  min-height: 44px;
+  padding: 0.7rem 0.8rem;
+  border: 1px solid color-mix(in srgb, var(--text-color) 25%, transparent);
+  border-radius: 0.4rem;
+  color: var(--text-color);
+  background: var(--background-color);
+}
+.adminLoginCard input:focus {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 1px;
+}
+.fieldError {
+  margin-top: 0.35rem;
+  color: #9b1c1c;
+  font-size: 0.875rem;
+}
+.loginError {
+  padding: 0.8rem;
+  border-radius: 0.4rem;
+  color: #8a1c1c;
+  background: #feecec;
+}
+.adminLoginButton {
+  width: 100%;
+  margin-top: 1.5rem;
+  border: 0;
+  cursor: pointer;
+}
+.adminLoginButton:disabled {
+  cursor: wait;
+  opacity: 0.65;
+}
+.adminShell {
+  min-height: 100svh;
+  display: grid;
+  grid-template-columns: 270px minmax(0, 1fr);
+  color: var(--text-color);
+  background: var(--background-color);
+}
+.adminSidebar {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  display: flex;
+  flex-direction: column;
+  padding: 1.25rem;
+  overflow-y: auto;
+  color: var(--footer-text-color);
+  background: var(--footer-background-color);
+}
+.adminBrand {
+  margin-bottom: 1.5rem;
+  padding: 0.5rem;
+  font-size: 1.15rem;
+  font-weight: 750;
+}
+.adminNavGroup {
+  margin-bottom: 1.25rem;
+}
+.adminNavGroup h2 {
+  margin: 0 0 0.4rem;
+  padding-inline: 0.5rem;
+  color: inherit;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.11em;
+  opacity: 0.6;
+  text-transform: uppercase;
+}
+.adminNavGroup a {
+  display: block;
+  padding: 0.6rem 0.7rem;
+  border-radius: 0.35rem;
+  color: inherit;
+  opacity: 0.78;
+  text-decoration: none;
+}
+.adminNavGroup a:hover,
+.adminNavGroup a:focus-visible,
+.adminNavGroup a.active {
+  background: color-mix(in srgb, var(--surface-color) 14%, transparent);
+  opacity: 1;
+}
+.adminLogout {
+  margin-top: auto;
+  padding: 0.7rem;
+  border: 1px solid currentColor;
+  border-radius: 0.4rem;
+  color: inherit;
+  background: transparent;
+  cursor: pointer;
+}
+.adminWorkspace {
+  min-width: 0;
+}
+.adminHeader {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  min-height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1rem;
+  padding-inline: clamp(1rem, 4vw, 2rem);
+  border-bottom: 1px solid
+    color-mix(in srgb, var(--text-color) 10%, transparent);
+  background: var(--header-background-color);
+}
+.adminMenuButton {
+  display: none;
+}
+.adminHeaderName {
+  font-weight: 650;
+}
+.adminHeaderLogout,
+.adminMenuButton {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid color-mix(in srgb, var(--text-color) 25%, transparent);
+  border-radius: 0.35rem;
+  color: var(--text-color);
+  background: transparent;
+  cursor: pointer;
+}
+.adminMain {
+  padding: clamp(1.25rem, 4vw, 2.5rem);
+}
+.adminPageHeader {
+  margin-bottom: 2rem;
+}
+.adminPageHeader h1 {
+  margin: 0;
+  font-size: clamp(1.8rem, 4vw, 2.7rem);
+}
+.adminQuickGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+  gap: 1rem;
+}
+.adminQuickGrid a,
+.adminPanel {
+  padding: 1.25rem;
+  border: 1px solid color-mix(in srgb, var(--text-color) 12%, transparent);
+  border-radius: 0.65rem;
+  background: var(--surface-color);
+  text-decoration: none;
+}
+.adminQuickGrid a {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+.adminQuickGrid a:hover,
+.adminQuickGrid a:focus-visible {
+  border-color: var(--primary-color);
+}
+.adminQuickGrid span,
+.adminPanel p {
+  color: var(--muted-text-color);
+}
+.sidebarBackdrop {
+  display: none;
+}
+@media (max-width: 960px) {
+  .adminShell {
+    grid-template-columns: 1fr;
+  }
+  .adminSidebar {
+    position: fixed;
+    inset: 0 auto 0 0;
+    z-index: 20;
+    width: min(290px, 85vw);
+    transform: translateX(-100%);
+    transition: transform 0.2s ease;
+  }
+  .adminSidebar.open {
+    transform: translateX(0);
+  }
+  .sidebarBackdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 15;
+    display: block;
+    border: 0;
+    background: color-mix(in srgb, var(--text-color) 50%, transparent);
+  }
+  .adminMenuButton {
+    display: inline-flex;
+    margin-right: auto;
+  }
+}
+
+.adminPageHeaderRow {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.adminPageHeaderRow span {
+  display: block;
+  margin-top: 0.5rem;
+  color: var(--muted-text-color);
+}
+.adminForm {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+.formGrid,
+.colorGrid,
+.settingsGroupGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem 1.25rem;
+}
+.colorGrid {
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+.settingsGroupGrid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: start;
+}
+.formField {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.formField > label,
+.fieldLabel {
+  font-weight: 650;
+}
+.formField input,
+.formField textarea,
+.formField select {
+  width: 100%;
+  min-height: 42px;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid color-mix(in srgb, var(--text-color) 22%, transparent);
+  border-radius: 0.4rem;
+  color: var(--text-color);
+  background: var(--surface-color);
+}
+.formField textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+.formField input:focus,
+.formField textarea:focus,
+.formField select:focus {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 1px;
+}
+.adminButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 0.55rem 0.85rem;
+  border: 1px solid transparent;
+  border-radius: 0.4rem;
+  font: inherit;
+  font-weight: 650;
+  cursor: pointer;
+  text-decoration: none;
+}
+.adminButton.primary {
+  align-self: flex-start;
+  color: var(--button-text-color);
+  background: var(--button-background-color);
+}
+.adminButton.secondary {
+  border-color: color-mix(in srgb, var(--text-color) 24%, transparent);
+  color: var(--text-color);
+  background: var(--surface-color);
+}
+.adminButton.danger {
+  color: #8a1c1c;
+  background: #feecec;
+}
+.adminButton.textButton {
+  color: var(--primary-color);
+  background: transparent;
+}
+.adminButton:disabled {
+  cursor: wait;
+  opacity: 0.6;
+}
+.formFeedback {
+  padding: 0.8rem 1rem;
+  border-radius: 0.4rem;
+}
+.errorFeedback {
+  color: #8a1c1c;
+  background: #feecec;
+}
+.successFeedback {
+  color: #176536;
+  background: #e7f7ed;
+}
+.statusToggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  align-self: flex-start;
+  cursor: pointer;
+}
+.statusToggle input {
+  width: 1.15rem;
+  height: 1.15rem;
+  accent-color: var(--primary-color);
+}
+.imageUploader {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.7rem;
+}
+.imagePreview {
+  width: min(100%, 300px);
+  height: 160px;
+  display: grid;
+  place-items: center;
+  border: 1px solid color-mix(in srgb, var(--text-color) 12%, transparent);
+  border-radius: 0.5rem;
+  background: var(--surface-color);
+  overflow: hidden;
+}
+.imagePreview.hasImage {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+.imagePreviewLoader {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+.imagePreview span {
+  padding: 1rem;
+  color: var(--muted-text-color);
+  text-align: center;
+}
+.imageActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.imageActions input[type="file"] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+.uploadSuccess {
+  color: #176536;
+  font-size: 0.875rem;
+}
+.colorControl {
+  display: grid;
+  grid-template-columns: 48px 1fr;
+  gap: 0.5rem;
+}
+.colorControl input[type="color"] {
+  padding: 0.2rem;
+}
+.themePreview {
+  padding: 1.5rem;
+  border-radius: 0.65rem;
+  color: var(--preview-text);
+  background: var(--preview-background);
+}
+.themePreview > div {
+  padding: 1.25rem;
+  border-radius: 0.4rem;
+  background: var(--preview-surface);
+}
+.themePreview p {
+  color: var(--preview-muted);
+}
+.themePreview button {
+  padding: 0.6rem 0.8rem;
+  border: 0;
+  border-radius: 0.35rem;
+  color: var(--preview-button-text);
+  background: var(--preview-primary);
+}
+.settingsGroup {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin: 0;
+  padding: 1.25rem;
+  border: 1px solid color-mix(in srgb, var(--text-color) 12%, transparent);
+  border-radius: 0.6rem;
+  background: var(--surface-color);
+}
+.settingsGroup legend {
+  padding-inline: 0.4rem;
+  font-weight: 750;
+}
+.editorPanel {
+  margin-bottom: 1.5rem;
+}
+.formActions,
+.listActions,
+.dialogActions,
+.adminSubheader {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.65rem;
+}
+.formActions {
+  justify-content: flex-end;
+}
+.adminList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.adminListCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  border: 1px solid color-mix(in srgb, var(--text-color) 12%, transparent);
+  border-radius: 0.6rem;
+  background: var(--surface-color);
+}
+.adminListCard h2,
+.adminListCard h3 {
+  margin: 0.35rem 0;
+}
+.adminListCard p {
+  margin: 0.25rem 0;
+  color: var(--muted-text-color);
+}
+.adminListCard a {
+  color: var(--primary-color);
+  overflow-wrap: anywhere;
+}
+.statusBadge {
+  display: inline-block;
+  padding: 0.2rem 0.45rem;
+  border-radius: 0.3rem;
+  color: var(--primary-color);
+  background: color-mix(in srgb, var(--primary-color) 12%, transparent);
+  font-size: 0.75rem;
+  font-weight: 750;
+}
+.itemManager {
+  margin-top: 2rem;
+}
+.sectionAccordionList,
+.itemAccordionList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.sectionAccordion,
+.itemAccordion {
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--text-color) 14%, transparent);
+  border-radius: 0.65rem;
+  background: var(--surface-color);
+}
+.sectionAccordion.isExpanded {
+  border-color: color-mix(in srgb, var(--primary-color) 35%, transparent);
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--text-color) 7%, transparent);
+}
+.accordionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.85rem 1rem;
+}
+.accordionSummary {
+  min-width: 0;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0;
+  border: 0;
+  color: var(--text-color);
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+}
+.accordionSummary > span:last-child {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.25rem;
+}
+.accordionSummary strong {
+  font-size: 1.1rem;
+}
+.accordionSummary small {
+  color: var(--muted-text-color);
+}
+.accordionChevron {
+  flex: 0 0 auto;
+  color: var(--primary-color);
+  font-size: 1.65rem;
+  line-height: 1;
+  transition: transform 160ms ease;
+}
+.isExpanded > .accordionHeader .accordionChevron {
+  transform: rotate(90deg);
+}
+.accordionPanel {
+  padding: 1rem;
+  border-top: 1px solid color-mix(in srgb, var(--text-color) 10%, transparent);
+  background: color-mix(
+    in srgb,
+    var(--background-color) 65%,
+    var(--surface-color)
+  );
+}
+.nestedItems {
+  padding: 0.25rem;
+}
+.nestedItems > .adminSubheader {
+  margin-bottom: 1rem;
+}
+.itemAccordion {
+  margin-left: 1rem;
+  border-left: 3px solid
+    color-mix(in srgb, var(--primary-color) 30%, transparent);
+}
+.itemAccordionSummary > img,
+.itemAccordionSummary > .adminItemIcon {
+  flex: 0 0 48px;
+  width: 48px;
+  height: 48px;
+  border-radius: 0.45rem;
+}
+.itemAccordionSummary > img {
+  object-fit: cover;
+}
+.itemAccordionSummary .itemListSubtitle {
+  color: var(--text-color);
+  font-size: 0.9rem;
+  font-weight: 650;
+}
+.accordionDescription {
+  margin: 0;
+  color: var(--muted-text-color);
+  line-height: 1.65;
+}
+.adminSubheader {
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+.adminSubheader h2 {
+  margin: 0;
+}
+.nestedEditor {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  background: var(--background-color);
+}
+.itemEditor {
+  padding: clamp(1rem, 3vw, 1.5rem);
+}
+.editorGroup {
+  min-width: 0;
+  margin: 0;
+  padding: 1rem;
+  border: 1px solid color-mix(in srgb, var(--text-color) 12%, transparent);
+  border-radius: 0.55rem;
+}
+.editorGroup legend {
+  padding-inline: 0.4rem;
+  color: var(--primary-color);
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.fieldHint {
+  display: block;
+  margin: 0 0 0.8rem;
+  color: var(--muted-text-color);
+  font-size: 0.85rem;
+  font-weight: 400;
+}
+.visualEditorGrid {
+  display: grid;
+  grid-template-columns: minmax(260px, 1fr) minmax(260px, 1fr);
+  gap: 1.25rem;
+  align-items: start;
+}
+.displayEditorGrid {
+  display: grid;
+  grid-template-columns: minmax(200px, 1fr) minmax(160px, 0.6fr);
+  gap: 1.25rem;
+  align-items: center;
+}
+.iconPickerTrigger {
+  width: 100%;
+  min-height: 62px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+  padding: 0.7rem 0.9rem;
+  border: 1px solid color-mix(in srgb, var(--text-color) 18%, transparent);
+  border-radius: 0.5rem;
+  color: var(--text-color);
+  background: var(--surface-color);
+  cursor: pointer;
+  text-align: left;
+}
+.iconPickerTrigger > span:nth-child(2),
+.iconPickerTrigger > span:first-child {
+  flex: 1;
+}
+.iconPickerTrigger svg {
+  width: 26px;
+  height: 26px;
+  color: var(--primary-color);
+}
+.iconPickerTrigger small {
+  display: block;
+  margin-bottom: 0.15rem;
+  color: var(--muted-text-color);
+}
+.iconPickerPanel {
+  margin-top: 0.65rem;
+  padding: 0.8rem;
+  border: 1px solid color-mix(in srgb, var(--text-color) 12%, transparent);
+  border-radius: 0.55rem;
+  background: var(--surface-color);
+  box-shadow: 0 12px 28px color-mix(in srgb, var(--text-color) 10%, transparent);
+}
+.iconPickerPanel > label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-bottom: 0.75rem;
+  font-weight: 650;
+}
+.iconPickerPanel input {
+  width: 100%;
+  padding: 0.65rem;
+  border: 1px solid color-mix(in srgb, var(--text-color) 18%, transparent);
+  border-radius: 0.4rem;
+}
+.iconPickerGrid {
+  max-height: 330px;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.45rem;
+  overflow-y: auto;
+}
+.iconPickerGrid button {
+  min-height: 84px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 0.55rem;
+  border: 1px solid color-mix(in srgb, var(--text-color) 12%, transparent);
+  border-radius: 0.45rem;
+  color: var(--text-color);
+  background: var(--background-color);
+  cursor: pointer;
+}
+.iconPickerGrid button:hover,
+.iconPickerGrid button:focus-visible {
+  border-color: var(--primary-color);
+}
+.iconPickerGrid button.isSelected {
+  border-width: 2px;
+  border-color: var(--primary-color);
+}
+.iconPickerGrid svg {
+  width: 24px;
+  height: 24px;
+  color: var(--primary-color);
+}
+.iconPickerGrid span {
+  font-size: 0.75rem;
+  text-align: center;
+}
+.iconPickerGrid small {
+  font-size: 0.65rem;
+  font-weight: 750;
+}
+.itemListSummary {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.itemListSummary > img,
+.adminItemIcon {
+  flex: 0 0 54px;
+  width: 54px;
+  height: 54px;
+  border-radius: 0.5rem;
+}
+.itemListSummary > img {
+  object-fit: cover;
+}
+.adminItemIcon {
+  display: grid;
+  place-items: center;
+  color: var(--primary-color);
+  background: color-mix(
+    in srgb,
+    var(--primary-color) 12%,
+    var(--surface-color)
+  );
+}
+.adminItemIcon svg {
+  width: 25px;
+  height: 25px;
+}
+.adminListCard .itemListSubtitle {
+  color: var(--text-color);
+  font-weight: 650;
+}
+.dialogBackdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  background: color-mix(in srgb, var(--text-color) 55%, transparent);
+}
+.confirmDialog {
+  width: min(100%, 430px);
+  padding: 1.5rem;
+  border-radius: 0.65rem;
+  background: var(--surface-color);
+}
+.confirmDialog h2 {
+  margin-top: 0;
+}
+.dialogActions {
+  justify-content: flex-end;
+  margin-top: 1.5rem;
+}
+@media (max-width: 760px) {
+  .adminPageHeaderRow,
+  .adminListCard {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .formGrid,
+  .settingsGroupGrid {
+    grid-template-columns: 1fr;
+  }
+  .listActions .adminButton {
+    flex: 1;
+  }
+  .visualEditorGrid,
+  .displayEditorGrid {
+    grid-template-columns: 1fr;
+  }
+  .iconPickerGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .accordionHeader {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .accordionHeader .listActions {
+    padding-left: 2.5rem;
+  }
+  .itemAccordion {
+    margin-left: 0;
+  }
+}
+
+.catalogueListCard > img {
+  width: 76px;
+  height: 76px;
+  flex: 0 0 auto;
+  border-radius: 0.45rem;
+  object-fit: contain;
+  background: var(--background-color);
+}
+.listCardContent {
+  min-width: 0;
+  flex: 1;
+}
+.toggleRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+.productFilters {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+.productFilters input,
+.productFilters select {
+  min-height: 42px;
+  padding: 0.6rem;
+  border: 1px solid color-mix(in srgb, var(--text-color) 20%, transparent);
+  border-radius: 0.4rem;
+  color: var(--text-color);
+  background: var(--surface-color);
+}
+.managementNav {
+  position: sticky;
+  top: 64px;
+  z-index: 4;
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  padding: 0.65rem;
+  overflow-x: auto;
+  border: 1px solid color-mix(in srgb, var(--text-color) 12%, transparent);
+  border-radius: 0.5rem;
+  background: var(--surface-color);
+}
+.managementNav a {
+  padding: 0.5rem 0.75rem;
+  color: var(--primary-color);
+  font-weight: 650;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.managementSection {
+  margin-bottom: 1.5rem;
+  padding: 1.25rem;
+  border: 1px solid color-mix(in srgb, var(--text-color) 12%, transparent);
+  border-radius: 0.65rem;
+  background: var(--surface-color);
+  scroll-margin-top: 140px;
+}
+.assetGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 1rem;
+}
+.assetCard {
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--text-color) 12%, transparent);
+  border-radius: 0.5rem;
+}
+.assetCard > img {
+  width: 100%;
+  height: 170px;
+  object-fit: contain;
+  background: var(--background-color);
+}
+.assetCard > div {
+  padding: 0.75rem;
+}
+.assetCard p {
+  margin: 0.35rem 0;
+  color: var(--muted-text-color);
+}
+@media (max-width: 760px) {
+  .catalogueListCard > img {
+    width: 100%;
+    height: 160px;
+  }
+}
+
+.productDetails {
+  padding-block: clamp(2.5rem, 6vw, 5rem);
+}
+.productDetails > section {
+  margin-top: 3rem;
+}
+.productDetails > section > p,
+.productOverview > div > p {
+  color: var(--muted-text-color);
+  line-height: 1.7;
+}
+.productOverview {
+  display: grid;
+  grid-template-columns: minmax(260px, 0.85fr) minmax(0, 1.15fr);
+  align-items: center;
+  gap: clamp(2rem, 6vw, 5rem);
+}
+.productOverview > img {
+  width: 100%;
+  max-height: 520px;
+  object-fit: contain;
+}
+.productOverview h1 {
+  margin: 0.5rem 0 1rem;
+  font-size: clamp(2.2rem, 5vw, 4rem);
+}
+.productOverview .button {
+  margin-top: 1rem;
+}
+.productGallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+}
+.productGallery img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: 0.5rem;
+  object-fit: contain;
+  background: var(--surface-color);
+}
+.specificationList {
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--text-color) 12%, transparent);
+  border-radius: 0.5rem;
+}
+.specificationList > div {
+  display: grid;
+  grid-template-columns: minmax(140px, 0.4fr) 1fr;
+  padding: 0.8rem 1rem;
+  border-bottom: 1px solid
+    color-mix(in srgb, var(--text-color) 10%, transparent);
+}
+.specificationList > div:last-child {
+  border-bottom: 0;
+}
+.specificationList dt {
+  font-weight: 700;
+}
+.specificationList dd {
+  margin: 0;
+}
+@media (max-width: 760px) {
+  .productOverview {
+    grid-template-columns: 1fr;
+  }
+  .specificationList > div {
+    grid-template-columns: 1fr;
+    gap: 0.35rem;
+  }
+}
+
+.legacyCatalogueList {
+  display: none;
+}
+.adminTableWrapper {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid color-mix(in srgb, var(--text-color) 12%, transparent);
+  border-radius: 0.65rem;
+  background: var(--surface-color);
+}
+.adminTable {
+  width: 100%;
+  min-width: 760px;
+  border-collapse: collapse;
+  text-align: left;
+}
+.adminTable th {
+  padding: 0.8rem 1rem;
+  color: var(--muted-text-color);
+  background: color-mix(
+    in srgb,
+    var(--background-color) 75%,
+    var(--surface-color)
+  );
+  font-size: 0.78rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.adminTable td {
+  padding: 0.85rem 1rem;
+  border-top: 1px solid color-mix(in srgb, var(--text-color) 10%, transparent);
+  vertical-align: middle;
+}
+.adminTable tbody tr:hover {
+  background: color-mix(in srgb, var(--primary-color) 4%, var(--surface-color));
+}
+.tableImage {
+  width: 56px;
+  height: 56px;
+  border-radius: 0.4rem;
+  object-fit: contain;
+  background: var(--background-color);
+}
+.emptyCell {
+  color: var(--muted-text-color);
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+.statusPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0;
+  font-size: 0.82rem;
+  font-weight: 700;
+  white-space: nowrap;
+  background: transparent;
+}
+.statusPill::before {
+  font-size: 1rem;
+  line-height: 1;
+}
+.statusPill.active {
+  color: #176536;
+}
+.statusPill.active::before {
+  content: "✓";
+}
+.statusPill.inactive {
+  color: #8a1c1c;
+}
+.statusPill.inactive::before {
+  content: "✕";
+}
+.tableActions {
+  display: flex;
+  gap: 0.45rem;
+  white-space: nowrap;
+}
+.tableActions .adminButton {
+  width: 34px;
+  min-height: 34px;
+  padding: 0;
+  border-color: currentColor;
+  font-size: 0;
+  background: transparent;
+}
+.tableActions .adminButton::before {
+  font-size: 1.15rem;
+  line-height: 1;
+}
+.tableActions button.secondary {
+  color: var(--primary-color);
+}
+.tableActions button.secondary::before {
+  content: "✎";
+}
+.tableActions a.secondary {
+  color: var(--secondary-color);
+}
+.tableActions a.secondary::before {
+  content: "⚙";
+}
+.tableActions .adminButton.danger {
+  color: #b42318;
+  background: transparent;
+}
+.tableActions .adminButton.danger::before {
+  content: "✕";
+}
+.tableActions .adminButton:hover,
+.tableActions .adminButton:focus-visible {
+  background: color-mix(in srgb, currentColor 10%, transparent);
+}
+.tableLink {
+  color: var(--primary-color);
+  font-weight: 650;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.productTable {
+  min-width: 1050px;
+}
+.productTable td strong,
+.productTable td small {
+  display: block;
+}
+.productTable td small {
+  margin-top: 0.25rem;
+  color: var(--muted-text-color);
+}
+
+.enquiryFilters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+.enquiryFilters label {
+  min-width: 180px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-weight: 650;
+}
+.enquiryFilters select,
+.statusEditor select {
+  min-height: 42px;
+  padding: 0.6rem;
+  border: 1px solid color-mix(in srgb, var(--text-color) 20%, transparent);
+  border-radius: 0.4rem;
+  color: var(--text-color);
+  background: var(--surface-color);
+}
+.enquiryTable {
+  min-width: 1150px;
+}
+.enquiryTable td strong,
+.enquiryTable td small {
+  display: block;
+}
+.enquiryTable td small {
+  margin-top: 0.2rem;
+  color: var(--muted-text-color);
+}
+.enquiryStatus {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.enquiryStatus::before {
+  font-size: 1rem;
+}
+.enquiryStatusNEW {
+  color: var(--primary-color);
+}
+.enquiryStatusNEW::before {
+  content: "●";
+}
+.enquiryStatusIN_PROGRESS {
+  color: #9a6700;
+}
+.enquiryStatusIN_PROGRESS::before {
+  content: "◐";
+}
+.enquiryStatusCONTACTED {
+  color: #176536;
+}
+.enquiryStatusCONTACTED::before {
+  content: "✓";
+}
+.enquiryStatusCLOSED {
+  color: var(--muted-text-color);
+}
+.enquiryStatusCLOSED::before {
+  content: "■";
+}
+.tableViewAction {
+  display: inline-grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border: 1px solid var(--primary-color);
+  border-radius: 0.4rem;
+  color: var(--primary-color);
+  font-size: 0;
+  text-decoration: none;
+}
+.tableViewAction::before {
+  content: "›";
+  font-size: 1.5rem;
+  line-height: 1;
+}
+.tableViewAction:hover,
+.tableViewAction:focus-visible {
+  background: color-mix(in srgb, var(--primary-color) 10%, transparent);
+}
+.paginationControls {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+.emptyState,
+.enquiryLoading {
+  margin-top: 1rem;
+}
+.enquiryDetailsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+.detailSection {
+  margin-bottom: 1rem;
+}
+.detailSection h2 {
+  margin-top: 0;
+}
+.detailList {
+  margin: 0;
+}
+.detailList > div {
+  display: grid;
+  grid-template-columns: minmax(100px, 0.35fr) 1fr;
+  gap: 1rem;
+  padding: 0.55rem 0;
+  border-bottom: 1px solid
+    color-mix(in srgb, var(--text-color) 10%, transparent);
+}
+.detailList dt {
+  color: var(--muted-text-color);
+  font-weight: 650;
+}
+.detailList dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.customerActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin-top: 1rem;
+}
+.enquiryMessage {
+  margin-bottom: 0;
+  line-height: 1.75;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.statusEditor {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 0.75rem;
+}
+.statusEditor h2 {
+  width: 100%;
+}
+.statusEditor label {
+  align-self: center;
+  font-weight: 650;
+}
+@media (max-width: 760px) {
+  .enquiryDetailsGrid {
+    grid-template-columns: 1fr;
+  }
+  .paginationControls {
+    justify-content: space-between;
+  }
+  .detailList > div {
+    grid-template-columns: 1fr;
+    gap: 0.2rem;
+  }
+}
+
+.contactHero {
+  position: relative;
+  display: grid;
+  min-height: 250px;
+  align-items: center;
+  background: var(--surface-color);
+}
+.contactHero.hasImage {
+  min-height: clamp(300px, 42vw, 480px);
+  color: var(--surface-color);
+  background-image:
+    linear-gradient(rgb(0 0 0 / 55%), rgb(0 0 0 / 55%)),
+    var(--contact-background);
+  background-position: center;
+  background-size: cover;
+}
+.contactHeroContent {
+  position: relative;
+  padding-block: 3.5rem;
+}
+.contactHero h1 {
+  max-width: 800px;
+  margin: 0;
+  font-size: clamp(2.25rem, 6vw, 4rem);
+}
+.contactHero p {
+  max-width: 680px;
+  margin: 1rem 0 0;
+  font-size: 1.08rem;
+  line-height: 1.7;
+}
+.contactLayout {
+  display: grid;
+  grid-template-columns: minmax(250px, 0.8fr) minmax(0, 1.2fr);
+  gap: clamp(2rem, 6vw, 5rem);
+  padding-block: clamp(3rem, 7vw, 5rem);
+}
+.contactInfo h2,
+.contactFormPanel h2,
+.mapSection h2 {
+  margin-top: 0;
+}
+.contactInfo dl {
+  margin: 0;
+}
+.contactInfo dl > div {
+  padding: 0.8rem 0;
+  border-bottom: 1px solid
+    color-mix(in srgb, var(--text-color) 12%, transparent);
+}
+.contactInfo dt {
+  margin-bottom: 0.25rem;
+  color: var(--muted-text-color);
+  font-size: 0.88rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.contactInfo dd {
+  margin: 0;
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+.contactActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin-block: 1.5rem;
+}
+.contactDetailsColumn > .socialLinks {
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.contactFormPanel {
+  padding: clamp(1.25rem, 4vw, 2rem);
+  border: 1px solid color-mix(in srgb, var(--text-color) 12%, transparent);
+  border-radius: 0.75rem;
+  background: var(--surface-color);
+}
+.contactForm {
+  display: grid;
+  gap: 1rem;
+}
+.contactForm label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-weight: 650;
+}
+.contactForm input,
+.contactForm textarea {
+  width: 100%;
+  padding: 0.75rem 0.8rem;
+  border: 1px solid color-mix(in srgb, var(--text-color) 22%, transparent);
+  border-radius: 0.45rem;
+  color: var(--text-color);
+  background: var(--background-color);
+}
+.contactForm textarea {
+  resize: vertical;
+}
+.contactForm .button {
+  justify-self: start;
+}
+.successMessage {
+  padding: 0.8rem;
+  border-left: 4px solid var(--primary-color);
+  background: color-mix(in srgb, var(--primary-color) 8%, var(--surface-color));
+}
+.mapSection {
+  padding-bottom: clamp(3rem, 7vw, 5rem);
+}
+.mapSection iframe {
+  display: block;
+  width: 100%;
+  min-height: 380px;
+  border: 0;
+  border-radius: 0.75rem;
+}
+
+@media (max-width: 760px) {
+  .contactLayout {
+    grid-template-columns: 1fr;
+  }
+  .contactActions .button {
+    flex: 1 1 140px;
+  }
+  .mapSection iframe {
+    min-height: 300px;
   }
 }
