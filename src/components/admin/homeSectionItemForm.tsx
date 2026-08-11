@@ -1,6 +1,7 @@
 import type { HomeSectionItemForm as ItemValues } from "../../interfaces/adminCms.interface";
 import { optionalText } from "../../utils/formValidation";
 import { FormField } from "./formField";
+import { IconPicker } from "./iconPicker";
 import { ImageUploader } from "./imageUploader";
 import { StatusToggle } from "./statusToggle";
 
@@ -11,7 +12,8 @@ interface Props {
   onSubmit: () => void;
   onCancel: () => void;
 }
-export const HomeSectionItemForm = ({value,saving,onChange,onSubmit,onCancel,}: Props) => {
+
+export const HomeSectionItemForm = ({value,saving,onChange,onSubmit,onCancel}: Props) => {
   const text = (key: keyof ItemValues, input: string) =>
     onChange({
       ...value,
@@ -19,60 +21,82 @@ export const HomeSectionItemForm = ({value,saving,onChange,onSubmit,onCancel,}: 
     });
   return (
     <form
-      className="nestedEditor"
-      onSubmit={(e) => {
-        e.preventDefault();
-        onSubmit();
-      }}>
+      className="nestedEditor itemEditor"
+      onSubmit={(event) => {
+        event.preventDefault();
+        onSubmit();}}>
       <h3>Section item</h3>
-      <div className="formGrid">
-        <FormField label="Title">
-          <input
-            value={value.title}
-            onChange={(e) => text("title", e.target.value)} />
-        </FormField>
-        <FormField label="Subtitle">
-          <input
-            value={value.subtitle ?? ""}
-            onChange={(e) => text("subtitle", e.target.value)}/>
-        </FormField>
-        <FormField label="Description">
-          <textarea
-            value={value.description ?? ""}
-            onChange={(e) => text("description", e.target.value)}/>
-        </FormField>
-        <FormField label="Icon name">
-          <input
-            value={value.iconName ?? ""}
-            onChange={(e) => text("iconName", e.target.value)}/>
-        </FormField>
-        <FormField label="Button text">
-          <input
-            value={value.buttonText ?? ""}
-            onChange={(e) => text("buttonText", e.target.value)}/>
-        </FormField>
-        <FormField label="Button link">
-          <input
-            value={value.buttonLink ?? ""}
-            onChange={(e) => text("buttonLink", e.target.value)}/>
-        </FormField>
-        <FormField label="Display order">
-          <input
-            type="number"
-            value={value.displayOrder}
-            onChange={(e) =>
-              onChange({ ...value, displayOrder: Number(e.target.value) })}/>
-        </FormField>
-      </div>
-      <ImageUploader
-        label="Item image"
-        type="section"
-        value={value.imageUrl}
-        onChange={(imageUrl) => onChange({ ...value, imageUrl })}/>
-      <StatusToggle
-        label="Visible"
-        checked={value.isVisible}
-        onChange={(isVisible) => onChange({ ...value, isVisible })}/>
+      <fieldset className="editorGroup">
+        <legend>Content</legend>
+        <div className="formGrid">
+          <FormField label="Title">
+            <input
+              value={value.title}
+              onChange={(event) => text("title", event.target.value)}/>
+          </FormField>
+          <FormField label="Subtitle">
+            <input
+              value={value.subtitle ?? ""}
+              onChange={(event) => text("subtitle", event.target.value)}/>
+          </FormField>
+          <FormField label="Description">
+            <textarea
+              value={value.description ?? ""}
+              onChange={(event) => text("description", event.target.value)}/>
+          </FormField>
+        </div>
+      </fieldset>
+      <fieldset className="editorGroup">
+        <legend>Visual</legend>
+        <p className="fieldHint">Choose an icon that represents this card.</p>
+        <div className="visualEditorGrid">
+          <IconPicker
+            value={value.iconName}
+            onChange={(iconName) => onChange({ ...value, iconName })}/>
+          <ImageUploader
+            label="Item image"
+            type="section"
+            value={value.imageUrl}
+            onChange={(imageUrl) => onChange({ ...value, imageUrl })}/>
+        </div>
+      </fieldset>
+      <fieldset className="editorGroup">
+        <legend>Optional action</legend>
+        <p className="fieldHint">
+          Leave both fields blank if this card does not need a button.
+        </p>
+        <div className="formGrid">
+          <FormField label="Button text">
+            <input
+              value={value.buttonText ?? ""}
+              onChange={(event) => text("buttonText", event.target.value)}/>
+          </FormField>
+          <FormField label="Button link">
+            <input
+              value={value.buttonLink ?? ""}
+              onChange={(event) => text("buttonLink", event.target.value)}/>
+          </FormField>
+        </div>
+      </fieldset>
+      <fieldset className="editorGroup">
+        <legend>Display</legend>
+        <div className="displayEditorGrid">
+          <FormField label="Display order">
+            <input
+              type="number"
+              min="0"
+              value={value.displayOrder}
+              onChange={(event) =>
+                onChange({ ...value, displayOrder: Number(event.target.value) })
+              }/>
+            <span className="fieldHint">Lower numbers appear first.</span>
+          </FormField>
+          <StatusToggle
+            label="Visible"
+            checked={value.isVisible}
+            onChange={(isVisible) => onChange({ ...value, isVisible })}/>
+        </div>
+      </fieldset>
       <div className="formActions">
         <button
           className="adminButton secondary"

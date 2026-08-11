@@ -4,6 +4,7 @@ import { ConfirmDialog } from "../../components/admin/confirmDialog";
 import { FormFeedback } from "../../components/admin/formFeedback";
 import { HomeSectionForm } from "../../components/admin/homeSectionForm";
 import { HomeSectionItemForm } from "../../components/admin/homeSectionItemForm";
+import { DynamicIcon } from "../../components/common/dynamicIcon";
 import { LoadingSpinner } from "../../components/common/loadingSpinner";
 import type {
   AdminHomeSection,
@@ -13,6 +14,7 @@ import type {
 } from "../../interfaces/adminCms.interface";
 import { getAdminApiError } from "../../services/admin/adminApiError";
 import { homeSectionApi } from "../../services/admin/homeSectionApi";
+import { getImageUrl } from "../../utils/getImageUrl";
 
 const emptySection: SectionValues = {
   sectionKey: "",
@@ -35,7 +37,7 @@ const emptyItem: ItemValues = {
   iconName: null,
   buttonText: null,
   buttonLink: null,
-  displayOrder: 0,
+  displayOrder: 1,
   isVisible: true,
 };
 const sectionValues = ({
@@ -84,17 +86,21 @@ const itemValues = ({
   displayOrder,
   isVisible,
 });
+
 export const HomeSectionsPage = () => {
-  const [sections, setSections] = useState<AdminHomeSection[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
-  const [saving, setSaving] = useState(false);
+  const [sections, setSections] = useState<AdminHomeSection[]>([]),
+    [loading, setLoading] = useState(true),
+    [error, setError] = useState(""),
+    [success, setSuccess] = useState(""),
+    [saving, setSaving] = useState(false);
   const [sectionEdit, setSectionEdit] = useState<{
     id?: number;
     value: SectionValues;
   } | null>(null);
-  const [itemParent, setItemParent] = useState<number | null>(null);
+  const [expandedSectionId, setExpandedSectionId] = useState<number | null>(
+      null,
+    ),
+    [expandedItemId, setExpandedItemId] = useState<number | null>(null);
   const [itemEdit, setItemEdit] = useState<{
     id?: number;
     value: ItemValues;
@@ -103,6 +109,7 @@ export const HomeSectionsPage = () => {
     kind: "section" | "item";
     id: number;
   } | null>(null);
+
   const load = useCallback(async () => {
     try {
       setSections(await homeSectionApi.getAll());
@@ -116,6 +123,32 @@ export const HomeSectionsPage = () => {
   useEffect(() => {
     void load();
   }, [load]);
+
+  const loadItems = async (section: AdminHomeSection) => {
+    if (section.sectionType !== "CARDS") return;
+    const items = await homeSectionApi.getItems(section.id);
+    setSections((current) =>
+      current.map((entry) =>
+        entry.id === section.id ? { ...entry, items } : entry,
+      ),
+    );
+  };
+  const toggleSection = async (section: AdminHomeSection) => {
+    if (expandedSectionId === section.id) {
+      setExpandedSectionId(null);
+      setExpandedItemId(null);
+      setItemEdit(null);
+      return;
+    }
+    setExpandedSectionId(section.id);
+    setExpandedItemId(null);
+    setItemEdit(null);
+    try {
+      await loadItems(section);
+    } catch (reason) {
+      setError(getAdminApiError(reason, "Unable to load section items."));
+    }
+  };
   const saveSection = async () => {
     if (!sectionEdit || saving) return;
     if (!sectionEdit.value.sectionKey.trim()) {
@@ -136,22 +169,8 @@ export const HomeSectionsPage = () => {
       setSaving(false);
     }
   };
-  const openItems = async (section: AdminHomeSection) => {
-    setItemParent(section.id);
-    setItemEdit(null);
-    try {
-      const items = await homeSectionApi.getItems(section.id);
-      setSections((current) =>
-        current.map((entry) =>
-          entry.id === section.id ? { ...entry, items } : entry,
-        ),
-      );
-    } catch (reason) {
-      setError(getAdminApiError(reason, "Unable to load section items."));
-    }
-  };
   const saveItem = async () => {
-    if (!itemEdit || itemParent === null || saving) return;
+    if (!itemEdit || expandedSectionId === null || saving) return;
     if (!itemEdit.value.title.trim()) {
       setError("Item title is required.");
       return;
@@ -160,11 +179,14 @@ export const HomeSectionsPage = () => {
     try {
       if (itemEdit.id)
         await homeSectionApi.updateItem(itemEdit.id, itemEdit.value);
-      else await homeSectionApi.createItem(itemParent, itemEdit.value);
+      else await homeSectionApi.createItem(expandedSectionId, itemEdit.value);
+      const parent = sections.find(
+        (section) => section.id === expandedSectionId,
+      );
+      if (parent) await loadItems(parent);
       setItemEdit(null);
+      setExpandedItemId(null);
       setSuccess("Section item saved successfully.");
-      const parent = sections.find((s) => s.id === itemParent);
-      if (parent) await openItems(parent);
     } catch (reason) {
       setError(getAdminApiError(reason, "Unable to save section item."));
     } finally {
@@ -177,15 +199,17 @@ export const HomeSectionsPage = () => {
     try {
       if (deleteTarget.kind === "section") {
         await homeSectionApi.delete(deleteTarget.id);
-        setItemParent(null);
+        setExpandedSectionId(null);
         await load();
       } else {
         await homeSectionApi.deleteItem(deleteTarget.id);
-        const parent = sections.find((s) => s.id === itemParent);
-        if (parent) await openItems(parent);
+        const parent = sections.find(
+          (section) => section.id === expandedSectionId,
+        );
+        if (parent) await loadItems(parent);
       }
-      setSuccess("Deleted successfully.");
       setDeleteTarget(null);
+      setSuccess("Deleted successfully.");
     } catch (reason) {
       setError(getAdminApiError(reason, "Unable to delete this record."));
     } finally {
@@ -193,12 +217,12 @@ export const HomeSectionsPage = () => {
     }
   };
   if (loading) return <LoadingSpinner />;
-  const activeSection = sections.find((section) => section.id === itemParent);
+
   return (
     <>
       <AdminPageHeader
         title="Home Sections"
-        description="Manage ordered sections and card items on the homepage."
+        description="Manage homepage sections and their nested items."
         action={
           <button
             className="adminButton primary"
@@ -210,7 +234,7 @@ export const HomeSectionsPage = () => {
         }
       />
       <FormFeedback error={error} success={success} />
-      {sectionEdit && (
+      {sectionEdit && !sectionEdit.id && (
         <HomeSectionForm
           value={sectionEdit.value}
           saving={saving}
@@ -219,90 +243,46 @@ export const HomeSectionsPage = () => {
           onCancel={() => setSectionEdit(null)}
         />
       )}
-      <div className="adminList">
-        {sections.map((section) => (
-          <article className="adminListCard" key={section.id}>
-            <div>
-              <span className="statusBadge">{section.sectionType}</span>
-              <h2>{section.title || section.sectionKey}</h2>
-              <p>
-                Order {section.displayOrder} ·{" "}
-                {section.isVisible ? "Visible" : "Hidden"}
-              </p>
-            </div>
-            <div className="listActions">
-              <button
-                className="adminButton secondary"
-                type="button"
-                onClick={() =>
-                  setSectionEdit({
-                    id: section.id,
-                    value: sectionValues(section),
-                  })
-                }
-              >
-                Edit
-              </button>
-              {section.sectionType === "CARDS" && (
-                <button
-                  className="adminButton secondary"
-                  type="button"
-                  onClick={() => void openItems(section)}
-                >
-                  Manage Items
-                </button>
-              )}
-              <button
-                className="adminButton danger"
-                type="button"
-                onClick={() =>
-                  setDeleteTarget({ kind: "section", id: section.id })
-                }
-              >
-                Delete
-              </button>
-            </div>
-          </article>
-        ))}
-      </div>
-      {activeSection && (
-        <section className="adminPanel itemManager">
-          <div className="adminSubheader">
-            <h2>{activeSection.title || activeSection.sectionKey} Items</h2>
-            <button
-              className="adminButton primary"
-              type="button"
-              onClick={() => setItemEdit({ value: emptyItem })}
+      <div className="sectionAccordionList">
+        {sections.map((section) => {
+          const expanded = expandedSectionId === section.id;
+          return (
+            <article
+              className={`sectionAccordion${expanded ? " isExpanded" : ""}`}
+              key={section.id}
             >
-              Add Item
-            </button>
-          </div>
-          {itemEdit && (
-            <HomeSectionItemForm
-              value={itemEdit.value}
-              saving={saving}
-              onChange={(value) => setItemEdit({ ...itemEdit, value })}
-              onSubmit={() => void saveItem()}
-              onCancel={() => setItemEdit(null)}
-            />
-          )}
-          <div className="adminList">
-            {activeSection.items.map((item: AdminHomeSectionItem) => (
-              <article className="adminListCard" key={item.id}>
-                <div>
-                  <h3>{item.title}</h3>
-                  <p>
-                    Order {item.displayOrder} ·{" "}
-                    {item.isVisible ? "Visible" : "Hidden"}
-                  </p>
-                </div>
+              <div className="accordionHeader">
+                <button
+                  className="accordionSummary"
+                  type="button"
+                  aria-expanded={expanded}
+                  aria-controls={`section-panel-${section.id}`}
+                  onClick={() => void toggleSection(section)}
+                >
+                  <span className="accordionChevron" aria-hidden="true">
+                    ›
+                  </span>
+                  <span>
+                    <span className="statusBadge">{section.sectionType}</span>
+                    <strong>{section.title || section.sectionKey}</strong>
+                    <small>
+                      Order {section.displayOrder} ·{" "}
+                      {section.isVisible ? "Visible" : "Hidden"}
+                    </small>
+                  </span>
+                </button>
                 <div className="listActions">
                   <button
                     className="adminButton secondary"
                     type="button"
-                    onClick={() =>
-                      setItemEdit({ id: item.id, value: itemValues(item) })
-                    }
+                    onClick={() => {
+                      setExpandedSectionId(section.id);
+                      setSectionEdit({
+                        id: section.id,
+                        value: sectionValues(section),
+                      });
+                      void loadItems(section);
+                    }}
                   >
                     Edit
                   </button>
@@ -310,17 +290,184 @@ export const HomeSectionsPage = () => {
                     className="adminButton danger"
                     type="button"
                     onClick={() =>
-                      setDeleteTarget({ kind: "item", id: item.id })
+                      setDeleteTarget({ kind: "section", id: section.id })
                     }
                   >
                     Delete
                   </button>
                 </div>
-              </article>
-            ))}
-          </div>
-        </section>
-      )}
+              </div>
+              {expanded && (
+                <div
+                  className="accordionPanel"
+                  id={`section-panel-${section.id}`}
+                >
+                  {sectionEdit?.id === section.id && (
+                    <HomeSectionForm
+                      value={sectionEdit.value}
+                      saving={saving}
+                      onChange={(value) =>
+                        setSectionEdit({ ...sectionEdit, value })
+                      }
+                      onSubmit={() => void saveSection()}
+                      onCancel={() => setSectionEdit(null)}
+                    />
+                  )}
+                  {section.sectionType === "CARDS" && (
+                    <div className="nestedItems">
+                      <div className="adminSubheader">
+                        <h3>Section items</h3>
+                        <button
+                          className="adminButton primary"
+                          type="button"
+                          onClick={() => {
+                            setExpandedItemId(null);
+                            setItemEdit({
+                              value: {
+                                ...emptyItem,
+                                displayOrder:
+                                  Math.max(
+                                    0,
+                                    ...section.items.map(
+                                      (item) => item.displayOrder,
+                                    ),
+                                  ) + 1,
+                              },
+                            });
+                          }}
+                        >
+                          Add Item
+                        </button>
+                      </div>
+                      {itemEdit && !itemEdit.id && (
+                        <HomeSectionItemForm
+                          value={itemEdit.value}
+                          saving={saving}
+                          onChange={(value) =>
+                            setItemEdit({ ...itemEdit, value })
+                          }
+                          onSubmit={() => void saveItem()}
+                          onCancel={() => setItemEdit(null)}
+                        />
+                      )}
+                      <div className="itemAccordionList">
+                        {section.items.map((item) => {
+                          const itemExpanded = expandedItemId === item.id;
+                          return (
+                            <article
+                              className={`itemAccordion${itemExpanded ? " isExpanded" : ""}`}
+                              key={item.id}
+                            >
+                              <div className="accordionHeader">
+                                <button
+                                  className="accordionSummary itemAccordionSummary"
+                                  type="button"
+                                  aria-expanded={itemExpanded}
+                                  aria-controls={`item-panel-${item.id}`}
+                                  onClick={() => {
+                                    setExpandedItemId(
+                                      itemExpanded ? null : item.id,
+                                    );
+                                    setItemEdit(null);
+                                  }}
+                                >
+                                  <span
+                                    className="accordionChevron"
+                                    aria-hidden="true"
+                                  >
+                                    ›
+                                  </span>
+                                  {item.imageUrl ? (
+                                    <img
+                                      src={getImageUrl(item.imageUrl)}
+                                      alt=""
+                                      loading="lazy"
+                                    />
+                                  ) : item.iconName ? (
+                                    <span className="adminItemIcon">
+                                      <DynamicIcon
+                                        name={item.iconName}
+                                        aria-hidden="true"
+                                      />
+                                    </span>
+                                  ) : null}
+                                  <span>
+                                    <strong>{item.title}</strong>
+                                    {item.subtitle && (
+                                      <span className="itemListSubtitle">
+                                        {item.subtitle}
+                                      </span>
+                                    )}
+                                    <small>
+                                      Order {item.displayOrder} ·{" "}
+                                      {item.isVisible ? "Visible" : "Hidden"}
+                                    </small>
+                                  </span>
+                                </button>
+                                <div className="listActions">
+                                  <button
+                                    className="adminButton secondary"
+                                    type="button"
+                                    onClick={() => {
+                                      setExpandedItemId(item.id);
+                                      setItemEdit({
+                                        id: item.id,
+                                        value: itemValues(item),
+                                      });
+                                    }}
+                                  >
+                                    Edit
+                                  </button>
+                                  <button
+                                    className="adminButton danger"
+                                    type="button"
+                                    onClick={() =>
+                                      setDeleteTarget({
+                                        kind: "item",
+                                        id: item.id,
+                                      })
+                                    }
+                                  >
+                                    Delete
+                                  </button>
+                                </div>
+                              </div>
+                              {itemExpanded && (
+                                <div
+                                  className="accordionPanel"
+                                  id={`item-panel-${item.id}`}
+                                >
+                                  {itemEdit?.id === item.id ? (
+                                    <HomeSectionItemForm
+                                      value={itemEdit.value}
+                                      saving={saving}
+                                      onChange={(value) =>
+                                        setItemEdit({ ...itemEdit, value })
+                                      }
+                                      onSubmit={() => void saveItem()}
+                                      onCancel={() => setItemEdit(null)}
+                                    />
+                                  ) : (
+                                    item.description && (
+                                      <p className="accordionDescription">
+                                        {item.description}
+                                      </p>
+                                    )
+                                  )}
+                                </div>
+                              )}
+                            </article>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+            </article>
+          );
+        })}
+      </div>
       <ConfirmDialog
         open={Boolean(deleteTarget)}
         title="Confirm deletion"

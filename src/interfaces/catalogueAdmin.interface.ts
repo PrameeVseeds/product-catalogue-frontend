@@ -34,7 +34,8 @@ export interface AdminCategoryBrand extends CategoryBrandForm {
   id: number;
 }
 export interface SubcategoryForm {
-  categoryBrandId: number;
+  categoryId: number;
+  categoryBrandId: number | null;
   name: string;
   slug: string;
   description: string | null;

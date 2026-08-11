@@ -147,12 +147,14 @@ const normalizeSiteContent = (response: unknown): SiteContent => {
         .map(asRecord)
         .map((item) => ({
           id: getId(item),
-          platform:
-            getText(item, "displayName", "display_name", "platform") ?? "",
+          platform: getText(item, "platform") ?? "",
+          displayName: getText(item, "displayName", "display_name"),
           url: getText(item, "profileUrl", "profile_url", "url") ?? "",
           isActive: getBoolean(item, true, "isActive", "is_active"),
+          displayOrder: getNumber(item, 0, "displayOrder", "display_order"),
         }))
         .filter((item) => item.platform && item.url)
+        .sort((a, b) => a.displayOrder - b.displayOrder)
     : [];
   const homeSections = (
     Array.isArray(sectionsSource) ? sectionsSource.map(normalizeSection) : []

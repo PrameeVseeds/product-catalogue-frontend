@@ -1,32 +1,32 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { ErrorMessage } from "../components/common/errorMessage";
 import { LoadingSpinner } from "../components/common/loadingSpinner";
-import { BrandCard } from "../components/products/brandCard";
-import type {
-  BrandSummary,
-  CategorySummary,
-} from "../interfaces/catalogue.interface";
+import { SubcategoryCard } from "../components/products/subcategoryCard";
+import type { CategorySummary } from "../interfaces/catalogue.interface";
+import type { SubcategorySummary } from "../interfaces/subcategory.interface";
 import { getApiErrorMessage } from "../services/apiClient";
-import { brandApi } from "../services/brandApi";
 import { categoryApi } from "../services/categoryApi";
+import { subcategoryApi } from "../services/subcategoryApi";
 import { getImageUrl } from "../utils/getImageUrl";
 
 export const CategoryPage = () => {
   const { slug = "" } = useParams();
   const [category, setCategory] = useState<CategorySummary | null>(null),
-    [brands, setBrands] = useState<BrandSummary[]>([]),
+    [subcategories, setSubcategories] = useState<SubcategorySummary[]>([]),
     [loading, setLoading] = useState(true),
     [error, setError] = useState("");
   useEffect(() => {
     setLoading(true);
     Promise.all([
       categoryApi.getCategoryBySlug(slug),
-      brandApi.getBrandsByCategorySlug(slug),
+      subcategoryApi.getActiveSubcategories(),
     ])
-      .then(([current, related]) => {
+      .then(([current, all]) => {
         setCategory(current);
-        setBrands(related);
+        setSubcategories(
+          all.filter((item) => item.categoryId === Number(current.id)),
+        );
       })
       .catch((reason) => setError(getApiErrorMessage(reason)))
       .finally(() => setLoading(false));
@@ -43,27 +43,34 @@ export const CategoryPage = () => {
         <ErrorMessage message={error || "Category not found."} />
       </div>
     );
+  const image = getImageUrl(category.imageUrl);
   return (
     <main className="container publicCataloguePage">
+      <nav className="breadcrumbs" aria-label="Breadcrumb">
+        <ol>
+          <li>
+            <Link to="/products">Products</Link>
+          </li>
+          <li aria-current="page">{category.name}</li>
+        </ol>
+      </nav>
       <header className="catalogueHero">
-        {getImageUrl(category.imageUrl) && (
-          <img src={getImageUrl(category.imageUrl)} alt={category.name} />
-        )}
+        {image && <img src={image} alt={category.name} />}
         <div>
           <h1>{category.name}</h1>
           {category.description && <p>{category.description}</p>}
         </div>
       </header>
-      <section>
-        <h2>Brands</h2>
-        {brands.length ? (
-          <div className="catalogueGrid">
-            {brands.map((brand) => (
-              <BrandCard key={brand.id} brand={brand} />
+      <section aria-labelledby="subcategory-heading">
+        <h2 id="subcategory-heading">Subcategories</h2>
+        {subcategories.length ? (
+          <div className="catalogueGrid categoryGrid">
+            {subcategories.map((item) => (
+              <SubcategoryCard key={item.id} subcategory={item} />
             ))}
           </div>
         ) : (
-          <p>No brands found.</p>
+          <p>No subcategories found.</p>
         )}
       </section>
     </main>

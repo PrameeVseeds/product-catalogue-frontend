@@ -3,8 +3,13 @@ import { AdminPageHeader } from "../../components/admin/adminPageHeader";
 import { ConfirmDialog } from "../../components/admin/confirmDialog";
 import { FormFeedback } from "../../components/admin/formFeedback";
 import { FormField } from "../../components/admin/formField";
+import { SocialPlatformPicker } from "../../components/admin/socialPlatformPicker";
 import { StatusToggle } from "../../components/admin/statusToggle";
 import { LoadingSpinner } from "../../components/common/loadingSpinner";
+import {
+  getSocialPlatform,
+  normalizeSocialPlatform,
+} from "../../config/socialPlatformConfig";
 import type {
   AdminSocialMedia,
   SocialMediaForm,
@@ -21,21 +26,16 @@ const emptyLink: SocialMediaForm = {
   displayOrder: 0,
   isActive: true,
 };
-const formValues = ({
-  platform,
-  displayName,
-  profileUrl,
-  iconName,
-  displayOrder,
-  isActive,
-}: AdminSocialMedia): SocialMediaForm => ({
-  platform,
-  displayName,
-  profileUrl,
-  iconName,
-  displayOrder,
-  isActive,
+
+const formValues = (link: AdminSocialMedia): SocialMediaForm => ({
+  platform: normalizeSocialPlatform(link.platform) ?? link.platform,
+  displayName: link.displayName,
+  profileUrl: link.profileUrl,
+  iconName: link.iconName,
+  displayOrder: link.displayOrder,
+  isActive: link.isActive,
 });
+
 export const SocialMediaPage = () => {
   const [links, setLinks] = useState<AdminSocialMedia[]>([]);
   const [loading, setLoading] = useState(true);
@@ -47,6 +47,7 @@ export const SocialMediaPage = () => {
     value: SocialMediaForm;
   } | null>(null);
   const [deleteId, setDeleteId] = useState<number | null>(null);
+
   const load = useCallback(async () => {
     try {
       setLinks(await socialMediaApi.getAll());
@@ -57,24 +58,34 @@ export const SocialMediaPage = () => {
       setLoading(false);
     }
   }, []);
+
   useEffect(() => {
     void load();
   }, [load]);
+
   const save = async () => {
     if (!edit || saving) return;
-    if (!edit.value.platform.trim()) {
-      setError("Platform is required.");
+    const platform = normalizeSocialPlatform(edit.value.platform);
+    if (!platform) {
+      setError("Choose a supported social platform.");
       return;
     }
     if (!isHttpUrl(edit.value.profileUrl)) {
       setError("Enter a valid HTTP or HTTPS profile URL.");
       return;
     }
+    const selected = getSocialPlatform(platform);
+    const value: SocialMediaForm = {
+      ...edit.value,
+      platform,
+      displayName: edit.value.displayName || selected?.label || null,
+      iconName: platform,
+    };
     setSaving(true);
     setError("");
     try {
-      if (edit.id) await socialMediaApi.update(edit.id, edit.value);
-      else await socialMediaApi.create(edit.value);
+      if (edit.id) await socialMediaApi.update(edit.id, value);
+      else await socialMediaApi.create(value);
       setEdit(null);
       setSuccess("Social link saved successfully.");
       await load();
@@ -84,6 +95,7 @@ export const SocialMediaPage = () => {
       setSaving(false);
     }
   };
+
   const remove = async () => {
     if (deleteId === null || saving) return;
     setSaving(true);
@@ -98,6 +110,7 @@ export const SocialMediaPage = () => {
       setSaving(false);
     }
   };
+
   if (loading) return <LoadingSpinner />;
   return (
     <>
@@ -118,32 +131,39 @@ export const SocialMediaPage = () => {
       {edit && (
         <form
           className="adminPanel adminForm editorPanel"
-          onSubmit={(e) => {
-            e.preventDefault();
+          onSubmit={(event) => {
+            event.preventDefault();
             void save();
           }}
         >
           <div className="formGrid">
-            <FormField label="Platform">
-              <input
+            <FormField label="Platform / Icon">
+              <SocialPlatformPicker
                 value={edit.value.platform}
-                onChange={(e) =>
+                onChange={(platform) => {
+                  const option = getSocialPlatform(platform);
                   setEdit({
                     ...edit,
-                    value: { ...edit.value, platform: e.target.value },
-                  })
-                }
+                    value: {
+                      ...edit.value,
+                      platform,
+                      iconName: platform,
+                      displayName:
+                        edit.value.displayName || option?.label || null,
+                    },
+                  });
+                }}
               />
             </FormField>
             <FormField label="Display name">
               <input
                 value={edit.value.displayName ?? ""}
-                onChange={(e) =>
+                onChange={(event) =>
                   setEdit({
                     ...edit,
                     value: {
                       ...edit.value,
-                      displayName: optionalText(e.target.value),
+                      displayName: optionalText(event.target.value),
                     },
                   })
                 }
@@ -153,24 +173,10 @@ export const SocialMediaPage = () => {
               <input
                 type="url"
                 value={edit.value.profileUrl}
-                onChange={(e) =>
+                onChange={(event) =>
                   setEdit({
                     ...edit,
-                    value: { ...edit.value, profileUrl: e.target.value },
-                  })
-                }
-              />
-            </FormField>
-            <FormField label="Icon name">
-              <input
-                value={edit.value.iconName ?? ""}
-                onChange={(e) =>
-                  setEdit({
-                    ...edit,
-                    value: {
-                      ...edit.value,
-                      iconName: optionalText(e.target.value),
-                    },
+                    value: { ...edit.value, profileUrl: event.target.value },
                   })
                 }
               />
@@ -179,12 +185,12 @@ export const SocialMediaPage = () => {
               <input
                 type="number"
                 value={edit.value.displayOrder}
-                onChange={(e) =>
+                onChange={(event) =>
                   setEdit({
                     ...edit,
                     value: {
                       ...edit.value,
-                      displayOrder: Number(e.target.value),
+                      displayOrder: Number(event.target.value),
                     },
                   })
                 }
@@ -217,66 +223,83 @@ export const SocialMediaPage = () => {
         </form>
       )}
       <div className="adminTableWrapper">
-        <table className="adminTable">
+        <table className="adminTable socialMediaTable">
           <thead>
             <tr>
               <th>Platform</th>
-              <th>Display Name</th>
               <th>Profile</th>
-              <th>Icon</th>
               <th>Order</th>
               <th>Status</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
-            {links.map((link) => (
-              <tr key={link.id}>
-                <td>
-                  <strong>{link.platform}</strong>
-                </td>
-                <td>{link.displayName || "—"}</td>
-                <td>
-                  <a
-                    className="tableLink"
-                    href={link.profileUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Open profile
-                  </a>
-                </td>
-                <td>{link.iconName || "—"}</td>
-                <td>{link.displayOrder}</td>
-                <td>
-                  <span
-                    className={`statusPill ${link.isActive ? "active" : "inactive"}`}
-                  >
-                    {link.isActive ? "Active" : "Inactive"}
-                  </span>
-                </td>
-                <td>
-                  <div className="tableActions">
-                    <button
-                      className="adminButton secondary"
-                      type="button"
-                      onClick={() =>
-                        setEdit({ id: link.id, value: formValues(link) })
-                      }
+            {links.map((link) => {
+              const platform = getSocialPlatform(link.platform);
+              const PlatformIcon = platform?.icon;
+              return (
+                <tr key={link.id}>
+                  <td>
+                    <span className="adminSocialPlatform">
+                      {platform && PlatformIcon && (
+                        <span
+                          className="socialPlatformIcon"
+                          style={{
+                            backgroundColor: platform.brandColor,
+                            color: platform.iconColor,
+                          }}
+                        >
+                          <PlatformIcon aria-hidden="true" />
+                        </span>
+                      )}
+                      <strong>
+                        {link.displayName || platform?.label || link.platform}
+                      </strong>
+                    </span>
+                  </td>
+                  <td>
+                    <a
+                      className="tableLink socialProfileUrl"
+                      href={link.profileUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
                     >
-                      Edit
-                    </button>
-                    <button
-                      className="adminButton danger"
-                      type="button"
-                      onClick={() => setDeleteId(link.id)}
+                      {link.profileUrl}
+                    </a>
+                  </td>
+                  <td>{link.displayOrder}</td>
+                  <td>
+                    <span
+                      className={`statusPill ${link.isActive ? "active" : "inactive"}`}
                     >
-                      Delete
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
+                      {link.isActive ? "Active" : "Inactive"}
+                    </span>
+                  </td>
+                  <td>
+                    <div className="tableActions">
+                      <button
+                        className="adminButton secondary"
+                        type="button"
+                        aria-label={`Edit ${link.displayName || link.platform}`}
+                        onClick={() =>
+                          setEdit({ id: link.id, value: formValues(link) })
+                        }
+                      >
+                        Edit
+                      </button>
+                      <button
+                        className="adminButton danger"
+                        type="button"
+                        aria-label={`Delete ${link.displayName || link.platform}`}
+                        onClick={() => setDeleteId(link.id)}
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>

@@ -7,13 +7,7 @@ import { ImageUploader } from "../../components/admin/imageUploader";
 import { StatusToggle } from "../../components/admin/statusToggle";
 import { LoadingSpinner } from "../../components/common/loadingSpinner";
 import { SubcategoriesTable } from "../../components/admin/subcategoriesTable";
-import type {
-  AdminBrand,
-  AdminCategory,
-  AdminCategoryBrand,
-  AdminSubcategory,
-  SubcategoryForm,
-} from "../../interfaces/catalogueAdmin.interface";
+import type {AdminBrand,AdminCategory,AdminCategoryBrand,AdminSubcategory,SubcategoryForm,} from "../../interfaces/catalogueAdmin.interface";
 import { getAdminApiError } from "../../services/admin/adminApiError";
 import { brandAdminApi } from "../../services/admin/brandAdminApi";
 import { categoryAdminApi } from "../../services/admin/categoryAdminApi";
@@ -24,6 +18,7 @@ import { optionalText } from "../../utils/formValidation";
 import { getImageUrl } from "../../utils/getImageUrl";
 
 const values = ({
+  categoryId,
   categoryBrandId,
   name,
   slug,
@@ -32,6 +27,7 @@ const values = ({
   displayOrder,
   isActive,
 }: AdminSubcategory): SubcategoryForm => ({
+  categoryId,
   categoryBrandId,
   name,
   slug,
@@ -78,7 +74,9 @@ export const SubcategoriesPage = () => {
   useEffect(() => {
     void load();
   }, [load]);
-  const relationName = (id: number) => {
+  const relationName = (id: number | null, categoryId = 0) => {
+    if (id === null)
+      return `${categories.find((category) => category.id === categoryId)?.name ?? "Category"} — No brand`;
     const relation = relations.find((r) => r.id === id);
     return relation
       ? `${categories.find((c) => c.id === relation.categoryId)?.name ?? "Category"} — ${brands.find((b) => b.id === relation.brandId)?.name ?? "Brand"}`
@@ -87,12 +85,12 @@ export const SubcategoriesPage = () => {
   const save = async () => {
     if (!edit || saving) return;
     if (
-      !edit.value.categoryBrandId ||
+      !edit.value.categoryId ||
       !edit.value.name.trim() ||
       !edit.value.slug.trim()
     )
       return setFeedback({
-        error: "Relationship, name and slug are required.",
+        error: "Category, name and slug are required.",
         success: "",
       });
     setSaving(true);
@@ -140,7 +138,8 @@ export const SubcategoriesPage = () => {
             onClick={() => {
               setEdit({
                 value: {
-                  categoryBrandId: relations[0]?.id ?? 0,
+                  categoryId: categories[0]?.id ?? 0,
+                  categoryBrandId: null,
                   name: "",
                   slug: "",
                   description: null,
@@ -166,24 +165,51 @@ export const SubcategoriesPage = () => {
           }}
         >
           <div className="formGrid">
-            <FormField label="Category — Brand">
+            <FormField label="Category">
               <select
-                value={edit.value.categoryBrandId}
+                value={edit.value.categoryId}
                 onChange={(e) =>
                   setEdit({
                     ...edit,
                     value: {
                       ...edit.value,
-                      categoryBrandId: Number(e.target.value),
+                      categoryId: Number(e.target.value),
+                      categoryBrandId: null,
                     },
                   })
                 }
               >
-                {relations.map((item) => (
-                  <option key={item.id} value={item.id}>
-                    {relationName(item.id)}
+                <option value={0}>Select category</option>
+                {categories.map((category) => (
+                  <option key={category.id} value={category.id}>
+                    {category.name}
                   </option>
                 ))}
+              </select>
+            </FormField>
+            <FormField label="Brand (optional)">
+              <select
+                value={edit.value.categoryBrandId ?? ""}
+                onChange={(e) =>
+                  setEdit({
+                    ...edit,
+                    value: {
+                      ...edit.value,
+                      categoryBrandId: e.target.value
+                        ? Number(e.target.value)
+                        : null,
+                    },
+                  })
+                }
+              >
+                <option value="">No brand</option>
+                {relations
+                  .filter((item) => item.categoryId === edit.value.categoryId)
+                  .map((item) => (
+                    <option key={item.id} value={item.id}>
+                      {relationName(item.id)}
+                    </option>
+                  ))}
               </select>
             </FormField>
             <FormField label="Name">

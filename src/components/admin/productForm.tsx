@@ -40,8 +40,11 @@ export const ProductForm = ({
       subcategories.find((item) => item.id === value.subcategoryId)
         ?.categoryBrandId,
   );
+  const selectedSubcategory = subcategories.find(
+    (item) => item.id === value.subcategoryId,
+  );
   const [categoryId, setCategoryId] = useState(
-    initialRelation?.categoryId ?? 0,
+    selectedSubcategory?.categoryId ?? initialRelation?.categoryId ?? 0,
   );
   const [brandId, setBrandId] = useState(initialRelation?.brandId ?? 0);
   const [slugEdited, setSlugEdited] = useState(Boolean(value.slug));
@@ -60,7 +63,11 @@ export const ProductForm = ({
     (entry) => entry.brandId === brandId,
   );
   const availableSubcategories = subcategories.filter(
-    (item) => item.categoryBrandId === relation?.id,
+    (item) =>
+      item.categoryId === categoryId &&
+      (brandId
+        ? item.categoryBrandId === relation?.id
+        : item.categoryBrandId === null),
   );
   const text = (key: keyof ProductFormValues, input: string) =>
     onChange({
@@ -95,7 +102,7 @@ export const ProductForm = ({
               ))}
             </select>
           </FormField>
-          <FormField label="Brand">
+          <FormField label="Brand (optional)">
             <select
               value={brandId}
               disabled={!categoryId}
@@ -115,7 +122,7 @@ export const ProductForm = ({
           <FormField label="Subcategory">
             <select
               value={value.subcategoryId}
-              disabled={!brandId}
+              disabled={!categoryId}
               onChange={(e) =>
                 onChange({ ...value, subcategoryId: Number(e.target.value) })
               }

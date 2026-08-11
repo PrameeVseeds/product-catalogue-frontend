@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { ErrorMessage } from "../components/common/errorMessage";
 import { LoadingSpinner } from "../components/common/loadingSpinner";
 import { ProductGrid } from "../components/products/productGrid";
 import type { ProductSummary } from "../interfaces/product.interface";
+import type { CategorySummary } from "../interfaces/catalogue.interface";
 import type { SubcategorySummary } from "../interfaces/subcategory.interface";
 import { getApiErrorMessage } from "../services/apiClient";
 import { productApi } from "../services/productApi";
+import { categoryApi } from "../services/categoryApi";
 import { subcategoryApi } from "../services/subcategoryApi";
 import { getImageUrl } from "../utils/getImageUrl";
 
@@ -15,6 +17,7 @@ export const SubcategoryPage = () => {
   const [subcategory, setSubcategory] = useState<SubcategorySummary | null>(
       null,
     ),
+    [category, setCategory] = useState<CategorySummary | null>(null),
     [products, setProducts] = useState<ProductSummary[]>([]),
     [loading, setLoading] = useState(true),
     [error, setError] = useState("");
@@ -23,10 +26,15 @@ export const SubcategoryPage = () => {
     Promise.all([
       subcategoryApi.getSubcategoryBySlug(slug),
       productApi.getProducts({ subcategory: slug }),
+      categoryApi.getActiveCategories(),
     ])
-      .then(([current, result]) => {
+      .then(([current, result, categories]) => {
         setSubcategory(current);
         setProducts(result.products);
+        setCategory(
+          categories.find((item) => Number(item.id) === current.categoryId) ??
+            null,
+        );
       })
       .catch((reason) => setError(getApiErrorMessage(reason)))
       .finally(() => setLoading(false));
@@ -45,6 +53,19 @@ export const SubcategoryPage = () => {
     );
   return (
     <main className="container publicCataloguePage">
+      <nav className="breadcrumbs" aria-label="Breadcrumb">
+        <ol>
+          <li>
+            <Link to="/products">Products</Link>
+          </li>
+          {category && (
+            <li>
+              <Link to={`/categories/${category.slug}`}>{category.name}</Link>
+            </li>
+          )}
+          <li aria-current="page">{subcategory.name}</li>
+        </ol>
+      </nav>
       <header className="catalogueHero">
         {getImageUrl(subcategory.imageUrl) && (
           <img src={getImageUrl(subcategory.imageUrl)} alt={subcategory.name} />

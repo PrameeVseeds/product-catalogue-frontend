@@ -10,7 +10,7 @@ export const SubcategoryCard = ({
   const image = getImageUrl(subcategory.imageUrl);
   return (
     <Link
-      className="catalogueCard"
+      className="catalogueCard categoryCard subcategoryCard"
       to={`/subcategories/${encodeURIComponent(subcategory.slug)}`}
     >
       {image && <img src={image} alt={subcategory.name} loading="lazy" />}

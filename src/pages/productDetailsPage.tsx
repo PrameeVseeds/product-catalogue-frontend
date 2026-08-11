@@ -31,7 +31,6 @@ export const ProductDetailsPage = () => {
       <div className="productOverview">
         <ProductGallery product={product} />
         <div className="productInfo">
-          {product.brand && <p className="eyebrow">{product.brand.name}</p>}
           <h1>{product.name}</h1>
           {product.modelNumber && (
             <p className="modelNumber">Model: {product.modelNumber}</p>

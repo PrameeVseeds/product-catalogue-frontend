@@ -14,11 +14,6 @@ export const ProductBreadcrumbs = ({ product }: { product: Product }) => (
           </Link>
         </li>
       )}
-      {product.brand && (
-        <li>
-          <Link to={`/brands/${product.brand.slug}`}>{product.brand.name}</Link>
-        </li>
-      )}
       {product.subcategory && (
         <li>
           <Link to={`/subcategories/${product.subcategory.slug}`}>

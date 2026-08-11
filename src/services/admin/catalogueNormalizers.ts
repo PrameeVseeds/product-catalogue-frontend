@@ -57,7 +57,8 @@ export const subcategory = (v: unknown): AdminSubcategory => {
   const s = asRecord(v);
   return {
     id: Number(getId(s)),
-    categoryBrandId: getNumber(s, 0, "categoryBrandId", "category_brand_id"),
+    categoryId: getNumber(s, 0, "categoryId", "category_id"),
+    categoryBrandId: getNumber(s, 0, "categoryBrandId", "category_brand_id") || null,
     name: getText(s, "name") ?? "",
     slug: getText(s, "slug") ?? "",
     description: getText(s, "description"),

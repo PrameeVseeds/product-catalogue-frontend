@@ -3,7 +3,7 @@ import { ProductCard } from "../home/productCard";
 
 export const ProductGrid = ({ products }: { products: ProductSummary[] }) =>
   products.length ? (
-    <div className="catalogueGrid">
+    <div className="catalogueGrid productGrid">
       {products.map((product) => (
         <ProductCard key={product.id} product={product} />
       ))}

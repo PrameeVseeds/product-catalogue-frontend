@@ -1,10 +1,11 @@
 import { useState } from "react";
+import { FileDown, Mail, Phone } from "lucide-react";
+import { FaWhatsapp } from "react-icons/fa6";
 import type { Product } from "../../interfaces/product.interface";
 import type { ContactSettings } from "../../interfaces/site.interface";
 import { productApi } from "../../services/productApi";
+import { getWhatsAppUrl } from "../../utils/getWhatsAppUrl";
 import { ProductEnquiryForm } from "./productEnquiryForm";
-
-const digitsOnly = (value: string) => value.replace(/[^\d]/g, "");
 
 export const ProductEnquiryActions = ({
   product,
@@ -18,39 +19,46 @@ export const ProductEnquiryActions = ({
   const whatsappMessage = [settings.whatsappDefaultMessage, productLabel]
     .filter(Boolean)
     .join(" - ");
+  const whatsappUrl = getWhatsAppUrl(settings.whatsappPhone, whatsappMessage);
   return (
     <>
       <div className="productActions">
-        {settings.callEnabled && settings.callPhone && (
-          <a className="button" href={`tel:${settings.callPhone}`}>
-            {settings.callButtonText || "Call"}
-          </a>
-        )}
-        {settings.whatsappEnabled && settings.whatsappPhone && (
-          <a
-            className="button buttonSecondary"
-            href={`https://wa.me/${digitsOnly(settings.whatsappPhone)}?text=${encodeURIComponent(whatsappMessage)}`}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {settings.whatsappButtonText || "WhatsApp"}
-          </a>
-        )}
-        {settings.emailEnabled && (
-          <button
-            className="button buttonSecondary"
-            type="button"
-            onClick={() => setShowForm(true)}
-          >
-            {settings.emailButtonText || "Enquire"}
-          </button>
-        )}
+        <div className="productContactActions">
+          {settings.callEnabled && settings.callPhone && (
+            <a className="button" href={`tel:${settings.callPhone}`}>
+              <Phone aria-hidden="true" />
+              {settings.callButtonText || "Call"}
+            </a>
+          )}
+          {settings.whatsappEnabled && whatsappUrl && (
+            <a
+              className="button buttonSecondary"
+              href={whatsappUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <FaWhatsapp aria-hidden="true" />
+              {settings.whatsappButtonText || "WhatsApp"}
+            </a>
+          )}
+          {settings.emailEnabled && (
+            <button
+              className="button buttonSecondary"
+              type="button"
+              onClick={() => setShowForm(true)}
+            >
+              <Mail aria-hidden="true" />
+              {settings.emailButtonText || "Enquire"}
+            </button>
+          )}
+        </div>
         <a
-          className="button buttonSecondary"
+          className="button datasheetButton"
           href={productApi.getDatasheetUrl(product.slug)}
           target="_blank"
           rel="noopener noreferrer"
         >
+          <FileDown aria-hidden="true" />
           Open Datasheet
         </a>
       </div>

@@ -68,7 +68,7 @@ export const ProductEnquiryForm = ({
       className="productEnquiryPanel"
       aria-labelledby="product-enquiry-heading"
     >
-      <div className="sectionHeading">
+      <div className="panelHeading">
         <h2 id="product-enquiry-heading">Product enquiry</h2>
         <button type="button" className="textButton" onClick={onClose}>
           Close

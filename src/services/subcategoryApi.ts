@@ -3,7 +3,9 @@ import { apiClient } from "./apiClient";
 import {asArray,asRecord,getId,getNumber,getText,unwrapData,type JsonRecord,} from "./responseNormalizers";
 const normalize = (item: JsonRecord): SubcategorySummary => ({
   id: Number(getId(item)),
-  categoryBrandId: getNumber(item, 0, "categoryBrandId", "category_brand_id"),
+  categoryId: getNumber(item, 0, "categoryId", "category_id"),
+  categoryBrandId:
+    getNumber(item, 0, "categoryBrandId", "category_brand_id") || null,
   name: getText(item, "name") ?? "",
   slug: getText(item, "slug") ?? "",
   description: getText(item, "description"),

@@ -1,6 +1,7 @@
 export interface SubcategorySummary {
   id: number;
-  categoryBrandId: number;
+  categoryId: number;
+  categoryBrandId: number | null;
   name: string;
   slug: string;
   description?: string | null;

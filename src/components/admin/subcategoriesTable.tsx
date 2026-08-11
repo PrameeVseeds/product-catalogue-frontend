@@ -2,7 +2,7 @@ import type { AdminSubcategory } from "../../interfaces/catalogueAdmin.interface
 import { getImageUrl } from "../../utils/getImageUrl";
 interface Props {
   items: AdminSubcategory[];
-  relationshipName: (id: number) => string;
+  relationshipName: (id: number | null, categoryId: number) => string;
   onEdit: (item: AdminSubcategory) => void;
   onDelete: (id: number) => void;
 }
@@ -18,7 +18,7 @@ export const SubcategoriesTable = ({
         <tr>
           <th>Image</th>
           <th>Name</th>
-          <th>Category — Brand</th>
+          <th>Category - Brand (optional)</th>
           <th>Slug</th>
           <th>Order</th>
           <th>Status</th>
@@ -42,7 +42,7 @@ export const SubcategoriesTable = ({
             <td>
               <strong>{item.name}</strong>
             </td>
-            <td>{relationshipName(item.categoryBrandId)}</td>
+            <td>{relationshipName(item.categoryBrandId, item.categoryId)}</td>
             <td>/{item.slug}</td>
             <td>{item.displayOrder}</td>
             <td>

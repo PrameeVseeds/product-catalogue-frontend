@@ -99,8 +99,10 @@ export interface ContactDetails {
 export interface SocialLink {
   id?: string | number
   platform: string
+  displayName?: string | null
   url: string
   isActive: boolean
+  displayOrder: number
 }
 
 export interface SiteContent {

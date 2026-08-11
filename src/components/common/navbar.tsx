@@ -3,19 +3,11 @@ import { NavLink } from "react-router-dom";
 import { useSiteContent } from "../../hooks/useSiteContent";
 import { getImageUrl } from "../../utils/getImageUrl";
 
-const phoneHref = (phone: string) => phone.replace(/[^+\d]/g, "");
-
 export const Navbar = () => {
   const [open, setOpen] = useState(false);
   const { data } = useSiteContent();
   const site = data?.siteSettings;
-  const contact = data?.contactSettings;
   const logoUrl = getImageUrl(site?.logo);
-  const callPhone = contact?.callPhone?.trim();
-  const whatsappPhone = contact?.whatsappPhone?.replace(/\D/g, "");
-  const whatsappUrl = whatsappPhone
-    ? `https://wa.me/${whatsappPhone}${contact?.whatsappDefaultMessage ? `?text=${encodeURIComponent(contact.whatsappDefaultMessage)}` : ""}`
-    : "";
 
   return (
     <header className="siteHeader">
@@ -54,24 +46,6 @@ export const Navbar = () => {
           <NavLink to="/contact" onClick={() => setOpen(false)}>
             Contact Us
           </NavLink>
-          {contact?.callEnabled && callPhone && (
-            <a
-              className="button buttonSmall"
-              href={`tel:${phoneHref(callPhone)}`}
-            >
-              {contact.callButtonText || "Call"}
-            </a>
-          )}
-          {contact?.whatsappEnabled && whatsappUrl && (
-            <a
-              className="button buttonSmall"
-              href={whatsappUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {contact.whatsappButtonText || "WhatsApp"}
-            </a>
-          )}
         </nav>
       </div>
     </header>
