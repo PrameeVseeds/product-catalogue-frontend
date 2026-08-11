@@ -14,4 +14,15 @@ export const uploadApi = {
     if (!path) throw new Error("INVALID_UPLOAD_RESPONSE");
     return path;
   },
+  async uploadDatasheet(file: File): Promise<string> {
+    const form = new FormData();
+    form.append("datasheet", file);
+    const { data } = await apiClient.post<unknown>(
+      "/admin/uploads/datasheet",
+      form,
+    );
+    const path = getText(asRecord(unwrapData(data)), "path");
+    if (!path) throw new Error("INVALID_UPLOAD_RESPONSE");
+    return path;
+  },
 };

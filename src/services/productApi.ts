@@ -36,6 +36,7 @@ const normalizeProduct = (value: unknown): Product => {
       "datasheetDescription",
       "datasheet_description",
     ),
+    datasheetFileUrl: getText(item, "datasheetFileUrl", "datasheet_file_url"),
     galleryImages: Array.isArray(item.galleryImages)
       ? item.galleryImages
           .map(asRecord)

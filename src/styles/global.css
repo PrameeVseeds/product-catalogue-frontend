@@ -1792,6 +1792,53 @@ img {
   color: #176536;
   font-size: 0.875rem;
 }
+.datasheetUploader {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  padding: 1rem;
+  border: 1px solid color-mix(in srgb, var(--text-color) 12%, transparent);
+  border-radius: 0.55rem;
+  background: var(--surface-color);
+}
+.currentDatasheet {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  overflow-wrap: anywhere;
+}
+.currentDatasheet > svg {
+  width: 24px;
+  height: 24px;
+  flex: 0 0 auto;
+  color: var(--primary-color);
+}
+.currentDatasheet > span {
+  min-width: 0;
+  flex: 1;
+}
+.datasheetUploader .imageActions .adminButton {
+  gap: 0.45rem;
+}
+.datasheetUploader .imageActions svg {
+  width: 17px;
+  height: 17px;
+}
+.datasheetFallbackHint {
+  margin: 0;
+}
+@media (max-width: 600px) {
+  .currentDatasheet {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+  .currentDatasheet .adminButton {
+    width: 100%;
+  }
+}
 .colorControl {
   display: grid;
   grid-template-columns: 48px 1fr;

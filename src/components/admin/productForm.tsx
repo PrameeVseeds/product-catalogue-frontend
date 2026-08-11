@@ -1,16 +1,11 @@
 import { useMemo, useState } from "react";
-import type {
-  AdminBrand,
-  AdminCategory,
-  AdminCategoryBrand,
-  AdminSubcategory,
-  ProductFormValues,
-} from "../../interfaces/catalogueAdmin.interface";
+import type {AdminBrand,AdminCategory,AdminCategoryBrand,AdminSubcategory,ProductFormValues,} from "../../interfaces/catalogueAdmin.interface";
 import { createSlug } from "../../utils/createSlug";
 import { optionalText } from "../../utils/formValidation";
 import { FormField } from "./formField";
 import { ImageUploader } from "./imageUploader";
 import { StatusToggle } from "./statusToggle";
+import { DatasheetUploader } from "./datasheetUploader";
 
 interface Props {
   value: ProductFormValues;
@@ -195,7 +190,7 @@ export const ProductForm = ({
         onChange={(mainImageUrl) => onChange({ ...value, mainImageUrl })}
       />
       <div className="settingsGroup">
-        <h2>Datasheet and search metadata</h2>
+        <h2>Datasheet</h2>
         <div className="formGrid">
           <FormField label="Datasheet title">
             <input
@@ -209,6 +204,17 @@ export const ProductForm = ({
               onChange={(e) => text("datasheetDescription", e.target.value)}
             />
           </FormField>
+        </div>
+        <DatasheetUploader
+          value={value.datasheetFileUrl}
+          onChange={(datasheetFileUrl) =>
+            onChange({ ...value, datasheetFileUrl })
+          }
+        />
+      </div>
+      <div className="settingsGroup">
+        <h2>Search metadata</h2>
+        <div className="formGrid">
           <FormField label="Meta title">
             <input
               value={value.metaTitle ?? ""}

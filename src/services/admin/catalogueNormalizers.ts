@@ -88,6 +88,7 @@ export const product = (v: unknown): AdminProduct => {
       "datasheetDescription",
       "datasheet_description",
     ),
+    datasheetFileUrl: text(s, "datasheetFileUrl", "datasheet_file_url"),
     metaTitle: text(s, "metaTitle", "meta_title"),
     metaDescription: text(s, "metaDescription", "meta_description"),
     isFeatured: getBoolean(s, false, "isFeatured", "is_featured"),
