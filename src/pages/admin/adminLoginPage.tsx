@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
+import { usePageTitle } from "../../hooks/usePageTitle";
 import { getLoginErrorMessage } from "../../services/authApi";
 
 interface FormErrors {
@@ -10,6 +11,7 @@ interface FormErrors {
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export const AdminLoginPage = () => {
+  usePageTitle("Admin Login");
   const { login } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();

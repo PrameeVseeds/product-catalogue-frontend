@@ -9,6 +9,7 @@ import { getApiErrorMessage } from "../services/apiClient";
 import { categoryApi } from "../services/categoryApi";
 import { subcategoryApi } from "../services/subcategoryApi";
 import { getImageUrl } from "../utils/getImageUrl";
+import { usePageTitle } from "../hooks/usePageTitle";
 
 export const CategoryPage = () => {
   const { slug = "" } = useParams();
@@ -16,6 +17,7 @@ export const CategoryPage = () => {
     [subcategories, setSubcategories] = useState<SubcategorySummary[]>([]),
     [loading, setLoading] = useState(true),
     [error, setError] = useState("");
+  usePageTitle(loading ? "Category" : category?.name || "Category");
   useEffect(() => {
     setLoading(true);
     Promise.all([

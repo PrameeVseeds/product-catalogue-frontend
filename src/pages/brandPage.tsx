@@ -10,6 +10,7 @@ import { brandApi } from "../services/brandApi";
 import { productApi } from "../services/productApi";
 import { subcategoryApi } from "../services/subcategoryApi";
 import { getImageUrl } from "../utils/getImageUrl";
+import { usePageTitle } from "../hooks/usePageTitle";
 
 export const BrandPage = () => {
   const { slug = "" } = useParams();
@@ -17,6 +18,7 @@ export const BrandPage = () => {
     [subcategories, setSubcategories] = useState<SubcategorySummary[]>([]),
     [loading, setLoading] = useState(true),
     [error, setError] = useState("");
+  usePageTitle(loading ? "Brand" : brand?.name || "Brand");
   useEffect(() => {
     setLoading(true);
     Promise.all([

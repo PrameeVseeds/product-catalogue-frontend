@@ -165,6 +165,7 @@ const normalizeSiteContent = (response: unknown): SiteContent => {
   return {
     siteSettings: {
       companyName: getText(settings, "companyName", "company_name"),
+      websiteTitle: getText(settings, "websiteTitle", "website_title"),
       logo: getText(settings, "logoUrl", "logo_url", "logo"),
       footerDescription: getText(
         settings,

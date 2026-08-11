@@ -4,7 +4,6 @@ import {
   AdminLoginRoute,
 } from "../components/admin/protectedRoute";
 import { AdminLayout } from "../layouts/adminLayout";
-import { SiteContentProvider } from "../hooks/siteContentProvider";
 import { PublicLayout } from "../layouts/publicLayout";
 import { BrandPage } from "../pages/brandPage";
 import { CategoryPage } from "../pages/categoryPage";
@@ -35,11 +34,7 @@ import { EnquiryDetailsPage } from "../pages/admin/enquiryDetailsPage";
 
 export const appRouter = createBrowserRouter([
   {
-    element: (
-      <SiteContentProvider>
-        <PublicLayout />
-      </SiteContentProvider>
-    ),
+    element: <PublicLayout />,
     children: [
       { path: "/", element: <HomePage /> },
       { path: "/products", element: <ProductsPage /> },

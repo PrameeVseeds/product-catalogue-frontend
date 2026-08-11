@@ -1,5 +1,6 @@
 export interface SiteSettings {
   companyName?: string | null
+  websiteTitle?: string | null
   logo?: string | null
   footerDescription?: string | null
   address?: string | null

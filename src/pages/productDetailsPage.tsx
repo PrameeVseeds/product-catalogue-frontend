@@ -8,11 +8,13 @@ import { ProductSpecifications } from "../components/products/productSpecificati
 import { useProductDetails } from "../hooks/useProductDetails";
 import { useSiteContent } from "../hooks/useSiteContent";
 import { useParams } from "react-router-dom";
+import { usePageTitle } from "../hooks/usePageTitle";
 
 export const ProductDetailsPage = () => {
   const { slug } = useParams();
   const { data: product, loading, error } = useProductDetails(slug);
   const { data: site } = useSiteContent();
+  usePageTitle(loading ? "Products" : product?.name || "Products");
   if (loading)
     return (
       <div className="container stateSection">
