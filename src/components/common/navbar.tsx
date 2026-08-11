@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Menu, X } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import { useSiteContent } from "../../hooks/useSiteContent";
 import { getImageUrl } from "../../utils/getImageUrl";
@@ -28,9 +29,10 @@ export const Navbar = () => {
           type="button"
           aria-expanded={open}
           aria-controls="public-navigation"
+          aria-label={open ? "Close navigation menu" : "Open navigation menu"}
           onClick={() => setOpen((value) => !value)}
         >
-          Menu
+          {open ? <X aria-hidden="true" /> : <Menu aria-hidden="true" />}
         </button>
         <nav
           id="public-navigation"

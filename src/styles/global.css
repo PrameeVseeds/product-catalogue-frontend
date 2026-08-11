@@ -98,11 +98,20 @@ img {
 
 .menuButton {
   display: none;
-  padding: 0.55rem 0.75rem;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  place-items: center;
   border: 1px solid currentColor;
   border-radius: 0.4rem;
   color: var(--text-color);
   background: transparent;
+  cursor: pointer;
+}
+
+.menuButton svg {
+  width: 24px;
+  height: 24px;
 }
 
 .button {
@@ -851,7 +860,7 @@ img {
   }
 
   .menuButton {
-    display: block;
+    display: grid;
   }
 
   .navLinks {
