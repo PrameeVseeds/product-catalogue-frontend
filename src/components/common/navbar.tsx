@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import { NavLink } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { useSiteContent } from "../../hooks/useSiteContent";
 import { getImageUrl } from "../../utils/getImageUrl";
 
 export const Navbar = () => {
   const [open, setOpen] = useState(false);
+  const { pathname } = useLocation();
   const { data } = useSiteContent();
   const site = data?.siteSettings;
   const logoUrl = getImageUrl(site?.logo);
@@ -42,7 +44,19 @@ export const Navbar = () => {
           <NavLink to="/" end onClick={() => setOpen(false)}>
             Home
           </NavLink>
-          <NavLink to="/products" onClick={() => setOpen(false)}>
+          <NavLink
+            to="/products"
+            className={
+              pathname === "/products" ||
+              pathname.startsWith("/products/") ||
+              pathname.startsWith("/categories/") ||
+              pathname.startsWith("/subcategories/") ||
+              pathname.startsWith("/brands/")
+                ? "active"
+                : undefined
+            }
+            onClick={() => setOpen(false)}
+          >
             Products
           </NavLink>
           <NavLink to="/contact" onClick={() => setOpen(false)}>

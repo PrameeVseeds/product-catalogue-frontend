@@ -9,7 +9,11 @@ export const CategoryCard = ({ category }: { category: CategorySummary }) => {
       className="catalogueCard categoryCard"
       to={`/categories/${encodeURIComponent(category.slug)}`}
     >
-      {image && <img src={image} alt={category.name} loading="lazy" />}
+      {image ? (
+        <img src={image} alt={category.name} loading="lazy" />
+      ) : (
+        <div className="categoryImagePlaceholder" aria-hidden="true" />
+      )}
       <div className="cardBody">
         <h3>{category.name}</h3>
         {category.description && <p>{category.description}</p>}
