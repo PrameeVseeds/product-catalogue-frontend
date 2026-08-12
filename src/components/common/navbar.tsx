@@ -1,16 +1,23 @@
-import { useState } from "react";
-import { Menu, X } from "lucide-react";
-import { NavLink } from "react-router-dom";
-import { useLocation } from "react-router-dom";
+import { useState, type FormEvent } from "react";
+import { Menu, Search, X } from "lucide-react";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useSiteContent } from "../../hooks/useSiteContent";
 import { getImageUrl } from "../../utils/getImageUrl";
 
 export const Navbar = () => {
   const [open, setOpen] = useState(false);
+  const [productSearch, setProductSearch] = useState("");
   const { pathname } = useLocation();
+  const navigate = useNavigate();
   const { data } = useSiteContent();
   const site = data?.siteSettings;
   const logoUrl = getImageUrl(site?.logo);
+  const submitProductSearch = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const search = productSearch.trim();
+    navigate(search ? `/products?search=${encodeURIComponent(search)}` : "/products");
+    setOpen(false);
+  };
 
   return (
     <header className="siteHeader">
@@ -62,6 +69,21 @@ export const Navbar = () => {
           <NavLink to="/contact" onClick={() => setOpen(false)}>
             Contact Us
           </NavLink>
+          <form className="navbarProductSearch" role="search" onSubmit={submitProductSearch}>
+            <label className="visuallyHidden" htmlFor="navbar-product-search">
+              Search products
+            </label>
+            <input
+              id="navbar-product-search"
+              type="search"
+              value={productSearch}
+              onChange={(event) => setProductSearch(event.target.value)}
+              placeholder="Search products"
+            />
+            <button type="submit" aria-label="Search products">
+              <Search aria-hidden="true" />
+            </button>
+          </form>
         </nav>
       </div>
     </header>
