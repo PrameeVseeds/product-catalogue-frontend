@@ -20,8 +20,17 @@ export const uploadApi = {
     const { data } = await apiClient.post<unknown>(
       "/admin/uploads/datasheet",
       form,
+      { timeout: 60_000 },
     );
-    const path = getText(asRecord(unwrapData(data)), "path");
+    const path = getText(
+      asRecord(unwrapData(data)),
+      "path",
+      "url",
+      "fileUrl",
+      "file_url",
+      "datasheetFileUrl",
+      "datasheet_file_url",
+    );
     if (!path) throw new Error("INVALID_UPLOAD_RESPONSE");
     return path;
   },
