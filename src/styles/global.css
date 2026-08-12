@@ -125,6 +125,60 @@ img {
   height: 3px;
 }
 
+.navbarProductSearch {
+  display: flex;
+  width: min(250px, 24vw);
+  min-width: 220px;
+  height: 38px;
+  overflow: hidden;
+  border: 1px solid rgb(255 255 255 / 48%);
+  border-radius: 0.5rem;
+  background: #ffffff;
+}
+.navbarProductSearch input {
+  -webkit-appearance: none;
+  appearance: textfield;
+  width: 100%;
+  min-width: 0;
+  padding: 0.35rem 0.45rem 0.35rem 0;
+  border: 0;
+  outline: 0;
+  color: #0b1f3a;
+  background: transparent;
+  direction: ltr;
+  text-align: left;
+  text-indent: 0;
+}
+.navbarProductSearch input::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+.navbarProductSearch input::placeholder {
+  color: #64748b;
+}
+.navbarProductSearch:focus-within {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary-color) 24%, transparent);
+}
+.navbarProductSearch button {
+  display: grid;
+  width: 38px;
+  flex: 0 0 38px;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  color: var(--button-text-color);
+  background: var(--primary-color);
+  cursor: pointer;
+}
+.navbarProductSearch button:hover,
+.navbarProductSearch button:focus-visible {
+  background: color-mix(in srgb, var(--primary-color) 90%, #000000);
+}
+.navbarProductSearch button svg {
+  width: 18px;
+  height: 18px;
+}
+
 .menuButton {
   display: none;
   width: 42px;
@@ -1062,6 +1116,12 @@ img {
   .navLinks > a.active:not(.button) {
     border-left-color: var(--primary-color);
     background: color-mix(in srgb, var(--primary-color) 8%, transparent);
+  }
+
+  .navbarProductSearch {
+    width: 100%;
+    min-width: 0;
+    margin-top: 0.25rem;
   }
 
   .heroContent {

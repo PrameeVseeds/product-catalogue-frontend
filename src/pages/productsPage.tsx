@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { ErrorMessage } from "../components/common/errorMessage";
 import { LoadingSpinner } from "../components/common/loadingSpinner";
 import { CategoryCard } from "../components/home/categoryCard";
@@ -13,14 +13,19 @@ import { productApi } from "../services/productApi";
 
 export const ProductsPage = () => {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [categories, setCategories] = useState<CategorySummary[]>([]),
     [products, setProducts] = useState<ProductSummary[]>([]);
-  const [search, setSearch] = useState(""),
+  const [search, setSearch] = useState(() => searchParams.get("search") ?? ""),
     [loadingCategories, setLoadingCategories] = useState(true),
     [loadingProducts, setLoadingProducts] = useState(false),
     [error, setError] = useState("");
   const debouncedSearch = useDebouncedValue(search, 400),
     searchActive = Boolean(search.trim());
+
+  useEffect(() => {
+    setSearch(searchParams.get("search") ?? "");
+  }, [searchParams]);
 
   useEffect(() => {
     categoryApi
@@ -41,7 +46,15 @@ export const ProductsPage = () => {
     productApi
       .getProducts({ search: debouncedSearch.trim() })
       .then((result) => {
-        if (active) setProducts(result.products);
+        if (!active) return;
+        const query = debouncedSearch.trim().toLocaleLowerCase();
+        setProducts(
+          result.products.filter(
+            (product) =>
+              product.name.toLocaleLowerCase().includes(query) ||
+              product.modelNumber?.toLocaleLowerCase().includes(query),
+          ),
+        );
       })
       .catch((reason) => {
         if (active) setError(getApiErrorMessage(reason));
@@ -68,6 +81,8 @@ export const ProductsPage = () => {
             value={search}
             onChange={(event) => {
               setSearch(event.target.value);
+              const value = event.target.value.trim();
+              setSearchParams(value ? { search: value } : {}, { replace: true });
               if (event.target.value.trim()) setLoadingProducts(true);
             }}
             placeholder="Search products or model number"
@@ -96,7 +111,10 @@ export const ProductsPage = () => {
           <button
             className="button buttonSecondary"
             type="button"
-            onClick={() => setSearch("")}
+            onClick={() => {
+              setSearch("");
+              setSearchParams({}, { replace: true });
+            }}
           >
             Clear
           </button>
