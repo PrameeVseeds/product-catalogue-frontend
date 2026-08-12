@@ -3077,7 +3077,7 @@ img {
 .contactHero {
   position: relative;
   display: grid;
-  min-height: 250px;
+  min-height: auto;
   align-items: center;
   color: #0b1f3a;
   background: #f7f9fc;
@@ -3097,6 +3097,9 @@ img {
 }
 .contactHeroContent {
   position: relative;
+  padding-block: clamp(1.75rem, 4vw, 2.75rem);
+}
+.contactHero.hasImage .contactHeroContent {
   padding-block: 3.5rem;
 }
 .contactHero h1 {
@@ -3117,11 +3120,36 @@ img {
 .contactHero:not(.hasImage) p {
   color: #475569;
 }
-.contactLayout {
+.contactOverview {
   display: grid;
-  grid-template-columns: minmax(250px, 0.8fr) minmax(0, 1.2fr);
-  gap: clamp(2rem, 6vw, 5rem);
-  padding-block: clamp(3rem, 7vw, 5rem);
+  grid-template-columns: minmax(280px, 0.8fr) minmax(0, 1.2fr);
+  align-items: start;
+  gap: clamp(2rem, 4vw, 3.5rem);
+  padding-block: clamp(2rem, 4vw, 3rem);
+}
+.modalOpen {
+  overflow: hidden;
+}
+.contactQuoteModal {
+  position: fixed;
+  z-index: 1000;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  overflow-y: auto;
+  background: rgb(7 26 51 / 68%);
+}
+.contactQuoteModalContent {
+  width: min(760px, 100%);
+  max-height: calc(100svh - 2rem);
+  overflow-y: auto;
+  border-radius: 0.75rem;
+  box-shadow: 0 24px 70px rgb(7 26 51 / 32%);
+}
+.contactQuoteModal .contactFormPanel {
+  width: 100%;
+  margin: 0;
 }
 .contactInfo h2,
 .contactFormPanel h2,
@@ -3133,7 +3161,7 @@ img {
   margin: 0;
 }
 .contactInfo dl > div {
-  padding: 0.8rem 0;
+  padding: 0.65rem 0;
   border-bottom: 1px solid #e2e8f0;
 }
 .contactInfo dt {
@@ -3161,7 +3189,7 @@ img {
   display: flex;
   flex-wrap: nowrap;
   gap: 0.65rem;
-  margin-block: 1.5rem;
+  margin-block: 1.25rem;
 }
 .contactActions .button {
   min-width: 0;
@@ -3169,15 +3197,15 @@ img {
   white-space: nowrap;
 }
 .contactActions .contactCallAction {
-  border-color: #ffc107;
-  color: #0b1f3a;
-  background: #ffc107;
+  border-color: var(--button-background-color);
+  color: var(--button-text-color);
+  background: var(--button-background-color);
 }
 .contactActions .contactCallAction:hover,
 .contactActions .contactCallAction:focus-visible {
-  border-color: #e5ad06;
-  color: #0b1f3a;
-  background: #e5ad06;
+  border-color: color-mix(in srgb, var(--button-background-color) 90%, #000000);
+  color: var(--button-text-color);
+  background: color-mix(in srgb, var(--button-background-color) 90%, #000000);
 }
 .contactActions .contactWhatsAppAction {
   border-color: #25d366;
@@ -3205,11 +3233,39 @@ img {
   flex-wrap: wrap;
 }
 .contactFormPanel {
-  padding: clamp(1.25rem, 4vw, 2rem);
+  padding: clamp(1.25rem, 3vw, 1.75rem);
   border: 1px solid #e2e8f0;
   border-radius: 0.75rem;
   background: #ffffff;
   box-shadow: 0 8px 24px rgb(15 23 42 / 5%);
+}
+.contactFormHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+.contactFormHeader h2 {
+  margin-bottom: 0;
+}
+.contactFormHeader button {
+  display: grid;
+  width: 40px;
+  height: 40px;
+  flex: 0 0 40px;
+  place-items: center;
+  padding: 0;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.45rem;
+  color: #0b1f3a;
+  background: #ffffff;
+  cursor: pointer;
+}
+.contactFormHeader button:hover,
+.contactFormHeader button:focus-visible {
+  color: #ffffff;
+  background: #0b1f3a;
 }
 .contactForm {
   display: grid;
@@ -3246,16 +3302,16 @@ img {
 }
 .contactForm .button {
   justify-self: start;
-  border-color: #ffc107;
-  color: #0b1f3a;
-  background: #ffc107;
+  border-color: var(--button-background-color);
+  color: var(--button-text-color);
+  background: var(--button-background-color);
   font-weight: 600;
 }
 .contactForm .button:hover:not(:disabled),
 .contactForm .button:focus-visible:not(:disabled) {
-  border-color: #e5ad06;
-  color: #0b1f3a;
-  background: #e5ad06;
+  border-color: color-mix(in srgb, var(--button-background-color) 90%, #000000);
+  color: var(--button-text-color);
+  background: color-mix(in srgb, var(--button-background-color) 90%, #000000);
 }
 .successMessage {
   padding: 0.8rem;
@@ -3263,7 +3319,10 @@ img {
   background: color-mix(in srgb, var(--primary-color) 8%, var(--surface-color));
 }
 .mapSection {
-  padding-bottom: clamp(3rem, 7vw, 5rem);
+  padding-bottom: clamp(2.5rem, 5vw, 4rem);
+}
+.contactOverview .mapSection {
+  padding-bottom: 0;
 }
 .mapSection iframe {
   display: block;
@@ -3274,7 +3333,7 @@ img {
 }
 
 @media (max-width: 760px) {
-  .contactLayout {
+  .contactOverview {
     grid-template-columns: 1fr;
   }
   .contactActions .button {
@@ -3285,5 +3344,98 @@ img {
   }
   .mapSection iframe {
     min-height: 300px;
+  }
+}
+
+@media (min-width: 761px) and (max-width: 900px) {
+  .navbar {
+    min-height: 64px;
+  }
+
+  .menuButton {
+    display: grid;
+  }
+
+  .navLinks {
+    position: absolute;
+    inset: 100% 0 auto;
+    display: none;
+    flex-direction: column;
+    align-items: stretch;
+    padding: 1rem max(1rem, calc((100% - 1120px) / 2));
+    background: var(--header-background-color);
+    box-shadow: 0 10px 20px rgb(0 0 0 / 10%);
+  }
+
+  .navLinks.open {
+    display: flex;
+  }
+
+  .navLinks > a:not(.button) {
+    padding: 0.65rem 0.75rem;
+    border-left: 3px solid transparent;
+  }
+
+  .navLinks > a:not(.button)::after {
+    display: none;
+  }
+
+  .navLinks > a.active:not(.button) {
+    border-left-color: var(--primary-color);
+    background: color-mix(in srgb, var(--primary-color) 8%, transparent);
+  }
+
+  .navbarProductSearch {
+    width: 100%;
+    min-width: 0;
+    margin-top: 0.25rem;
+  }
+
+  .contactOverview {
+    grid-template-columns: 1fr;
+  }
+
+  .contactActions {
+    flex-wrap: wrap;
+  }
+
+  .contactActions .button {
+    flex: 0 1 auto;
+  }
+
+  .contactOverview .mapSection iframe {
+    min-height: 340px;
+  }
+
+  .productOverview {
+    grid-template-columns: 1fr;
+  }
+
+  .productActions {
+    max-width: 100%;
+  }
+
+  .enquiryOptionCard {
+    align-items: flex-start;
+    min-height: 150px;
+    padding: 1rem;
+  }
+
+  .enquiryOptionCard > div,
+  .enquiryOptionCard > span {
+    flex: 1;
+  }
+
+  .enquiryOptionCard strong {
+    line-height: 1.3;
+  }
+
+  .enquiryOptionCard .contactValue {
+    overflow-wrap: normal;
+    word-break: normal;
+  }
+
+  .copyPhoneControl {
+    margin-top: auto;
   }
 }
