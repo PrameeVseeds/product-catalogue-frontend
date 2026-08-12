@@ -76,10 +76,10 @@ export const SubcategoriesPage = () => {
   }, [load]);
   const relationName = (id: number | null, categoryId = 0) => {
     if (id === null)
-      return `${categories.find((category) => category.id === categoryId)?.name ?? "Category"} — No brand`;
+      return `${categories.find((category) => category.id === categoryId)?.name ?? "Category"} - No brand`;
     const relation = relations.find((r) => r.id === id);
     return relation
-      ? `${categories.find((c) => c.id === relation.categoryId)?.name ?? "Category"} — ${brands.find((b) => b.id === relation.brandId)?.name ?? "Brand"}`
+      ? `${categories.find((c) => c.id === relation.categoryId)?.name ?? "Category"} - ${brands.find((b) => b.id === relation.brandId)?.name ?? "Brand"}`
       : "Unavailable relationship";
   };
   const save = async () => {
