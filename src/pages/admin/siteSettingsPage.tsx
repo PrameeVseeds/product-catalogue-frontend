@@ -43,7 +43,7 @@ export const SiteSettingsPage = () => {
       >
         <FormFeedback error={state.error} success={state.success} />
         <div className="formGrid">
-          <FormField label="Company name" htmlFor="companyName">
+          <FormField label="Company name" htmlFor="companyName" required>
             <input
               id="companyName"
               value={form.companyName}

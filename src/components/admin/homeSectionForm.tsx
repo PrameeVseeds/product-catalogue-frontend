@@ -24,12 +24,12 @@ export const HomeSectionForm = ({value,saving,onChange,onSubmit,onCancel,}: Prop
         e.preventDefault();
         onSubmit();}}>
       <div className="formGrid">
-        <FormField label="Section key">
+        <FormField label="Section key" required>
           <input
             value={value.sectionKey}
             onChange={(e) => text("sectionKey", e.target.value)}/>
         </FormField>
-        <FormField label="Section type">
+        <FormField label="Section type" required>
           <select
             value={value.sectionType}
             onChange={(e) =>

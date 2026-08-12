@@ -137,7 +137,7 @@ export const SocialMediaPage = () => {
           }}
         >
           <div className="formGrid">
-            <FormField label="Platform / Icon">
+            <FormField label="Platform / Icon" required>
               <SocialPlatformPicker
                 value={edit.value.platform}
                 onChange={(platform) => {
@@ -169,7 +169,7 @@ export const SocialMediaPage = () => {
                 }
               />
             </FormField>
-            <FormField label="Profile URL">
+            <FormField label="Profile URL" required>
               <input
                 type="url"
                 value={edit.value.profileUrl}

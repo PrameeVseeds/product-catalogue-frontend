@@ -84,7 +84,7 @@ export const ProductSpecificationManager = ({
           }}
         >
           <div className="formGrid">
-            <FormField label="Name">
+            <FormField label="Name" required>
               <input
                 value={edit.value.specificationName}
                 onChange={(e) =>
@@ -95,7 +95,7 @@ export const ProductSpecificationManager = ({
                 }
               />
             </FormField>
-            <FormField label="Value">
+            <FormField label="Value" required>
               <input
                 value={edit.value.specificationValue}
                 onChange={(e) =>

@@ -165,7 +165,7 @@ export const SubcategoriesPage = () => {
           }}
         >
           <div className="formGrid">
-            <FormField label="Category">
+            <FormField label="Category" required>
               <select
                 value={edit.value.categoryId}
                 onChange={(e) =>
@@ -212,7 +212,7 @@ export const SubcategoriesPage = () => {
                   ))}
               </select>
             </FormField>
-            <FormField label="Name">
+            <FormField label="Name" required>
               <input
                 value={edit.value.name}
                 onChange={(e) => {
@@ -228,7 +228,7 @@ export const SubcategoriesPage = () => {
                 }}
               />
             </FormField>
-            <FormField label="Slug">
+            <FormField label="Slug" required>
               <input
                 value={edit.value.slug}
                 onChange={(e) => {

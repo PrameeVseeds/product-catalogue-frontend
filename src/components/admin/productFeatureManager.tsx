@@ -73,7 +73,7 @@ export const ProductFeatureManager = ({
           }}
         >
           <div className="formGrid">
-            <FormField label="Feature text">
+            <FormField label="Feature text" required>
               <input
                 value={edit.value.featureText}
                 onChange={(e) =>

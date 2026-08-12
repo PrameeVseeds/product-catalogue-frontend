@@ -29,7 +29,7 @@ export const HomeSectionItemForm = ({value,saving,onChange,onSubmit,onCancel}: P
       <fieldset className="editorGroup">
         <legend>Content</legend>
         <div className="formGrid">
-          <FormField label="Title">
+          <FormField label="Title" required>
             <input
               value={value.title}
               onChange={(event) => text("title", event.target.value)}/>

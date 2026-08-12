@@ -129,7 +129,7 @@ export const CategoryBrandsPage = () => {
           }}
         >
           <div className="formGrid">
-            <FormField label="Category">
+            <FormField label="Category" required>
               <select
                 value={edit.value.categoryId}
                 onChange={(e) =>
@@ -149,7 +149,7 @@ export const CategoryBrandsPage = () => {
                 ))}
               </select>
             </FormField>
-            <FormField label="Brand">
+            <FormField label="Brand" required>
               <select
                 value={edit.value.brandId}
                 onChange={(e) =>

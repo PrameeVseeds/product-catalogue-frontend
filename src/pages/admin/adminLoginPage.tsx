@@ -64,7 +64,10 @@ export const AdminLoginPage = () => {
           </div>
         )}
         <form onSubmit={handleSubmit} noValidate>
-          <label htmlFor="admin-email">Email</label>
+          <label htmlFor="admin-email">
+            Email <span className="requiredMark" aria-hidden="true">*</span>
+            <span className="visuallyHidden"> (required)</span>
+          </label>
           <input
             id="admin-email"
             name="email"
@@ -79,7 +82,10 @@ export const AdminLoginPage = () => {
               {errors.email}
             </span>
           )}
-          <label htmlFor="admin-password">Password</label>
+          <label htmlFor="admin-password">
+            Password <span className="requiredMark" aria-hidden="true">*</span>
+            <span className="visuallyHidden"> (required)</span>
+          </label>
           <input
             id="admin-password"
             name="password"
