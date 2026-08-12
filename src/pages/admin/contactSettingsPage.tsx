@@ -42,7 +42,7 @@ export const ContactSettingsPage = () => {
           void state.save(validate);}}>
         <FormFeedback error={state.error} success={state.success} />
         <div className="formGrid">
-          <FormField label="Contact heading">
+          <FormField label="Contact heading" required>
             <input
               value={form.contactHeading}
               onChange={(e) => text("contactHeading", e.target.value)}/>

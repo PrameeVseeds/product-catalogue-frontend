@@ -2007,6 +2007,10 @@ img {
 .fieldLabel {
   font-weight: 650;
 }
+.requiredMark {
+  color: #c1121f;
+  font-weight: 800;
+}
 .formField input,
 .formField textarea,
 .formField select {

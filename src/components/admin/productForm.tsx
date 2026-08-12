@@ -80,7 +80,7 @@ export const ProductForm = ({
       <div className="settingsGroup">
         <h2>Catalogue placement</h2>
         <div className="formGrid">
-          <FormField label="Category">
+          <FormField label="Category" required>
             <select
               value={categoryId}
               onChange={(e) => {
@@ -114,7 +114,7 @@ export const ProductForm = ({
               ))}
             </select>
           </FormField>
-          <FormField label="Subcategory">
+          <FormField label="Subcategory" required>
             <select
               value={value.subcategoryId}
               disabled={!categoryId}
@@ -133,7 +133,7 @@ export const ProductForm = ({
         </div>
       </div>
       <div className="formGrid">
-        <FormField label="Product name">
+        <FormField label="Product name" required>
           <input
             value={value.name}
             onChange={(e) => {
@@ -146,7 +146,7 @@ export const ProductForm = ({
             }}
           />
         </FormField>
-        <FormField label="Slug">
+        <FormField label="Slug" required>
           <input
             value={value.slug}
             onChange={(e) => {

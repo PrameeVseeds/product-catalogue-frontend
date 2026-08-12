@@ -105,6 +105,7 @@ export const ProductGalleryManager = ({
         >
           <ImageUploader
             label="Gallery image"
+            required
             type="product"
             value={edit.value.imageUrl || null}
             onChange={(imageUrl) =>

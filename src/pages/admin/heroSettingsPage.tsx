@@ -45,7 +45,7 @@ export const HeroSettingsPage = () => {
           void state.save(validate);}}>
         <FormFeedback error={state.error} success={state.success} />
         <div className="formGrid">
-          <FormField label="Title" htmlFor="heroTitle">
+          <FormField label="Title" htmlFor="heroTitle" required>
             <input
               id="heroTitle"
               value={form.title}

@@ -65,12 +65,12 @@ export const EnquirySettingsPage = () => {
             "Call Now",
             "callEnabled",
             <>
-              <FormField label="Button text">
+              <FormField label="Button text" required>
                 <input
                   value={form.callButtonText}
                   onChange={(e) => text("callButtonText", e.target.value)}/>
               </FormField>
-              <FormField label="Phone">
+              <FormField label="Phone" required={form.callEnabled}>
                 <input
                   value={form.callPhone ?? ""}
                   onChange={(e) => text("callPhone", e.target.value)}/>
@@ -81,12 +81,12 @@ export const EnquirySettingsPage = () => {
             "WhatsApp",
             "whatsappEnabled",
             <>
-              <FormField label="Button text">
+              <FormField label="Button text" required>
                 <input
                   value={form.whatsappButtonText}
                   onChange={(e) => text("whatsappButtonText", e.target.value)}/>
               </FormField>
-              <FormField label="WhatsApp number">
+              <FormField label="WhatsApp number" required={form.whatsappEnabled}>
                 <input
                   value={form.whatsappNumber ?? ""}
                   onChange={(e) => text("whatsappNumber", e.target.value)}/>
@@ -103,12 +103,12 @@ export const EnquirySettingsPage = () => {
             "Email",
             "emailEnabled",
             <>
-              <FormField label="Button text">
+              <FormField label="Button text" required>
                 <input
                   value={form.emailButtonText}
                   onChange={(e) => text("emailButtonText", e.target.value)}/>
               </FormField>
-              <FormField label="Destination email">
+              <FormField label="Destination email" required={form.emailEnabled}>
                 <input
                   type="email"
                   value={form.enquiryEmail ?? ""}

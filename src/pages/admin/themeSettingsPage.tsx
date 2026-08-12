@@ -54,7 +54,7 @@ export const ThemeSettingsPage = () => {
         <FormFeedback error={state.error} success={state.success} />
         <div className="colorGrid">
           {colorFields.map(({ key, label }) => (
-            <FormField key={key} label={label} htmlFor={key}>
+            <FormField key={key} label={label} htmlFor={key} required>
               <div className="colorControl">
                 <input
                   type="color"

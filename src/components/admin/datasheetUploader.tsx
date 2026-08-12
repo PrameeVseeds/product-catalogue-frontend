@@ -26,8 +26,8 @@ export const DatasheetUploader = ({
       setError("Choose a valid PDF file.");
       return;
     }
-    if (file.size > 25 * 1024 * 1024) {
-      setError("Datasheet PDF must not exceed 25 MB.");
+    if (file.size > 10 * 1024 * 1024) {
+      setError("Datasheet PDF must be 10 MB or smaller.");
       return;
     }
     setUploading(true);
@@ -40,7 +40,7 @@ export const DatasheetUploader = ({
       const message = getApiErrorMessage(reason);
       setError(
         message === "Something went wrong while loading the content."
-          ? "Datasheet upload failed. Please use a PDF up to 25 MB."
+          ? "Datasheet upload failed. Please use a PDF up to 10 MB."
           : message,
       );
     } finally {

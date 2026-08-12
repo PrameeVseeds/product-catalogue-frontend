@@ -119,10 +119,10 @@ export const EnquiriesPage = () => {
                     <strong>{item.name}</strong>
                     <small>{item.email}</small>
                   </td>
-                  <td>{item.phone || "—"}</td>
-                  <td>{item.subject || "—"}</td>
+                  <td>{item.phone || "-"}</td>
+                  <td>{item.subject || "-"}</td>
                   <td>
-                    {item.enquiryType === "PRODUCT" ? "Product enquiry" : "—"}
+                    {item.enquiryType === "PRODUCT" ? "Product enquiry" : "-"}
                   </td>
                   <td>
                     <EnquiryStatusBadge status={item.status} />

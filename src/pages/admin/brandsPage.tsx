@@ -152,7 +152,7 @@ export const BrandsPage = () => {
           }}
         >
           <div className="formGrid">
-            <FormField label="Name">
+            <FormField label="Name" required>
               <input
                 value={edit.value.name}
                 onChange={(e) => {
@@ -168,7 +168,7 @@ export const BrandsPage = () => {
                 }}
               />
             </FormField>
-            <FormField label="Slug">
+            <FormField label="Slug" required>
               <input
                 value={edit.value.slug}
                 onChange={(e) => {
@@ -287,7 +287,7 @@ export const BrandsPage = () => {
                 <td>
                   <strong>{item.name}</strong>
                 </td>
-                <td>{item.countryName || "—"}</td>
+                <td>{item.countryName || "-"}</td>
                 <td>/{item.slug}</td>
                 <td>{item.displayOrder}</td>
                 <td>

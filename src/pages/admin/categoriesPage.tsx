@@ -131,7 +131,7 @@ export const CategoriesPage = () => {
           }}
         >
           <div className="formGrid">
-            <FormField label="Name">
+            <FormField label="Name" required>
               <input
                 value={edit.value.name}
                 onChange={(e) => {
@@ -147,7 +147,7 @@ export const CategoriesPage = () => {
                 }}
               />
             </FormField>
-            <FormField label="Slug">
+            <FormField label="Slug" required>
               <input
                 value={edit.value.slug}
                 onChange={(e) => {

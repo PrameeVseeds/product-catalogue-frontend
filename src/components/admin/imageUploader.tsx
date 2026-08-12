@@ -8,8 +8,9 @@ interface Props {
   value: string | null;
   type: UploadType;
   onChange: (path: string | null) => void;
+  required?: boolean;
 }
-export const ImageUploader = ({ label, value, type, onChange }: Props) => {
+export const ImageUploader = ({ label, value, type, onChange, required = false }: Props) => {
   const [preview, setPreview] = useState("");
   const [previewFailed, setPreviewFailed] = useState(false);
   const [cacheKey, setCacheKey] = useState(() => Date.now());
@@ -62,7 +63,11 @@ export const ImageUploader = ({ label, value, type, onChange }: Props) => {
     : undefined;
   return (
     <div className="imageUploader">
-      <span className="fieldLabel">{label}</span>
+      <span className="fieldLabel">
+        {label}
+        {required && <span className="requiredMark" aria-hidden="true"> *</span>}
+        {required && <span className="visuallyHidden"> (required)</span>}
+      </span>
       <div
         className={`imagePreview${image && !previewFailed ? " hasImage" : ""}`}
         style={image && !previewFailed ? { backgroundImage } : undefined}
