@@ -20,7 +20,7 @@ export const uploadApi = {
     const { data } = await apiClient.post<unknown>(
       "/admin/uploads/datasheet",
       form,
-      { timeout: 60_000 },
+      { timeout: 180_000 },
     );
     const path = getText(
       asRecord(unwrapData(data)),
