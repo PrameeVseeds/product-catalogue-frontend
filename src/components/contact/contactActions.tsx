@@ -3,7 +3,9 @@ import { FaWhatsapp } from "react-icons/fa6";
 import type { ContactSettings } from "../../interfaces/site.interface";
 import { getWhatsAppUrl } from "../../utils/getWhatsAppUrl";
 
-export const ContactActions = ({ settings }: { settings: ContactSettings }) => {
+export const ContactActions = ({settings,onRequestQuote,}: {
+  settings: ContactSettings;
+  onRequestQuote: () => void;}) => {
   const callPhone = settings.callPhone?.trim();
   const whatsappUrl = getWhatsAppUrl(
     settings.whatsappPhone,
@@ -38,10 +40,14 @@ export const ContactActions = ({ settings }: { settings: ContactSettings }) => {
         </a>
       )}
       {settings.emailEnabled && (
-        <a className="button contactQuoteAction" href="#contact-form">
+        <button
+          className="button contactQuoteAction"
+          type="button"
+          onClick={onRequestQuote}
+        >
           <Mail aria-hidden="true" />
           Request Quote
-        </a>
+        </button>
       )}
     </div>
   );

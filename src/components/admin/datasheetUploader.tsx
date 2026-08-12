@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { FileText, Upload } from "lucide-react";
+import { getApiErrorMessage } from "../../services/apiClient";
 import { uploadApi } from "../../services/admin/uploadApi";
 import { getImageUrl } from "../../utils/getImageUrl";
 
@@ -35,8 +36,13 @@ export const DatasheetUploader = ({
     try {
       onChange(await uploadApi.uploadDatasheet(file));
       setUploaded(true);
-    } catch {
-      setError("Datasheet upload failed. Please use a PDF up to 10 MB.");
+    } catch (reason) {
+      const message = getApiErrorMessage(reason);
+      setError(
+        message === "Something went wrong while loading the content."
+          ? "Datasheet upload failed. Please use a PDF up to 10 MB."
+          : message,
+      );
     } finally {
       setUploading(false);
     }

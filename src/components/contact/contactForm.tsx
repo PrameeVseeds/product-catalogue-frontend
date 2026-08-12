@@ -1,4 +1,5 @@
 import { useState, type FormEvent } from "react";
+import { X } from "lucide-react";
 import { getApiErrorMessage } from "../../services/apiClient";
 import { enquiryApi } from "../../services/enquiryApi";
 
@@ -12,8 +13,10 @@ const initialForm = {
 
 export const ContactForm = ({
   defaultSubject,
+  onClose,
 }: {
   defaultSubject?: string | null;
+  onClose?: () => void;
 }) => {
   const [form, setForm] = useState({
     ...initialForm,
@@ -60,11 +63,19 @@ export const ContactForm = ({
       id="contact-form"
       aria-labelledby="contact-form-heading"
     >
-      <h2 id="contact-form-heading">Send an enquiry</h2>
+      <div className="contactFormHeader">
+        <h2 id="contact-form-heading">Send an enquiry</h2>
+        {onClose && (
+          <button type="button" onClick={onClose} aria-label="Close enquiry form">
+            <X aria-hidden="true" />
+          </button>
+        )}
+      </div>
       <form className="contactForm" onSubmit={submit} noValidate>
         <label>
           Name *
           <input
+            autoFocus={Boolean(onClose)}
             value={form.name}
             onChange={(event) => update("name", event.target.value)}
             maxLength={150}
