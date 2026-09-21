@@ -7,6 +7,9 @@ import { getImageUrl } from "../../utils/getImageUrl";
 interface DatasheetUploaderProps {
   value: string | null;
   onChange: (path: string | null) => void;
+  type: "datasheet" | "specification";
+  extracting?: boolean;
+  onExtract?: () => void;
 }
 
 const getFilename = (value: string) =>
@@ -15,10 +18,14 @@ const getFilename = (value: string) =>
 export const DatasheetUploader = ({
   value,
   onChange,
+  type,
+  extracting,
+  onExtract,
 }: DatasheetUploaderProps) => {
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState("");
   const [uploaded, setUploaded] = useState(false);
+  const pdfLabel = type === "datasheet" ? "Datasheet" : "Specification";
 
   const handleFile = async (file?: File) => {
     if (!file || uploading) return;
@@ -27,20 +34,20 @@ export const DatasheetUploader = ({
       return;
     }
     if (file.size > 10 * 1024 * 1024) {
-      setError("Datasheet PDF must be 10 MB or smaller.");
+      setError(`${pdfLabel} PDF must be 10 MB or smaller.`);
       return;
     }
     setUploading(true);
     setUploaded(false);
     setError("");
     try {
-      onChange(await uploadApi.uploadDatasheet(file));
+      onChange(type === "datasheet" ? await uploadApi.uploadDatasheet(file) : await uploadApi.uploadSpecificationPdf(file));
       setUploaded(true);
     } catch (reason) {
       const message = getApiErrorMessage(reason);
       setError(
         message === "Something went wrong while loading the content."
-          ? "Datasheet upload failed. Please use a PDF up to 10 MB."
+          ? `${pdfLabel} PDF upload failed. Please use a PDF up to 10 MB.`
           : message,
       );
     } finally {
@@ -50,7 +57,7 @@ export const DatasheetUploader = ({
 
   return (
     <div className="datasheetUploader">
-      <span className="fieldLabel">Upload Datasheet PDF</span>
+      <span className="fieldLabel">Upload {pdfLabel} PDF</span>
       {value ? (
         <div className="currentDatasheet">
           <FileText aria-hidden="true" />
@@ -61,12 +68,12 @@ export const DatasheetUploader = ({
             target="_blank"
             rel="noopener noreferrer"
           >
-            View Current Datasheet
+            View Current {pdfLabel} PDF
           </a>
         </div>
       ) : (
         <p className="fieldHint">
-          No custom datasheet uploaded. The generated datasheet will be used.
+          {type === "datasheet" ? "No custom datasheet uploaded. The generated datasheet will be used." : "No specification PDF uploaded for automatic extraction."}
         </p>
       )}
       <div className="imageActions">
@@ -83,6 +90,11 @@ export const DatasheetUploader = ({
             }}
           />
         </label>
+        {value && type === "specification" && onExtract && (
+          <button className="adminButton primary" type="button" disabled={uploading || extracting} onClick={onExtract}>
+            {extracting ? "Extracting specifications…" : "Extract specifications"}
+          </button>
+        )}
         {value && (
           <button
             className="adminButton textButton"
@@ -98,12 +110,9 @@ export const DatasheetUploader = ({
           </button>
         )}
       </div>
-      {uploaded && <span className="uploadSuccess" role="status">PDF uploaded. Save the product to use it.</span>}
+      {uploaded && <span className="uploadSuccess" role="status">{pdfLabel} PDF uploaded successfully.</span>}
       {error && <span className="fieldError">{error}</span>}
-      <p className="fieldHint datasheetFallbackHint">
-        If no PDF is uploaded, the system will automatically generate a
-        datasheet using the product information, features and specifications.
-      </p>
+      {type === "datasheet" && <p className="fieldHint datasheetFallbackHint">If no PDF is uploaded, the system will automatically generate a datasheet using the product information, features and specifications.</p>}
     </div>
   );
 };

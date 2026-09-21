@@ -190,27 +190,8 @@ export const ProductForm = ({
         onChange={(mainImageUrl) => onChange({ ...value, mainImageUrl })}
       />
       <div className="settingsGroup">
-        <h2>Datasheet</h2>
-        <div className="formGrid">
-          <FormField label="Datasheet title">
-            <input
-              value={value.datasheetTitle ?? ""}
-              onChange={(e) => text("datasheetTitle", e.target.value)}
-            />
-          </FormField>
-          <FormField label="Datasheet description">
-            <textarea
-              value={value.datasheetDescription ?? ""}
-              onChange={(e) => text("datasheetDescription", e.target.value)}
-            />
-          </FormField>
-        </div>
-        <DatasheetUploader
-          value={value.datasheetFileUrl}
-          onChange={(datasheetFileUrl) =>
-            onChange({ ...value, datasheetFileUrl })
-          }
-        />
+        <h2>Datasheet PDF</h2>
+        <DatasheetUploader type="datasheet" value={value.datasheetFileUrl} onChange={(datasheetFileUrl) => onChange({ ...value, datasheetFileUrl })} />
       </div>
       <div className="settingsGroup">
         <h2>Search metadata</h2>
