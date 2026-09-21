@@ -43,6 +43,16 @@ export const ProductManagementPage = () => {
   useEffect(() => {
     void load();
   }, [load]);
+  const saveSpecificationPdf = async (specificationFileUrl: string | null) => {
+    if (!product) return;
+    try {
+      await productAdminApi.update(product.id, { ...product, specificationFileUrl });
+      await load();
+    } catch (reason) {
+      setError(getAdminApiError(reason, "Specification PDF uploaded but could not be linked to this product."));
+      throw reason;
+    }
+  };
   if (loading) return <LoadingSpinner />;
   if (!product) return <FormFeedback error={error} />;
   return (
@@ -105,6 +115,8 @@ export const ProductManagementPage = () => {
         <ProductSpecificationManager
           productId={product.id}
           items={product.specifications}
+          specificationFileUrl={product.specificationFileUrl}
+          onSpecificationFileChange={saveSpecificationPdf}
           onRefresh={load}
         />
       </div>

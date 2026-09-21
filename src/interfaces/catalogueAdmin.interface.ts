@@ -57,6 +57,7 @@ export interface ProductFormValues {
   datasheetTitle: string | null;
   datasheetDescription: string | null;
   datasheetFileUrl: string | null;
+  specificationFileUrl: string | null;
   metaTitle: string | null;
   metaDescription: string | null;
   isFeatured: boolean;
@@ -99,6 +100,22 @@ export interface ProductSpecificationForm {
 }
 export interface ProductSpecification extends ProductSpecificationForm {
   id: number;
+}
+
+export interface ExtractedProductSpecification {
+  name: string;
+  value: string;
+  unit: string | null;
+}
+
+export interface ProductExtractionResult {
+  productName: string | null;
+  modelNumber: string | null;
+  brand: string | null;
+  description: string | null;
+  features: string[];
+  specifications: ExtractedProductSpecification[];
+  warnings: string[];
 }
 export interface AdminProductDetail extends AdminProduct {
   galleryImages: ProductImage[];
