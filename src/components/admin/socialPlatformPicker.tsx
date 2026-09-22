@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { ChevronDown } from "lucide-react";
 import {getSocialPlatform,socialPlatformOptions,type SocialPlatform,} from "../../config/socialPlatformConfig";
 
 interface SocialPlatformPickerProps {
@@ -17,6 +18,7 @@ export const SocialPlatformPicker = ({value,onChange,}: SocialPlatformPickerProp
         className="socialPlatformTrigger"
         type="button"
         aria-expanded={open}
+        aria-haspopup="listbox"
         onClick={() => setOpen((current) => !current)}
       >
         {SelectedIcon && (
@@ -30,7 +32,13 @@ export const SocialPlatformPicker = ({value,onChange,}: SocialPlatformPickerProp
             <SelectedIcon aria-hidden="true" />
           </span>
         )}
-        <span>{selected?.label ?? "Choose a platform"}</span>
+        <span className="socialPlatformTriggerLabel">
+          {selected?.label ?? "Choose a platform"}
+        </span>
+        <ChevronDown
+          className={`socialPlatformChevron${open ? " isOpen" : ""}`}
+          aria-hidden="true"
+        />
         <span aria-hidden="true">⌄</span>
       </button>
       {open && (

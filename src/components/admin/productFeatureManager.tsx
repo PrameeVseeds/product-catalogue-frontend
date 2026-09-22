@@ -55,7 +55,7 @@ export const ProductFeatureManager = ({
       <div className="adminSubheader">
         <h2>Features</h2>
         <button
-          className="adminButton primary"
+          className="adminButton primary addButton"
           onClick={() =>
             setEdit({ value: { productId, featureText: "", displayOrder: 0 } })
           }

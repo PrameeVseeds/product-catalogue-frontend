@@ -80,13 +80,13 @@ export const ProductForm = ({
       <div className="settingsGroup">
         <h2>Catalogue placement</h2>
         <div className="formGrid">
-          <FormField label="Category" required>
+          <FormField label="Category (optional)">
             <select
               value={categoryId}
               onChange={(e) => {
                 setCategoryId(Number(e.target.value));
                 setBrandId(0);
-                onChange({ ...value, subcategoryId: 0 });
+                onChange({ ...value, subcategoryId: null });
               }}
             >
               <option value={0}>Select category</option>
@@ -103,7 +103,7 @@ export const ProductForm = ({
               disabled={!categoryId}
               onChange={(e) => {
                 setBrandId(Number(e.target.value));
-                onChange({ ...value, subcategoryId: 0 });
+                onChange({ ...value, subcategoryId: null });
               }}
             >
               <option value={0}>Select brand</option>
@@ -114,12 +114,15 @@ export const ProductForm = ({
               ))}
             </select>
           </FormField>
-          <FormField label="Subcategory" required>
+          <FormField label="Subcategory (optional)">
             <select
-              value={value.subcategoryId}
+              value={value.subcategoryId ?? 0}
               disabled={!categoryId}
               onChange={(e) =>
-                onChange({ ...value, subcategoryId: Number(e.target.value) })
+                onChange({
+                  ...value,
+                  subcategoryId: Number(e.target.value) || null,
+                })
               }
             >
               <option value={0}>Select subcategory</option>
@@ -155,11 +158,12 @@ export const ProductForm = ({
             }}
           />
         </FormField>
-        <FormField label="Model number">
+        <FormField label="Initial model (optional)">
           <input
             value={value.modelNumber ?? ""}
             onChange={(e) => text("modelNumber", e.target.value)}
           />
+          <small className="fieldHint">After saving the product, add and manage multiple models from its Manage page.</small>
         </FormField>
         <FormField label="Short description">
           <textarea

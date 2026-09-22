@@ -21,7 +21,6 @@ export const ProductsTable = ({
         <tr>
           <th>Image</th>
           <th>Product</th>
-          <th>Model</th>
           <th>Brand</th>
           <th>Subcategory</th>
           <th>Featured</th>
@@ -47,7 +46,6 @@ export const ProductsTable = ({
               <strong>{item.name}</strong>
               <small>/{item.slug}</small>
             </td>
-            <td>{item.modelNumber || "-"}</td>
             <td>{brandName(item)}</td>
             <td>{subcategoryName(item)}</td>
             <td>{item.isFeatured ? "Yes" : "No"}</td>

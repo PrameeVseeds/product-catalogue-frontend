@@ -8,14 +8,14 @@ import { getWhatsAppUrl } from "../../utils/getWhatsAppUrl";
 import { CopyPhoneButton } from "./copyPhoneButton";
 import { ProductEnquiryForm } from "./productEnquiryForm";
 
-export const ProductEnquiryActions = ({ product, settings }: { product: Product; settings: ContactSettings }) => {
+export const ProductEnquiryActions = ({ product, settings, selectedModel }: { product: Product; settings: ContactSettings; selectedModel?: string | null }) => {
   const [showOptions, setShowOptions] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const callPhone = settings.callPhone?.trim();
   const whatsappMessage = [
     settings.whatsappDefaultMessage,
     `Product: ${product.name}`,
-    product.modelNumber ? `Model: ${product.modelNumber}` : null,
+    selectedModel ? `Model: ${selectedModel}` : null,
   ].filter(Boolean).join("\n");
   const whatsappUrl = getWhatsAppUrl(settings.whatsappPhone, whatsappMessage);
   const hasOptions = Boolean(
@@ -23,12 +23,13 @@ export const ProductEnquiryActions = ({ product, settings }: { product: Product;
     (settings.whatsappEnabled && whatsappUrl) ||
     settings.emailEnabled,
   );
-  const defaultSubject = `${settings.defaultEmailSubject?.trim() || "Quote Request"} - ${product.name}`;
+  const productLabel = selectedModel ? `${product.name} - ${selectedModel}` : product.name;
+  const defaultSubject = `${settings.defaultEmailSubject?.trim() || "Quote Request"} - ${productLabel}`;
   const defaultMessage = [
-    "I would like to request a quotation for this product.",
+    `I would like to request a quotation for ${productLabel}.`,
     "",
     `Product: ${product.name}`,
-    product.modelNumber ? `Model: ${product.modelNumber}` : null,
+    selectedModel ? `Model: ${selectedModel}` : null,
   ].filter((line) => line !== null).join("\n");
 
   return (
@@ -42,15 +43,24 @@ export const ProductEnquiryActions = ({ product, settings }: { product: Product;
               <ChevronDown className={showOptions ? "isExpanded" : undefined} aria-hidden="true" />
             </button>
           )}
-          <a className="button datasheetButton" href={productApi.getDatasheetUrl(product.slug)} target="_blank" rel="noopener noreferrer">
+          <a className="button datasheetButton" href={productApi.getDatasheetUrl(product.slug, selectedModel)} target="_blank" rel="noopener noreferrer">
             <FileDown aria-hidden="true" />
             Open Datasheet
           </a>
         </div>
+        {showForm && (
+          <ProductEnquiryForm
+            product={product}
+            selectedModel={selectedModel}
+            defaultSubject={defaultSubject}
+            defaultMessage={defaultMessage}
+            onClose={() => setShowForm(false)}
+          />
+        )}
         {showOptions && hasOptions && (
           <section className="enquiryOptionsPanel" id="product-enquiry-options" aria-labelledby="enquiry-options-heading">
             <div className="enquiryOptionsHeading">
-              <h2 id="enquiry-options-heading">Interested in this product?</h2>
+              <h2 id="enquiry-options-heading">Interested in {productLabel}?</h2>
               <p>Choose how you would like to contact us.</p>
             </div>
             <div className="enquiryOptionGrid">
@@ -80,9 +90,6 @@ export const ProductEnquiryActions = ({ product, settings }: { product: Product;
           </section>
         )}
       </div>
-      {showForm && (
-        <ProductEnquiryForm product={product} defaultSubject={defaultSubject} defaultMessage={defaultMessage} onClose={() => setShowForm(false)} />
-      )}
     </>
   );
 };

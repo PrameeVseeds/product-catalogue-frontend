@@ -119,7 +119,7 @@ export const SocialMediaPage = () => {
         description="Manage social links displayed on the public website."
         action={
           <button
-            className="adminButton primary"
+            className="adminButton primary addButton"
             type="button"
             onClick={() => setEdit({ value: emptyLink })}
           >

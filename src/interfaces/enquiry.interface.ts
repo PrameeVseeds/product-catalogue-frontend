@@ -1,5 +1,6 @@
 export interface ProductEnquiryRequest {
   productId?: string | number;
+  modelNumber?: string | null;
   name: string;
   email: string;
   phone?: string | null;

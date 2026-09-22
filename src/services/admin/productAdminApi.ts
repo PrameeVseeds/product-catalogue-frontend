@@ -3,6 +3,13 @@ import { apiClient } from "../apiClient";
 import { unwrapData } from "../responseNormalizers";
 import { product, productDetail, products } from "./catalogueNormalizers";
 import { environment } from "../../config/environment";
+
+/** The API treats subcategoryId as an optional numeric field, not a nullable one. */
+const productPayload = ({ subcategoryId, ...input }: ProductFormValues) => ({
+  ...input,
+  ...(subcategoryId ? { subcategoryId } : {}),
+});
+
 export const productAdminApi = {
   async getAll(filters?: ProductFilters): Promise<AdminProduct[]> {
     const { data } = await apiClient.get<unknown>("/admin/products", {
@@ -17,13 +24,16 @@ export const productAdminApi = {
     return productDetail(data);
   },
   async create(input: ProductFormValues) {
-    const { data } = await apiClient.post<unknown>("/admin/products", input);
+    const { data } = await apiClient.post<unknown>(
+      "/admin/products",
+      productPayload(input),
+    );
     return product(unwrapData(data));
   },
   async update(id: number, input: ProductFormValues) {
     const { data } = await apiClient.put<unknown>(
       `/admin/products/${id}`,
-      input,
+      productPayload(input),
     );
     return product(unwrapData(data));
   },

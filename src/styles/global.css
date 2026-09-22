@@ -252,6 +252,21 @@ img {
   background: var(--surface-color);
 }
 
+.catalogueBackButton {
+  gap: 0.45rem;
+  margin-bottom: 1rem;
+}
+
+.catalogueBackButton svg {
+  width: 1rem;
+  height: 1rem;
+  flex: 0 0 auto;
+}
+
+.catalogueBackButton+.breadcrumbs ol {
+  margin-top: 0;
+}
+
 .pageSection,
 .stateSection {
   padding-block: clamp(3rem, 8vw, 6rem);
@@ -1128,9 +1143,25 @@ img {
   text-align: left;
 }
 
-.socialPlatformTrigger>span:nth-child(2) {
+.socialPlatformTriggerLabel {
   flex: 1;
   font-weight: 650;
+}
+
+.socialPlatformTrigger>span:last-child[aria-hidden="true"] {
+  display: none;
+}
+
+.socialPlatformChevron {
+  width: 1.15rem;
+  height: 1.15rem;
+  flex: 0 0 auto;
+  color: var(--muted-text-color);
+  transition: transform 0.18s ease;
+}
+
+.socialPlatformChevron.isOpen {
+  transform: rotate(180deg);
 }
 
 .socialPlatformIcon {
@@ -2016,6 +2047,47 @@ img {
   outline-offset: 1px;
 }
 
+.passwordField {
+  position: relative;
+}
+
+.adminLoginCard .passwordField input {
+  padding-right: 3rem;
+}
+
+.passwordVisibilityButton {
+  position: absolute;
+  top: 50%;
+  right: 0.35rem;
+  display: grid;
+  width: 2.3rem;
+  height: 2.3rem;
+  padding: 0;
+  place-items: center;
+  border: 0;
+  border-radius: 0.35rem;
+  color: var(--muted-text-color);
+  background: transparent;
+  cursor: pointer;
+  transform: translateY(-50%);
+}
+
+.passwordVisibilityButton:hover,
+.passwordVisibilityButton:focus-visible {
+  color: var(--text-color);
+  background: color-mix(in srgb, var(--text-color) 8%, transparent);
+}
+
+.passwordVisibilityButton:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 1px;
+}
+
+.passwordVisibilityButton svg {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
 .fieldError {
   margin-top: 0.35rem;
   color: #9b1c1c;
@@ -2042,9 +2114,11 @@ img {
 }
 
 .adminShell {
+  --admin-sidebar-width: 270px;
   min-height: 100svh;
   display: grid;
-  grid-template-columns: 270px minmax(0, 1fr);
+  grid-template-columns: var(--admin-sidebar-width) minmax(0, 1fr);
+  overflow-x: hidden;
   color: var(--text-color);
   background: var(--background-color);
 }
@@ -2059,13 +2133,55 @@ img {
   overflow-y: auto;
   color: var(--footer-text-color);
   background: var(--footer-background-color);
+  transition: transform 0.2s ease, visibility 0.2s ease;
+}
+
+.adminShell.sidebarCollapsed {
+  --admin-sidebar-width: 0px;
+}
+
+.adminShell.sidebarCollapsed .adminSidebar {
+  width: 270px;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateX(-100%);
+}
+
+.adminSidebarHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
 }
 
 .adminBrand {
-  margin-bottom: 1.5rem;
   padding: 0.5rem;
   font-size: 1.15rem;
   font-weight: 750;
+}
+
+.adminSidebarClose {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  border: 1px solid color-mix(in srgb, currentColor 45%, transparent);
+  border-radius: 0.35rem;
+  color: inherit;
+  background: transparent;
+  cursor: pointer;
+}
+
+.adminSidebarClose:hover,
+.adminSidebarClose:focus-visible {
+  background: color-mix(in srgb, currentColor 14%, transparent);
+}
+
+.adminSidebarClose svg {
+  width: 1.25rem;
+  height: 1.25rem;
 }
 
 .adminNavGroup {
@@ -2101,12 +2217,23 @@ img {
 
 .adminLogout {
   margin-top: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
   padding: 0.7rem;
   border: 1px solid currentColor;
   border-radius: 0.4rem;
   color: inherit;
   background: transparent;
   cursor: pointer;
+}
+
+.adminLogout svg,
+.adminHeaderLogout svg {
+  width: 1rem;
+  height: 1rem;
+  flex: 0 0 auto;
 }
 
 .adminWorkspace {
@@ -2125,10 +2252,14 @@ img {
   padding-inline: clamp(1rem, 4vw, 2rem);
   border-bottom: 1px solid color-mix(in srgb, var(--text-color) 10%, transparent);
   background: var(--header-background-color);
+  color: #fff;
 }
 
 .adminMenuButton {
-  display: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: auto;
 }
 
 .adminHeaderName {
@@ -2138,15 +2269,52 @@ img {
 .adminHeaderLogout,
 .adminMenuButton {
   padding: 0.5rem 0.75rem;
-  border: 1px solid color-mix(in srgb, var(--text-color) 25%, transparent);
+  border: 1px solid color-mix(in srgb, #fff 55%, transparent);
   border-radius: 0.35rem;
-  color: var(--text-color);
+  color: #fff;
   background: transparent;
   cursor: pointer;
 }
 
+.adminHeaderLogout:hover,
+.adminHeaderLogout:focus-visible,
+.adminMenuButton:hover,
+.adminMenuButton:focus-visible {
+  background: color-mix(in srgb, #fff 16%, transparent);
+}
+
+.adminMenuButton svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
 .adminMain {
   padding: clamp(1.25rem, 4vw, 2.5rem);
+}
+
+@media (min-width: 961px) {
+  .adminShell {
+    height: 100svh;
+    overflow: hidden;
+  }
+
+  .adminWorkspace {
+    display: flex;
+    min-width: 0;
+    height: 100svh;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .adminMain {
+    min-height: 0;
+    flex: 1 1 auto;
+    overflow-y: auto;
+  }
+}
+
+.adminDashboard {
+  width: min(100%, 1280px);
 }
 
 .adminPageHeader {
@@ -2158,9 +2326,234 @@ img {
   font-size: clamp(1.8rem, 4vw, 2.7rem);
 }
 
+.adminDashboard .adminPageHeader>span {
+  display: block;
+  max-width: 42rem;
+  margin-top: 0.65rem;
+  color: var(--muted-text-color);
+}
+
+.adminKpiGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.adminKpiCard {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.4rem 0.8rem;
+  padding: 1.1rem;
+  border: 1px solid color-mix(in srgb, var(--text-color) 12%, transparent);
+  border-radius: 0.65rem;
+  background: var(--surface-color);
+}
+
+.adminKpiIcon {
+  display: grid;
+  width: 2.5rem;
+  height: 2.5rem;
+  place-items: center;
+  border-radius: 0.6rem;
+  color: var(--heading-text-color);
+  background: color-mix(in srgb, var(--primary-color) 22%, var(--surface-color));
+}
+
+.adminKpiIcon svg {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+.adminKpiCard>div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.adminKpiCard>div>span,
+.adminKpiCard small,
+.adminPanelHeading p,
+.adminEmptyState {
+  color: var(--muted-text-color);
+}
+
+.adminKpiCard>div>strong {
+  font-size: 1.65rem;
+  line-height: 1.1;
+}
+
+.adminKpiCard small {
+  grid-column: 1 / -1;
+  font-size: 0.8rem;
+}
+
+.adminDashboardInsights {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.adminChartPanel,
+.adminRecentEnquiries {
+  padding: 1.25rem;
+}
+
+.adminPanelHeading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.adminPanelHeading h2 {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+.adminPanelHeading p {
+  margin: 0.3rem 0 0;
+  font-size: 0.875rem;
+}
+
+.adminPanelHeading a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  flex: 0 0 auto;
+  color: var(--heading-text-color);
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.adminPanelHeading a:hover,
+.adminPanelHeading a:focus-visible {
+  color: var(--primary-color);
+}
+
+.adminPanelHeading a svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.adminProgressList {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.adminProgressList>div:not(.adminProgressTrack) {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  color: var(--muted-text-color);
+  font-size: 0.875rem;
+}
+
+.adminProgressList strong,
+.adminBarRow strong {
+  color: var(--heading-text-color);
+}
+
+.adminProgressTrack,
+.adminBarTrack {
+  height: 0.55rem;
+  overflow: hidden;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--text-color) 9%, transparent);
+}
+
+.adminProgressTrack span,
+.adminBarTrack span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--primary-color);
+}
+
+.adminBarChart {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.adminBarRow {
+  display: grid;
+  grid-template-columns: 5.8rem minmax(0, 1fr) 1.5rem;
+  align-items: center;
+  gap: 0.65rem;
+  color: var(--muted-text-color);
+  font-size: 0.85rem;
+}
+
+.adminBarRow strong {
+  text-align: right;
+}
+
+.adminRecentEnquiries {
+  margin-bottom: 2rem;
+}
+
+.adminRecentList {
+  display: grid;
+}
+
+.adminRecentList a {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.8rem 0;
+  border-top: 1px solid color-mix(in srgb, var(--text-color) 10%, transparent);
+  text-decoration: none;
+}
+
+.adminRecentList a:hover strong,
+.adminRecentList a:focus-visible strong {
+  color: var(--primary-color);
+}
+
+.adminRecentAvatar {
+  display: grid;
+  width: 2.25rem;
+  height: 2.25rem;
+  place-items: center;
+  border-radius: 50%;
+  color: var(--heading-text-color);
+  font-weight: 750;
+  background: color-mix(in srgb, var(--primary-color) 22%, var(--surface-color));
+}
+
+.adminRecentList a>span:not(.adminRecentAvatar) {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.adminRecentList small,
+.adminRecentList time {
+  color: var(--muted-text-color);
+  font-size: 0.8rem;
+}
+
+.adminRecentList time {
+  text-align: right;
+}
+
+.adminEmptyState {
+  margin: 0;
+}
+
+.adminQuickLinksHeading {
+  margin: 0 0 1rem;
+  font-size: 1.05rem;
+}
+
 .adminQuickGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
   gap: 1rem;
 }
 
@@ -2174,14 +2567,52 @@ img {
 }
 
 .adminQuickGrid a {
+  position: relative;
+  min-height: 128px;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.9rem;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+}
+
+.adminQuickLinkIcon {
+  display: grid;
+  width: 2.8rem;
+  height: 2.8rem;
+  place-items: center;
+  border-radius: 0.65rem;
+  color: var(--heading-text-color);
+  background: color-mix(in srgb, var(--primary-color) 22%, var(--surface-color));
+}
+
+.adminQuickLinkIcon svg {
+  width: 1.35rem;
+  height: 1.35rem;
+}
+
+.adminQuickLinkContent {
   display: flex;
+  min-width: 0;
   flex-direction: column;
-  gap: 0.45rem;
+  gap: 0.35rem;
+}
+
+.adminQuickLinkContent strong {
+  color: var(--heading-text-color);
+}
+
+.adminQuickLinkArrow {
+  width: 1.2rem;
+  height: 1.2rem;
+  color: var(--muted-text-color);
 }
 
 .adminQuickGrid a:hover,
 .adminQuickGrid a:focus-visible {
   border-color: var(--primary-color);
+  box-shadow: 0 10px 20px color-mix(in srgb, var(--text-color) 9%, transparent);
+  transform: translateY(-2px);
 }
 
 .adminQuickGrid span,
@@ -2191,6 +2622,47 @@ img {
 
 .sidebarBackdrop {
   display: none;
+}
+
+@media (min-width: 1600px) {
+  .adminShell {
+    --admin-sidebar-width: 300px;
+  }
+
+  .adminShell.sidebarCollapsed {
+    --admin-sidebar-width: 0px;
+  }
+
+  .adminSidebar {
+    padding: 1.5rem;
+  }
+
+  .adminMain {
+    padding: clamp(2rem, 3vw, 4rem);
+  }
+
+  .adminDashboard {
+    width: min(100%, 2100px);
+  }
+
+  .adminKpiGrid,
+  .adminDashboardInsights {
+    gap: 1.25rem;
+  }
+
+  .adminKpiCard {
+    min-height: 132px;
+    padding: 1.35rem;
+  }
+
+  .adminChartPanel,
+  .adminRecentEnquiries {
+    padding: 1.5rem;
+  }
+
+  .adminQuickGrid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 960px) {
@@ -2207,7 +2679,18 @@ img {
     transition: transform 0.2s ease;
   }
 
+  .adminShell.sidebarCollapsed .adminSidebar {
+    width: min(290px, 85vw);
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateX(-100%);
+  }
+
   .adminSidebar.open {
+    transform: translateX(0);
+  }
+
+  .adminShell.sidebarCollapsed .adminSidebar.open {
     transform: translateX(0);
   }
 
@@ -2222,7 +2705,74 @@ img {
 
   .adminMenuButton {
     display: inline-flex;
-    margin-right: auto;
+  }
+
+  .adminSidebarClose {
+    display: inline-flex;
+  }
+
+  .adminKpiGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .adminHeader {
+    min-height: 56px;
+    gap: 0.55rem;
+    padding-inline: 1rem;
+  }
+
+  .adminHeaderName {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .adminHeaderLogout,
+  .adminMenuButton {
+    padding: 0.45rem 0.6rem;
+  }
+
+  .adminMain {
+    padding: 1.25rem 1rem 2rem;
+  }
+
+  .adminPageHeader {
+    margin-bottom: 1.5rem;
+  }
+
+  .adminQuickGrid {
+    gap: 0.75rem;
+  }
+
+  .adminQuickGrid a {
+    min-height: 104px;
+    padding: 1rem;
+  }
+
+  .adminKpiGrid,
+  .adminDashboardInsights {
+    grid-template-columns: 1fr;
+  }
+
+  .adminChartPanel,
+  .adminRecentEnquiries {
+    padding: 1rem;
+  }
+
+  .adminPanelHeading {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .adminPanelHeading a {
+    align-self: flex-start;
+  }
+
+  .adminRecentList time {
+    grid-column: 2;
+    text-align: left;
   }
 }
 
@@ -2322,10 +2872,39 @@ img {
   background: var(--button-background-color);
 }
 
+.adminButton.addButton::before,
+.adminButton.saveButton::before,
+form .adminButton.primary::before {
+  display: inline-block;
+  margin-right: 0.45rem;
+  font-size: 1.1em;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.adminButton.addButton::before {
+  content: "\002B";
+}
+
+.adminButton.saveButton::before,
+form .adminButton.primary:not(.addButton)::before {
+  content: "\2713";
+}
+
 .adminButton.secondary {
   border-color: color-mix(in srgb, var(--text-color) 24%, transparent);
   color: var(--text-color);
   background: var(--surface-color);
+}
+
+.adminButton.backButton {
+  gap: 0.4rem;
+}
+
+.adminButton.backButton svg {
+  width: 1rem;
+  height: 1rem;
+  flex: 0 0 auto;
 }
 
 .adminButton.danger {
@@ -2967,11 +3546,17 @@ img {
   width: min(100%, 430px);
   padding: 1.5rem;
   border-radius: 0.65rem;
+  color: var(--text-color);
   background: var(--surface-color);
 }
 
 .confirmDialog h2 {
   margin-top: 0;
+  color: var(--heading-text-color);
+}
+
+.confirmDialog p {
+  color: var(--body-text-color);
 }
 
 .dialogActions {
@@ -3087,6 +3672,69 @@ img {
   scroll-margin-top: 140px;
 }
 
+.productManagementAccordions {
+  display: grid;
+  width: 100%;
+  gap: 0.8rem;
+}
+
+.managementAccordion {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--text-color) 12%, transparent);
+  border-radius: 0.65rem;
+  background: var(--surface-color);
+}
+
+.managementAccordionTrigger {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 3.6rem;
+  padding: 0.9rem 1rem;
+  border: 0;
+  color: var(--primary-color);
+  background: transparent;
+  cursor: pointer;
+  font-size: 1.1rem;
+  font-weight: 750;
+  text-align: left;
+}
+
+.managementAccordionTrigger>span {
+  display: block;
+  color: inherit;
+}
+
+.managementAccordionTrigger::after {
+  width: 0.55rem;
+  height: 0.55rem;
+  margin-left: auto;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  content: "";
+  transform: rotate(45deg) translateY(-0.2rem);
+  transition: transform 160ms ease;
+}
+
+.managementAccordion.isOpen>.managementAccordionTrigger {
+  border-bottom: 1px solid color-mix(in srgb, var(--text-color) 12%, transparent);
+}
+
+.managementAccordion.isOpen>.managementAccordionTrigger::after {
+  transform: rotate(225deg) translateY(-0.1rem);
+}
+
+.managementAccordionContent>.managementSection {
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+}
+
+.managementAccordionContent>.managementSection .adminSubheader h2 {
+  display: none;
+}
+
 .assetGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
@@ -3154,8 +3802,105 @@ img {
   font-size: clamp(2.2rem, 5vw, 4rem);
 }
 
+.productInfo {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(180px, 0.75fr);
+  column-gap: clamp(1rem, 3vw, 2rem);
+  align-items: start;
+}
+
+.productInfo>.productTitle {
+  grid-column: 1 / -1;
+}
+
+.productInfo>.productModels {
+  grid-column: 2;
+  grid-row: 2;
+  margin-top: 0.85rem;
+}
+
+.productInfo>p {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+.productInfo>.productActions {
+  grid-column: 1 / -1;
+  grid-row: 3;
+}
+
 .productOverview .button {
   margin-top: 1rem;
+}
+
+.productModels {
+  width: 100%;
+  margin: 0 0 1rem;
+}
+
+.productModels h2 {
+  margin: 0 0 0.45rem;
+  font-size: 0.82rem;
+}
+
+.productModels label {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.productModels p {
+  margin: 0 0 0.35rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.productModelList {
+  display: grid;
+  gap: 0.35rem;
+  max-height: 20rem;
+  overflow-y: auto;
+}
+
+.productModelList button {
+  width: 100%;
+  min-height: 2.35rem;
+  padding: 0.45rem 0.65rem;
+  border: 1px solid color-mix(in srgb, var(--primary-color) 30%, transparent);
+  border-radius: 0.4rem;
+  background: color-mix(in srgb, var(--primary-color) 7%, var(--surface-color));
+  color: var(--text-color);
+  font: inherit;
+  font-weight: 650;
+  text-align: left;
+  cursor: pointer;
+}
+
+.productModelList button:hover,
+.productModelList button:focus-visible,
+.productModelList button.isSelected {
+  border-color: var(--primary-color);
+  background: color-mix(in srgb, var(--primary-color) 16%, var(--surface-color));
+  outline: none;
+}
+
+.productModelClearButton {
+  margin-top: 0.5rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--primary-color);
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.productModelClearButton:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 3px;
 }
 
 .productGallery {
@@ -3200,6 +3945,10 @@ img {
 @media (max-width: 760px) {
   .productOverview {
     grid-template-columns: 1fr;
+  }
+
+  .productInfo {
+    grid-template-columns: minmax(0, 1fr) minmax(150px, 0.75fr);
   }
 
   .specificationList>div {
@@ -3342,6 +4091,76 @@ img {
 
 .tableActions .adminButton:hover,
 .tableActions .adminButton:focus-visible {
+  background: color-mix(in srgb, currentColor 10%, transparent);
+}
+
+.tableActions .adminButton,
+.adminListCard .listActions .adminButton,
+.assetCard .listActions .adminButton,
+.accordionHeader .listActions .adminButton {
+  width: 34px;
+  min-height: 34px;
+  padding: 0;
+  border-color: currentColor;
+  font-size: 0;
+  background: transparent;
+}
+
+.tableActions .adminButton::before,
+.adminListCard .listActions .adminButton::before,
+.assetCard .listActions .adminButton::before,
+.accordionHeader .listActions .adminButton::before {
+  font-size: 1.15rem;
+  line-height: 1;
+}
+
+.tableActions button.secondary,
+.adminListCard .listActions button.secondary,
+.assetCard .listActions button.secondary,
+.accordionHeader .listActions button.secondary {
+  color: var(--primary-color);
+}
+
+.tableActions button.secondary::before,
+.adminListCard .listActions button.secondary::before,
+.assetCard .listActions button.secondary::before,
+.accordionHeader .listActions button.secondary::before {
+  content: "\270E";
+}
+
+.tableActions a.secondary,
+.adminListCard .listActions a.secondary {
+  color: var(--secondary-color);
+}
+
+.tableActions a.secondary::before,
+.adminListCard .listActions a.secondary::before {
+  content: "\2699";
+}
+
+.tableActions .adminButton.danger,
+.adminListCard .listActions .adminButton.danger,
+.assetCard .listActions .adminButton.danger,
+.accordionHeader .listActions .adminButton.danger {
+  color: #b42318;
+  background: transparent;
+}
+
+.tableActions .adminButton.danger::before,
+.adminListCard .listActions .adminButton.danger::before,
+.assetCard .listActions .adminButton.danger::before,
+.accordionHeader .listActions .adminButton.danger::before {
+  content: "\00D7";
+}
+
+.tableActions .adminButton:hover,
+.tableActions .adminButton:focus-visible,
+.adminListCard .listActions .adminButton:hover,
+.adminListCard .listActions .adminButton:focus-visible,
+.assetCard .listActions .adminButton:hover,
+.assetCard .listActions .adminButton:focus-visible,
+.accordionHeader .listActions .adminButton:hover,
+.accordionHeader .listActions .adminButton:focus-visible {
   background: color-mix(in srgb, currentColor 10%, transparent);
 }
 

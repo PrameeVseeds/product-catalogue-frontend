@@ -134,7 +134,7 @@ export const SubcategoriesPage = () => {
         description="Manage product groupings within category-brand relationships."
         action={
           <button
-            className="adminButton primary"
+            className="adminButton primary addButton"
             onClick={() => {
               setEdit({
                 value: {

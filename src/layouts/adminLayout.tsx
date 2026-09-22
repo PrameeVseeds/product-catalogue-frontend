@@ -24,6 +24,16 @@ const adminTitles: Record<string, string> = {
 export const AdminLayout = () => {
   const { pathname } = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const isMobileNavigation = () => window.matchMedia("(max-width: 960px)").matches;
+  const toggleNavigation = () => {
+    if (isMobileNavigation()) setSidebarOpen((open) => !open);
+    else setSidebarCollapsed((collapsed) => !collapsed);
+  };
+  const closeNavigation = () => {
+    if (isMobileNavigation()) setSidebarOpen(false);
+    else setSidebarCollapsed(true);
+  };
   const pageTitle =
     adminTitles[pathname] ??
     (pathname.startsWith("/admin/products/") ? "Manage Product" : null) ??
@@ -32,10 +42,10 @@ export const AdminLayout = () => {
       : "Admin Page Not Found");
   usePageTitle(pageTitle);
   return (
-    <div className="adminShell">
-      <AdminSidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+    <div className={`adminShell${sidebarCollapsed ? " sidebarCollapsed" : ""}`}>
+      <AdminSidebar open={sidebarOpen} onClose={closeNavigation} />
       <div className="adminWorkspace">
-        <AdminHeader onMenuToggle={() => setSidebarOpen((value) => !value)} />
+        <AdminHeader onMenuToggle={toggleNavigation} />
         <main className="adminMain">
           <Outlet />
         </main>

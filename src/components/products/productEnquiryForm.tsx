@@ -5,6 +5,7 @@ import { enquiryApi } from "../../services/enquiryApi";
 
 interface Props {
   product: Product;
+  selectedModel?: string | null;
   defaultSubject?: string | null;
   defaultMessage?: string | null;
   onClose: () => void;
@@ -12,6 +13,7 @@ interface Props {
 
 export const ProductEnquiryForm = ({
   product,
+  selectedModel,
   defaultSubject,
   defaultMessage,
   onClose,
@@ -45,6 +47,7 @@ export const ProductEnquiryForm = ({
     try {
       await enquiryApi.createEnquiry({
         productId: product.id,
+        modelNumber: selectedModel || null,
         name: form.name.trim(),
         email: form.email.trim(),
         phone: form.phone.trim() || null,

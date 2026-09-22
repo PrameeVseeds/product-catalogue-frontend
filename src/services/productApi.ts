@@ -118,6 +118,8 @@ export const productApi = {
     );
     return normalizeProduct(unwrapData(data));
   },
-  getDatasheetUrl: (slug: string) =>
-    `${environment.apiUrl}/products/${encodeURIComponent(slug)}/datasheet`,
+  getDatasheetUrl: (slug: string, model?: string | null) => {
+    const path = `${environment.apiUrl}/products/${encodeURIComponent(slug)}/datasheet`;
+    return model ? `${path}?model=${encodeURIComponent(model)}` : path;
+  },
 };

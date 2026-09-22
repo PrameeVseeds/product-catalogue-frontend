@@ -125,7 +125,7 @@ export const ProductSpecificationManager = ({
       <div className="adminSubheader">
         <h2>Specifications</h2>
         <button
-          className="adminButton primary"
+          className="adminButton primary addButton"
           onClick={() =>
             setEdit({
               value: {
@@ -172,7 +172,7 @@ export const ProductSpecificationManager = ({
               ))}
             </div>
             <div className="nestedEditor">
-              <div className="adminSubheader"><h3>Extracted features</h3><button className="adminButton secondary" type="button" onClick={() => setReviewedFeatures([...reviewedFeatures, ""])}>Add feature</button></div>
+              <div className="adminSubheader"><h3>Extracted features</h3><button className="adminButton secondary addButton" type="button" onClick={() => setReviewedFeatures([...reviewedFeatures, ""])}>Add feature</button></div>
               {reviewedFeatures.map((feature, index) => (
                 <div className="extractedRow" key={`feature-${index}`}>
                   <input aria-label={`Feature ${index + 1}`} value={feature} onChange={(event) => setReviewedFeatures(reviewedFeatures.map((entry, entryIndex) => entryIndex === index ? event.target.value : entry))} />
@@ -181,8 +181,8 @@ export const ProductSpecificationManager = ({
               ))}
             </div>
             <div className="formActions">
-              <button className="adminButton secondary" type="button" onClick={() => setReviewedSpecifications([...reviewedSpecifications, { name: "", value: "", unit: null }])}>Add extracted specification</button>
-              <button className="adminButton primary" type="button" disabled={busy} onClick={() => void saveExtractedSpecifications()}>Save reviewed content</button>
+              <button className="adminButton secondary addButton" type="button" onClick={() => setReviewedSpecifications([...reviewedSpecifications, { name: "", value: "", unit: null }])}>Add extracted specification</button>
+              <button className="adminButton primary saveButton" type="button" disabled={busy} onClick={() => void saveExtractedSpecifications()}>Save reviewed content</button>
             </div>
           </div>
         )}
