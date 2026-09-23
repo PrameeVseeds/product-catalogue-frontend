@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { ArrowLeft } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
 import { ErrorMessage } from "../components/common/errorMessage";
 import { LoadingSpinner } from "../components/common/loadingSpinner";
@@ -48,6 +49,10 @@ export const CategoryPage = () => {
   const image = getImageUrl(category.imageUrl);
   return (
     <main className="container publicCataloguePage">
+      <Link className="button buttonSecondary catalogueBackButton" to="/products">
+        <ArrowLeft aria-hidden="true" />
+        Back to Products
+      </Link>
       <nav className="breadcrumbs" aria-label="Breadcrumb">
         <ol>
           <li>

@@ -47,7 +47,7 @@ export interface AdminSubcategory extends SubcategoryForm {
   id: number;
 }
 export interface ProductFormValues {
-  subcategoryId: number;
+  subcategoryId: number | null;
   name: string;
   slug: string;
   modelNumber: string | null;

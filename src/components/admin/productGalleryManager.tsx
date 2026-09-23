@@ -88,7 +88,7 @@ export const ProductGalleryManager = ({
       <div className="adminSubheader">
         <h2>Gallery</h2>
         <button
-          className="adminButton primary"
+          className="adminButton primary addButton"
           onClick={() => setEdit({ value: values(productId) })}
         >
           Add Image

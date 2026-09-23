@@ -103,7 +103,7 @@ export const CategoryBrandsPage = () => {
         description="Connect categories with available brands."
         action={
           <button
-            className="adminButton primary"
+            className="adminButton primary addButton"
             onClick={() =>
               setEdit({
                 value: {

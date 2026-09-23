@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { ArrowLeft } from "lucide-react";
+import { Link, useParams } from "react-router-dom";
 import { ErrorMessage } from "../components/common/errorMessage";
 import { LoadingSpinner } from "../components/common/loadingSpinner";
 import { SubcategoryCard } from "../components/products/subcategoryCard";
@@ -52,6 +53,10 @@ export const BrandPage = () => {
     );
   return (
     <main className="container publicCataloguePage">
+      <Link className="button buttonSecondary catalogueBackButton" to="/products">
+        <ArrowLeft aria-hidden="true" />
+        Back to Products
+      </Link>
       <header className="catalogueHero">
         {getImageUrl(brand.logoUrl) && (
           <img src={getImageUrl(brand.logoUrl)} alt={`${brand.name} logo`} />

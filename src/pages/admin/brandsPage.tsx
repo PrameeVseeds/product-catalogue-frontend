@@ -132,7 +132,7 @@ export const BrandsPage = () => {
         description="Manage catalogue brands and partner details."
         action={
           <button
-            className="adminButton primary"
+            className="adminButton primary addButton"
             onClick={() => {
               setEdit({ value: empty });
               setSlugEdited(false);

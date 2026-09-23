@@ -1,4 +1,5 @@
 import { useState, type FormEvent } from "react";
+import { Eye, EyeOff } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import { usePageTitle } from "../../hooks/usePageTitle";
@@ -17,6 +18,7 @@ export const AdminLoginPage = () => {
   const location = useLocation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [passwordVisible, setPasswordVisible] = useState(false);
   const [errors, setErrors] = useState<FormErrors>({});
   const [submitError, setSubmitError] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -86,17 +88,29 @@ export const AdminLoginPage = () => {
             Password <span className="requiredMark" aria-hidden="true">*</span>
             <span className="visuallyHidden"> (required)</span>
           </label>
-          <input
-            id="admin-password"
-            name="password"
-            type="password"
-            autoComplete="current-password"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-            aria-invalid={Boolean(errors.password)}
-            aria-describedby={
-              errors.password ? "admin-password-error" : undefined
-            }/>
+          <div className="passwordField">
+            <input
+              id="admin-password"
+              name="password"
+              type={passwordVisible ? "text" : "password"}
+              autoComplete="current-password"
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+              aria-invalid={Boolean(errors.password)}
+              aria-describedby={
+                errors.password ? "admin-password-error" : undefined
+              }
+            />
+            <button
+              className="passwordVisibilityButton"
+              type="button"
+              aria-label={passwordVisible ? "Hide password" : "Show password"}
+              aria-pressed={passwordVisible}
+              onClick={() => setPasswordVisible((visible) => !visible)}
+            >
+              {passwordVisible ? <EyeOff aria-hidden="true" /> : <Eye aria-hidden="true" />}
+            </button>
+          </div>
           {errors.password && (
             <span id="admin-password-error" className="fieldError">
               {errors.password}

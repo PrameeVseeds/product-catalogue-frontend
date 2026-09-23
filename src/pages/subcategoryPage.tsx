@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { ArrowLeft } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
 import { ErrorMessage } from "../components/common/errorMessage";
 import { LoadingSpinner } from "../components/common/loadingSpinner";
@@ -55,6 +56,13 @@ export const SubcategoryPage = () => {
     );
   return (
     <main className="container publicCataloguePage">
+      <Link
+        className="button buttonSecondary catalogueBackButton"
+        to={category ? `/categories/${category.slug}` : "/products"}
+      >
+        <ArrowLeft aria-hidden="true" />
+        Back to {category?.name || "Products"}
+      </Link>
       <nav className="breadcrumbs" aria-label="Breadcrumb">
         <ol>
           <li>

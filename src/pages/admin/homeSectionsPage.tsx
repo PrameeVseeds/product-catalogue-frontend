@@ -225,7 +225,7 @@ export const HomeSectionsPage = () => {
         description="Manage homepage sections and their nested items."
         action={
           <button
-            className="adminButton primary"
+            className="adminButton primary addButton"
             type="button"
             onClick={() => setSectionEdit({ value: emptySection })}
           >
@@ -318,7 +318,7 @@ export const HomeSectionsPage = () => {
                       <div className="adminSubheader">
                         <h3>Section items</h3>
                         <button
-                          className="adminButton primary"
+                          className="adminButton primary addButton"
                           type="button"
                           onClick={() => {
                             setExpandedItemId(null);

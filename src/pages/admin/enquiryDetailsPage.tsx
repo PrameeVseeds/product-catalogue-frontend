@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { ArrowLeft } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
 import { AdminPageHeader } from "../../components/admin/adminPageHeader";
 import { EnquiryStatusBadge } from "../../components/admin/enquiryStatusBadge";
@@ -8,6 +9,28 @@ import type {EnquiryDetail,EnquiryStatus,} from "../../interfaces/admin/enquiry.
 import { getAdminApiError } from "../../services/admin/adminApiError";
 import { enquiryApi } from "../../services/admin/enquiryApi";
 import { formatDateTime } from "../../utils/formatDateTime";
+
+const emailCustomerHref = (enquiry: EnquiryDetail) => {
+  const topic = enquiry.productName
+    ? `your enquiry about ${enquiry.productName}`
+    : "your enquiry";
+  const originalSubject = enquiry.subject || "Website enquiry";
+  const body = [
+    `Hello ${enquiry.name},`,
+    "",
+    `Thank you for contacting SEEDS PVT LTD regarding ${topic}.`,
+    "",
+    "[Write your response here]",
+    "",
+    "Kind regards,",
+    "SEEDS PVT LTD",
+    "",
+    "--- Original enquiry ---",
+    `Subject: ${originalSubject}`,
+    enquiry.message,
+  ].join("\n");
+  return `mailto:${encodeURIComponent(enquiry.email)}?subject=${encodeURIComponent(`Re: ${originalSubject}`)}&body=${encodeURIComponent(body)}`;
+};
 
 export const EnquiryDetailsPage = () => {
   const { id } = useParams();
@@ -66,13 +89,15 @@ export const EnquiryDetailsPage = () => {
   if (loading) return <LoadingSpinner />;
   if (!enquiry) return <FormFeedback error={feedback.error} />;
   const phoneHref = enquiry.phone?.replace(/[^+\d]/g, "");
+  const emailHref = emailCustomerHref(enquiry);
   return (
     <>
       <AdminPageHeader
         title={`Enquiry #${enquiry.id}`}
         description="Review the original customer enquiry and update its status."
         action={
-          <Link className="adminButton secondary" to="/admin/enquiries">
+          <Link className="adminButton secondary backButton" to="/admin/enquiries">
+            <ArrowLeft aria-hidden="true" />
             Back to Enquiries
           </Link>
         }
@@ -125,7 +150,7 @@ export const EnquiryDetailsPage = () => {
           <div className="customerActions">
             <a
               className="adminButton secondary"
-              href={`mailto:${enquiry.email}`}
+              href={emailHref}
             >
               Email Customer
             </a>

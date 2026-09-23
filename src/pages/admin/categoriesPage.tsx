@@ -111,7 +111,7 @@ export const CategoriesPage = () => {
         description="Manage top-level product categories."
         action={
           <button
-            className="adminButton primary"
+            className="adminButton primary addButton"
             onClick={() => {
               setEdit({ value: empty });
               setSlugEdited(false);

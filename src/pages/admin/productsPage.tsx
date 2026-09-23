@@ -25,7 +25,7 @@ import { subcategoryAdminApi } from "../../services/admin/subcategoryAdminApi";
 import { getImageUrl } from "../../utils/getImageUrl";
 
 const empty: ProductFormValues = {
-  subcategoryId: 0,
+  subcategoryId: null,
   name: "",
   slug: "",
   modelNumber: null,
@@ -42,6 +42,7 @@ const empty: ProductFormValues = {
   isActive: true,
   displayOrder: 0,
 };
+const productsPerPage = 10;
 const values = ({
   subcategoryId,
   name,
@@ -99,6 +100,7 @@ export const ProductsAdminPage = () => {
   const [subcategorySlug, setSubcategorySlug] = useState("");
   const [featured, setFeatured] = useState("");
   const [active, setActive] = useState("");
+  const [page, setPage] = useState(1);
   useEffect(() => {
     Promise.all([
       categoryAdminApi.getAll(),
@@ -148,6 +150,17 @@ export const ProductsAdminPage = () => {
   const visibleItems = active
     ? items.filter((item) => item.isActive === (active === "true"))
     : items;
+  const totalPages = Math.max(1, Math.ceil(visibleItems.length / productsPerPage));
+  const paginatedItems = visibleItems.slice(
+    (page - 1) * productsPerPage,
+    page * productsPerPage,
+  );
+  useEffect(() => {
+    setPage(1);
+  }, [debouncedSearch, categorySlug, brandSlug, subcategorySlug, featured, active]);
+  useEffect(() => {
+    setPage((current) => Math.min(current, totalPages));
+  }, [totalPages]);
   const relationFor = (product: AdminProduct) =>
     relations.find(
       (r) =>
@@ -157,13 +170,9 @@ export const ProductsAdminPage = () => {
     );
   const save = async () => {
     if (!edit || saving) return;
-    if (
-      !edit.value.subcategoryId ||
-      !edit.value.name.trim() ||
-      !edit.value.slug.trim()
-    )
+    if (!edit.value.name.trim() || !edit.value.slug.trim())
       return setFeedback({
-        error: "Category, brand, subcategory, name and slug are required.",
+        error: "Product name and slug are required.",
         success: "",
       });
     setSaving(true);
@@ -208,7 +217,7 @@ export const ProductsAdminPage = () => {
         description="Manage products and their catalogue content."
         action={
           <button
-            className="adminButton primary"
+            className="adminButton primary addButton"
             onClick={() => setEdit({ value: empty })}
           >
             Add Product
@@ -304,24 +313,24 @@ export const ProductsAdminPage = () => {
       ) : (
         <>
           <ProductsTable
-            items={visibleItems}
+            items={paginatedItems}
             brandName={(item) => {
               const relation = relationFor(item);
               return (
                 brands.find((brand) => brand.id === relation?.brandId)?.name ??
-                "Unavailable"
+                "Unassigned"
               );
             }}
             subcategoryName={(item) =>
               subcategories.find(
                 (subcategory) => subcategory.id === item.subcategoryId,
-              )?.name ?? "Unavailable"
+              )?.name ?? "Unassigned"
             }
             onEdit={(item) => setEdit({ id: item.id, value: values(item) })}
             onDelete={setDeleteId}
           />
           <div className="adminList legacyCatalogueList">
-            {visibleItems.map((item) => {
+            {paginatedItems.map((item) => {
               const relation = relationFor(item);
               return (
                 <article
@@ -336,10 +345,10 @@ export const ProductsAdminPage = () => {
                     <p>
                       {item.modelNumber || "No model"} ·{" "}
                       {brands.find((b) => b.id === relation?.brandId)?.name ??
-                        "Brand unavailable"}{" "}
+                        "No brand assigned"}{" "}
                       ·{" "}
                       {subcategories.find((s) => s.id === item.subcategoryId)
-                        ?.name ?? "Subcategory unavailable"}
+                        ?.name ?? "No subcategory assigned"}
                     </p>
                     <p>
                       {item.isFeatured ? "Featured" : "Standard"} ·{" "}
@@ -371,6 +380,29 @@ export const ProductsAdminPage = () => {
                 </article>
               );
             })}
+          </div>
+          <div className="paginationControls" aria-label="Product pagination">
+            <span>
+              Showing {visibleItems.length ? (page - 1) * productsPerPage + 1 : 0}
+              -{Math.min(page * productsPerPage, visibleItems.length)} of {visibleItems.length}
+            </span>
+            <button
+              className="adminButton secondary"
+              type="button"
+              disabled={page === 1}
+              onClick={() => setPage((current) => current - 1)}
+            >
+              Previous
+            </button>
+            <span>Page {page} of {totalPages}</span>
+            <button
+              className="adminButton secondary"
+              type="button"
+              disabled={page === totalPages}
+              onClick={() => setPage((current) => current + 1)}
+            >
+              Next
+            </button>
           </div>
         </>
       )}
