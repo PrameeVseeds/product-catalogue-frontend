@@ -24,9 +24,6 @@ export const ProductCard = ({
             {product.name}
           </Link>
         </h3>
-        {!compact && product.modelNumber && (
-          <p className="modelNumber">{product.modelNumber}</p>
-        )}
         {!compact && product.shortDescription && <p>{product.shortDescription}</p>}
         <Link
           className={compact ? "featuredProductArrow" : "textLink"}

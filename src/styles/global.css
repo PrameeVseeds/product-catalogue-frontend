@@ -678,14 +678,16 @@ img {
 .textLink {
   display: inline-flex;
   margin-top: 0.25rem;
-  color: var(--heading-text-color);
+  color: #a16207;
   font-weight: 700;
-  text-decoration: none;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.25em;
 }
 
 .textLink:hover,
 .textLink:focus-visible {
-  text-decoration: underline;
+  color: #7c4a03;
 }
 
 .itemIcon {
@@ -1526,15 +1528,12 @@ img {
 }
 
 .productsLandingPage .productGrid .textLink {
-  color: #0b1f3a;
+  color: #a16207;
 }
 
 .productsLandingPage .productGrid .textLink:hover,
 .productsLandingPage .productGrid .textLink:focus-visible {
-  color: #082b5c;
-  text-decoration-color: #ffc107;
-  text-decoration-thickness: 2px;
-  text-underline-offset: 0.25em;
+  color: #7c4a03;
 }
 
 .catalogueHero {

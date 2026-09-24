@@ -25,6 +25,8 @@ import { subcategoryAdminApi } from "../../services/admin/subcategoryAdminApi";
 import { getImageUrl } from "../../utils/getImageUrl";
 
 const empty: ProductFormValues = {
+  categoryId: null,
+  brandId: null,
   subcategoryId: null,
   name: "",
   slug: "",
@@ -44,6 +46,8 @@ const empty: ProductFormValues = {
 };
 const productsPerPage = 10;
 const values = ({
+  categoryId,
+  brandId,
   subcategoryId,
   name,
   slug,
@@ -61,6 +65,8 @@ const values = ({
   isActive,
   displayOrder,
 }: AdminProduct): ProductFormValues => ({
+  categoryId,
+  brandId,
   subcategoryId,
   name,
   slug,
@@ -317,6 +323,7 @@ export const ProductsAdminPage = () => {
             brandName={(item) => {
               const relation = relationFor(item);
               return (
+                brands.find((brand) => brand.id === item.brandId)?.name ??
                 brands.find((brand) => brand.id === relation?.brandId)?.name ??
                 "Unassigned"
               );
@@ -344,7 +351,8 @@ export const ProductsAdminPage = () => {
                     <h2>{item.name}</h2>
                     <p>
                       {item.modelNumber || "No model"} ·{" "}
-                      {brands.find((b) => b.id === relation?.brandId)?.name ??
+                      {brands.find((b) => b.id === item.brandId)?.name ??
+                        brands.find((b) => b.id === relation?.brandId)?.name ??
                         "No brand assigned"}{" "}
                       ·{" "}
                       {subcategories.find((s) => s.id === item.subcategoryId)

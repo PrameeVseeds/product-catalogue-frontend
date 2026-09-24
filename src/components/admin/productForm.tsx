@@ -39,9 +39,9 @@ export const ProductForm = ({
     (item) => item.id === value.subcategoryId,
   );
   const [categoryId, setCategoryId] = useState(
-    selectedSubcategory?.categoryId ?? initialRelation?.categoryId ?? 0,
+    value.categoryId ?? selectedSubcategory?.categoryId ?? initialRelation?.categoryId ?? 0,
   );
-  const [brandId, setBrandId] = useState(initialRelation?.brandId ?? 0);
+  const [brandId, setBrandId] = useState(value.brandId ?? initialRelation?.brandId ?? 0);
   const [slugEdited, setSlugEdited] = useState(Boolean(value.slug));
   const availableRelations = useMemo(
     () => relations.filter((relation) => relation.categoryId === categoryId),
@@ -86,7 +86,12 @@ export const ProductForm = ({
               onChange={(e) => {
                 setCategoryId(Number(e.target.value));
                 setBrandId(0);
-                onChange({ ...value, subcategoryId: null });
+                onChange({
+                  ...value,
+                  categoryId: Number(e.target.value) || null,
+                  brandId: null,
+                  subcategoryId: null,
+                });
               }}
             >
               <option value={0}>Select category</option>
@@ -103,7 +108,11 @@ export const ProductForm = ({
               disabled={!categoryId}
               onChange={(e) => {
                 setBrandId(Number(e.target.value));
-                onChange({ ...value, subcategoryId: null });
+                onChange({
+                  ...value,
+                  brandId: Number(e.target.value) || null,
+                  subcategoryId: null,
+                });
               }}
             >
               <option value={0}>Select brand</option>
@@ -118,12 +127,19 @@ export const ProductForm = ({
             <select
               value={value.subcategoryId ?? 0}
               disabled={!categoryId}
-              onChange={(e) =>
+              onChange={(e) => {
+                const subcategoryId = Number(e.target.value) || null;
+                const selected = subcategories.find((item) => item.id === subcategoryId);
+                const selectedRelation = relations.find(
+                  (item) => item.id === selected?.categoryBrandId,
+                );
                 onChange({
                   ...value,
-                  subcategoryId: Number(e.target.value) || null,
-                })
-              }
+                  categoryId: selected?.categoryId ?? value.categoryId,
+                  brandId: selectedRelation?.brandId ?? null,
+                  subcategoryId,
+                });
+              }}
             >
               <option value={0}>Select subcategory</option>
               {availableSubcategories.map((item) => (

@@ -3,11 +3,14 @@ import { ArrowLeft } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
 import { ErrorMessage } from "../components/common/errorMessage";
 import { LoadingSpinner } from "../components/common/loadingSpinner";
+import { ProductGrid } from "../components/products/productGrid";
 import { SubcategoryCard } from "../components/products/subcategoryCard";
 import type { CategorySummary } from "../interfaces/catalogue.interface";
+import type { ProductSummary } from "../interfaces/product.interface";
 import type { SubcategorySummary } from "../interfaces/subcategory.interface";
 import { getApiErrorMessage } from "../services/apiClient";
 import { categoryApi } from "../services/categoryApi";
+import { productApi } from "../services/productApi";
 import { subcategoryApi } from "../services/subcategoryApi";
 import { getImageUrl } from "../utils/getImageUrl";
 import { usePageTitle } from "../hooks/usePageTitle";
@@ -16,6 +19,7 @@ export const CategoryPage = () => {
   const { slug = "" } = useParams();
   const [category, setCategory] = useState<CategorySummary | null>(null),
     [subcategories, setSubcategories] = useState<SubcategorySummary[]>([]),
+    [products, setProducts] = useState<ProductSummary[]>([]),
     [loading, setLoading] = useState(true),
     [error, setError] = useState("");
   usePageTitle(loading ? "Category" : category?.name || "Category");
@@ -24,12 +28,14 @@ export const CategoryPage = () => {
     Promise.all([
       categoryApi.getCategoryBySlug(slug),
       subcategoryApi.getActiveSubcategories(),
+      productApi.getProducts({ category: slug }),
     ])
-      .then(([current, all]) => {
+      .then(([current, all, result]) => {
         setCategory(current);
         setSubcategories(
           all.filter((item) => item.categoryId === Number(current.id)),
         );
+        setProducts(result.products);
       })
       .catch((reason) => setError(getApiErrorMessage(reason)))
       .finally(() => setLoading(false));
@@ -68,8 +74,10 @@ export const CategoryPage = () => {
           {category.description && <p>{category.description}</p>}
         </div>
       </header>
-      <section aria-labelledby="subcategory-heading">
-        <h2 id="subcategory-heading">Subcategories</h2>
+      <section aria-labelledby="catalogue-content-heading">
+        <h2 id="catalogue-content-heading">
+          {subcategories.length ? "Subcategories" : "Products"}
+        </h2>
         {subcategories.length ? (
           <div className="catalogueGrid categoryGrid">
             {subcategories.map((item) => (
@@ -77,7 +85,7 @@ export const CategoryPage = () => {
             ))}
           </div>
         ) : (
-          <p>No subcategories found.</p>
+          <ProductGrid products={products} />
         )}
       </section>
     </main>
