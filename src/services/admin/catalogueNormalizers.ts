@@ -75,6 +75,8 @@ export const product = (v: unknown): AdminProduct => {
   const s = asRecord(v);
   return {
     id: Number(getId(s)),
+    categoryId: getNumber(s, 0, "categoryId", "category_id") || null,
+    brandId: getNumber(s, 0, "brandId", "brand_id") || null,
     subcategoryId:
       getNumber(s, 0, "subcategoryId", "subcategory_id") || null,
     name: getText(s, "name") ?? "",

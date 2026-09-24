@@ -3,8 +3,10 @@ import { ArrowLeft } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
 import { ErrorMessage } from "../components/common/errorMessage";
 import { LoadingSpinner } from "../components/common/loadingSpinner";
+import { ProductGrid } from "../components/products/productGrid";
 import { SubcategoryCard } from "../components/products/subcategoryCard";
 import type { BrandSummary } from "../interfaces/catalogue.interface";
+import type { ProductSummary } from "../interfaces/product.interface";
 import type { SubcategorySummary } from "../interfaces/subcategory.interface";
 import { getApiErrorMessage } from "../services/apiClient";
 import { brandApi } from "../services/brandApi";
@@ -17,6 +19,7 @@ export const BrandPage = () => {
   const { slug = "" } = useParams();
   const [brand, setBrand] = useState<BrandSummary | null>(null),
     [subcategories, setSubcategories] = useState<SubcategorySummary[]>([]),
+    [products, setProducts] = useState<ProductSummary[]>([]),
     [loading, setLoading] = useState(true),
     [error, setError] = useState("");
   usePageTitle(loading ? "Brand" : brand?.name || "Brand");
@@ -34,6 +37,7 @@ export const BrandPage = () => {
             .filter(Boolean),
         );
         setBrand(current);
+        setProducts(products.products);
         setSubcategories(all.filter((item) => ids.has(Number(item.id))));
       })
       .catch((reason) => setError(getApiErrorMessage(reason)))
@@ -67,8 +71,10 @@ export const BrandPage = () => {
           {brand.description && <p>{brand.description}</p>}
         </div>
       </header>
-      <section>
-        <h2>Subcategories</h2>
+      <section aria-labelledby="catalogue-content-heading">
+        <h2 id="catalogue-content-heading">
+          {subcategories.length ? "Subcategories" : "Products"}
+        </h2>
         {subcategories.length ? (
           <div className="catalogueGrid">
             {subcategories.map((item) => (
@@ -76,7 +82,7 @@ export const BrandPage = () => {
             ))}
           </div>
         ) : (
-          <p>No subcategories found.</p>
+          <ProductGrid products={products} />
         )}
       </section>
     </main>
